@@ -14,55 +14,61 @@ class PythonOrgSearch(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome()
 
-    # def test_navigate_to_home(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://rad-naiad-d04419.netlify.app/posts")
-    #     self.assertIn("Please Sign In to create your own memories and like other's memories.", driver.page_source)
-    #     # locate main menu item to hover and sub menu item to click
-    #     signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/a/span[1]')
-    #     signin_button.click()
-    #     email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
-    #     password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
-    #     email.send_keys("rabiatest@test.com")
-    #     password.send_keys("rabia123")
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
-
-    # def test_signin(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://rad-naiad-d04419.netlify.app/auth")
-    #     # locate main menu item to hover and sub menu item to click
-    #     email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
-    #     password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
-    #     email.send_keys("rabiatest@test.com")
-    #     password.send_keys("rabia123")
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click() # Sign In button
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/h6'))
-    #         WebDriverWait(driver, 5).until(element_present)
-    #         self.assertIn("Logout", driver.page_source)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
- 
-
-    def test_create_post(self):
+    def test_prevent_posting_without_signin(self):
         driver = self.driver
         driver.maximize_window()
-        driver.get("https://rad-naiad-d04419.netlify.app/auth")
-        # locate main menu item to hover and sub menu item to click
+        driver.get("https://rad-naiad-d04419.netlify.app/posts")
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/h6')) # Sign in card
+            WebDriverWait(driver, 5).until(element_present)
+            self.assertIn("Please Sign In to create your own memories and like other's memories.", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    def test_signin(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("https://rad-naiad-d04419.netlify.app/posts")
+        # locate Sign In button
+        signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/a/span[1]')
+        signin_button.click()
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/h1')) # Sign in form title
+            WebDriverWait(driver, 5).until(element_present)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
         email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
         password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
         email.send_keys("rabiatest@test.com")
         password.send_keys("rabia123")
         driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
         try:
-            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/div[1]/div')) # Title
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/header/div/div/button')) # Logout button
+            WebDriverWait(driver, 5).until(element_present)
+            self.assertIn("Logout", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    def test_create_post(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("https://rad-naiad-d04419.netlify.app/auth")
+        # locate and enter email and password and submit
+        email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
+        password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        email.send_keys("rabiatest@test.com")
+        password.send_keys("rabia123")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/h6')) # Create a Memory form heading
             WebDriverWait(driver, 5).until(element_present)
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+        # locate and enter title, message, tags, and file
         title = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/div[1]/div/input')
         message = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/div[2]/div/textarea')
         tags = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/div[3]/div/div/div/input')
@@ -70,44 +76,15 @@ class PythonOrgSearch(unittest.TestCase):
         title.send_keys("Selenium Test Title")
         message.send_keys("Selenium Test Message")
         tags.send_keys("Selenium Test Tag", Keys.ENTER)
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/button[1]').click() # Create Post button
+        # check if post is created (should be redirected to /posts/[id])
         try:
-            driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/div[1]/form/button[1]').click() # Create Post button
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/h2[1]')) # post title
             WebDriverWait(driver, 5).until(element_present)
-            self.assertIn("Selenium Test Title", driver.page_source) # was Logout
+            self.assertIn("Selenium Test Title", driver.page_source)
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
-
-
-    # def test_navigate_to_home(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://rad-naiad-d04419.netlify.app/posts")
-    #     # locate main menu item to hover and sub menu item to click
-    #     signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/a/span[1]')
-    #     signin_button.click()
-    #     email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
-    #     password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
-    #     email.send_keys("rabiatest@test.com")
-    #     password.send_keys("rabia123")
-    #     signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]')
-    #     signin_button.click()
-    #     self.assertIn("Logout", driver.page_source)
-
-    # def test_navigate_to_allorders(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://hellomeal.com/menu/")
-    #     # locate main menu item to hover and sub menu item to click
-    #     main_menu_elem = driver.find_element(By.ID, "menu-item-472")
-    #     sub_menu_elem = driver.find_element(By.ID, "menu-item-6066")
-    #     # chain actions and perform
-    #     actions = ActionChains(driver)
-    #     actions.move_to_element(main_menu_elem)
-    #     actions.click(sub_menu_elem)
-    #     actions.perform()
-    #     self.assertIn("Login", driver.page_source)
 
     def tearDown(self):
         self.driver.close()
