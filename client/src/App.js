@@ -22,7 +22,7 @@ const App = () => {
           <Route path="/posts/search" exact component={Home} />
           <Route path="/posts/:id" exact component={PostDetails} />
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
-          <Route path="/user" exact component={Profile} />
+          <Route path="/user/:name" exact component={Profile} />
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
         </Switch>
       </Container>
