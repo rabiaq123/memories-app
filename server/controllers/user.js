@@ -47,22 +47,13 @@ export const signup = async (req, res) => {
   }
 };
 
-// export const getUser = async (req, res) => {
-//   const { id } = req.params;
+export const getUser = async (req, res) => {
+  const { name } = req.params;
 
-//   try {
-//     const user = await UserModel.findById(id);
-
-//     res.status(200).json(user);
-//     console.log(user);
-//   } catch (error) {
-//     res.status(404).json({ message: error.message });
-//   }
-// }
-
-export const getUsers = async (req, res) => {
   try {
-    const users = await UserModel.find();
+    const user = await UserModel.findOne({ name });
+
+    res.status(200).json(user);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
