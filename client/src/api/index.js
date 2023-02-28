@@ -22,5 +22,4 @@ export const deletePost = (id) => API.delete(`/posts/${id}`);
 
 export const signIn = (formData) => API.post('/user/signin', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);
-// export const getUser = (name) => API.get(`/user/name=${name}`);
-// export const getUsers = () => API.get(`/user`, getUsers);
+export const getUser = (name) => API.get(`/user/name=${name}`);
