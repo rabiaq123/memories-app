@@ -46,3 +46,31 @@ export const signup = async (req, res) => {
     console.log(error);
   }
 };
+
+// Edit user profile
+// export const updateUserProfile = asyncHandler(async (req, res) => {
+//     const user = await UserModal.findById(req.user._id);
+//     // if the user exists then update the following fields
+//     if (user) {
+//       user.name = req.body.name || user.name; 
+//       user.email = req.body.email || user.email;
+//       // Are we adding a picture? 
+
+//       if(req.body.password) {
+//         user.password = req.body.password;
+//       }
+
+//       const updatedUser = await user.save();
+
+//       res.json({
+//         _id:updatedUser._id,
+//         name:updatedUser.name, 
+//         email:updatedUser.email,
+
+//       });
+//     }else {
+//       res.status(404)
+//       throw new Error("User not found!");
+//     }
+
+// });

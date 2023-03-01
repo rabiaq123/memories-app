@@ -16,4 +16,6 @@ router.delete('/:id', auth, deletePost);
 router.patch('/:id/likePost', auth, likePost);
 router.post('/:id/commentPost', commentPost);
 
+// Router for edit profile page
+// router.get('/editprofile', getEditProfilePage);
 export default router;
