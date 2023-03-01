@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://memories-server-cis4250.herokuapp.com/' });
+// TODO: figure out why I don't see an error in the Network tab 
+// when using http://localhost:5000 to access /user/:name, but 
+// I do when using the Heroku link
+const API = axios.create({ baseURL: 'https://memories-server-cis4250.herokuapp.com/' }); 
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
