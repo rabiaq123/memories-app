@@ -6,21 +6,27 @@ import Post from '../Posts/Post/Post';
 import { getPostsByCreator } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { getUser } from '../../actions/user';
 
 const Profile = () => {
   const { name } = useParams(); // user's name from URL
-  const { posts, isLoading } = useSelector((state) => state.posts);
+  // const { posts, isLoading } = useSelector((state) => state.posts);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  console.log('user', user);
+  
   useEffect(() => {
-    dispatch(getPostsByCreator(name));
-  }, []);
+    dispatch(getUser(name)); // THIS IS THE PROBLEM LINE
+  }, [name]);
 
   return (
     <div>
       <Typography variant="h2">{name}</Typography>
       <Divider style={{ margin: '20px 0 50px 0' }} />
-      {isLoading ? <CircularProgress /> : (
+
+      {/* <Typography variant="h4">{user?.email}</Typography> */}
+
+      {/* {isLoading ? <CircularProgress /> : (
       <Grid container alignItems="stretch" spacing={3}>
         {posts?.map((post) => (
         <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
@@ -29,7 +35,7 @@ const Profile = () => {
         ))}
       </Grid>
       )}
-      {!posts && <Typography variant="h2">No posts</Typography>}
+      {!posts && <Typography variant="h2">No posts</Typography>} */}
     </div>
   )
 }
