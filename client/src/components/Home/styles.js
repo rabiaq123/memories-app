@@ -7,6 +7,9 @@ export default makeStyles((theme) => ({
     display: 'flex',
     padding: '16px',
   },
+  searchButton: {
+    marginTop: '10px',
+  },
   pagination: {
     borderRadius: 4,
     marginTop: '1rem',
