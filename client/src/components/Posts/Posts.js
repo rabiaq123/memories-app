@@ -6,7 +6,7 @@ import Post from './Post/Post';
 import useStyles from './styles';
 
 const Posts = ({ setCurrentId }) => {
-  const { posts, isLoading } = useSelector((state) => state.posts);
+  const { posts, isLoading } = useSelector((state) => state.posts); // state.posts because posts is the name of the reducer
   const classes = useStyles();
 
   if (!posts.length && !isLoading) return 'No posts';

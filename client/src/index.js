@@ -11,7 +11,8 @@ import './index.css';
 const store = createStore(reducers, {}, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
-  <Provider store={store}>
+  // Provider will keep track of the store / global state and will allow us to access state from any component
+  <Provider store={store}> 
     <App />
   </Provider>,
   document.getElementById('root'),

@@ -1,5 +1,7 @@
 import { FETCH_ALL, FETCH_BY_SEARCH, FETCH_BY_CREATOR, FETCH_POST, CREATE, UPDATE, DELETE, LIKE, COMMENT } from '../constants/actionTypes';
 
+// in reducers, state must be initialized with a default value
+
 export default (state = { isLoading: true, posts: [] }, action) => {
   switch (action.type) {
     case 'START_LOADING':
