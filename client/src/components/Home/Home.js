@@ -31,6 +31,7 @@ const Home = () => {
       dispatch(getPostsByCreator(search));
     } else if (search.trim()) {
       dispatch(getPostsBySearch({ search, tags: search }));
+      console.log('the search query is', search);
       history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else {
       history.push('/');

@@ -15,12 +15,16 @@ const Profile = () => {
   
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const { post, posts, isLoading } = useSelector((state) => state.posts);
+
   console.log('user', user);
+  console.log('user_posts', posts)
   // console.log("the user is:" + user);
 
 
   useEffect(() => {
     dispatch(getUser(name)); // THIS IS THE PROBLEM LINE
+    dispatch(getPostsByCreator(name));
     console.log(name);
   }, [name]);
 
