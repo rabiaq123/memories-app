@@ -17,12 +17,12 @@ app.use('/posts', postRoutes); // every route in postRoutes will start with /pos
 app.use("/user", userRouter); // every route in userRouter will start with /user
 
 app.get('/', (req, res) => {
-  res.send ("Hello to memories API from Wes ")
-} )
+  res.send("Hello to memories API from Wes ")
+})
 
 // now that the database is our personal one network security needs to be set up for the application (allow the ip)
 const CONNECTION_URL = 'mongodb+srv://group8:Ashisstupid23@cluster0.lvg4p5o.mongodb.net/?retryWrites=true&w=majority';
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5500;
 
 // Error check to ensure database is connected to the server
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })

@@ -14,9 +14,10 @@ const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   console.log('user', user);
-  
+
   useEffect(() => {
     dispatch(getUser(name)); // THIS IS THE PROBLEM LINE
+    console.log(name);
   }, [name]);
 
   return (
