@@ -6,6 +6,7 @@ import PostDetails from './components/PostDetails/PostDetails';
 import Navbar from './components/Navbar/Navbar';
 import Home from './components/Home/Home';
 import Auth from './components/Auth/Auth';
+import EditScreen from './components/EditProfile/EditScreen';
 import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import Profile from './components/ProfilePage/Profile';
 
@@ -24,6 +25,7 @@ const App = () => {
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
           <Route path="/user/:name" exact component={Profile} />
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
+          <Route path="/edit" exact component={EditScreen} />
         </Switch>
       </Container>
     </BrowserRouter>

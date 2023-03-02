@@ -37,12 +37,12 @@ export const signup = async (req, res) => {
 
     const result = await UserModel.create({ email, password: hashedPassword, name: `${firstName} ${lastName}` });
 
-    const token = jwt.sign( { email: result.email, id: result._id }, secret, { expiresIn: "1h" } );
+    const token = jwt.sign({ email: result.email, id: result._id }, secret, { expiresIn: "1h" });
 
     res.status(201).json({ result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
-    
+
     console.log(error);
   }
 };
@@ -60,3 +60,31 @@ export const getUser = async (req, res) => {
     console.log(error);
   }
 }
+
+// Edit user profile
+// export const updateUserProfile = asyncHandler(async (req, res) => {
+//     const user = await UserModal.findById(req.user._id);
+//     // if the user exists then update the following fields
+//     if (user) {
+//       user.name = req.body.name || user.name; 
+//       user.email = req.body.email || user.email;
+//       // Are we adding a picture? 
+
+//       if(req.body.password) {
+//         user.password = req.body.password;
+//       }
+
+//       const updatedUser = await user.save();
+
+//       res.json({
+//         _id:updatedUser._id,
+//         name:updatedUser.name, 
+//         email:updatedUser.email,
+
+//       });
+//     }else {
+//       res.status(404)
+//       throw new Error("User not found!");
+//     }
+
+// });
