@@ -72,6 +72,39 @@ export const getUsers = async (req, res) => {
     console.log(error);
   }
 }
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    // const users = await UserModel.find();
+    const {id, email, name} = req.body;
+    
+    // getting the user that matches the ID that is sent
+
+    const user = await UserModel.findById(id);
+
+    // const updateUser = { email, name, _id : id};
+    // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
+
+    // upateing the user profile
+    await UserModel.findOneAndUpdate(
+      { "_id": id},
+      { 
+          "$set": {
+              "email": email, // the data you want to update
+              "name" : name
+          }
+      });
+
+
+    res.status(200).json({"found_user": user});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+    console.log(error);
+  }
+}
+
+
 // Edit user profile
 // export const updateUserProfile = asyncHandler(async (req, res) => {
 //     const user = await UserModal.findById(req.user._id);
