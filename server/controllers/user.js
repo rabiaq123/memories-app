@@ -61,6 +61,17 @@ export const getUser = async (req, res) => {
   }
 }
 
+export const getUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+    console.log(error);
+  }
+}
 // Edit user profile
 // export const updateUserProfile = asyncHandler(async (req, res) => {
 //     const user = await UserModal.findById(req.user._id);
