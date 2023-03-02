@@ -60,3 +60,15 @@ export const getUser = async (req, res) => {
     console.log(error);
   }
 }
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+    console.log(error);
+  }
+}
