@@ -1,11 +1,13 @@
-import { FETCH_USER, FETCH_ALL } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, START_LOADING } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const getUser = (name) => async (dispatch) => {
   try {
-    const { user } = await api.getUser(name);
+    // dispatch({ type: START_LOADING });
 
-    dispatch({ type: FETCH_USER, payload: {user} });
+    const { data } = await api.fetchUserName(name);
+
+    dispatch({ type: FETCH_USER, payload: { user: data } });
   } catch (error) {
     console.log(error);
   }

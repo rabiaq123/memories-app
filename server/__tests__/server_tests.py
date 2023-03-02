@@ -72,7 +72,7 @@ def user_endpoint_test(name):
     This test confirms the connection to the API
     """
 
-    url = BASE_URL + 'user?name='+name
+    url = BASE_URL + 'user/'+ name
   
 
     submit_post_data = {

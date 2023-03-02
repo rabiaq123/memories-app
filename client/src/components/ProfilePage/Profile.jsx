@@ -6,14 +6,18 @@ import Post from '../Posts/Post/Post';
 import { getPostsByCreator } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { getUser } from '../../actions/user';
+import { getUser, getUsers } from '../../actions/user';
+import { getPosts, getPost } from '../../actions/posts';
 
 const Profile = () => {
   const { name } = useParams(); // user's name from URL
   // const { posts, isLoading } = useSelector((state) => state.posts);
-  const { user } = useSelector((state) => state.user);
+  
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   console.log('user', user);
+  // console.log("the user is:" + user);
+
 
   useEffect(() => {
     dispatch(getUser(name)); // THIS IS THE PROBLEM LINE
