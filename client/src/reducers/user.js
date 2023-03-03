@@ -15,6 +15,8 @@ export default (state = { isLoading: true, user: [] }, action) => { // should it
         ...state,
         users: action.payload.data,
       };
+    case UPDATE:
+      return { ...state, user: action.payload.user };
     default:
       return state; // return existing state unchanged
   }
