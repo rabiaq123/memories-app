@@ -3,30 +3,31 @@ import { useParams } from 'react-router-dom'
 import { Typography, CircularProgress, Grid, Divider } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import Post from '../Posts/Post/Post';
-import { getPostsByCreator } from '../../actions/posts';
+import { getPostsByCreator, getPostsByCreatorId } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getUser } from '../../actions/user';
 
 const Profile = () => {
-  const { name } = useParams(); // user's name from URL
+  const { id } = useParams(); // user's name from URL
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { posts, isLoading } = useSelector((state) => state.posts);
 
-  // console.log('user', user);
-  // console.log('user_posts', posts)
+  console.log('id', id);
+  console.log('user', user);
+  console.log('user_posts', posts)
 
   useEffect(() => {
-    dispatch(getUser(name));
-    dispatch(getPostsByCreator(name));
+    dispatch(getUser(id));
+    dispatch(getPostsByCreatorId(id));
     // console.log(name);
-  }, [name]);
+  }, [id]);
 
   return (
     <div>
-      <Typography variant="h2">{name}</Typography>
+      <Typography variant="h2">{user?.name}</Typography>
       <Divider style={{ margin: '20px 0 50px 0' }} />
 
       {isLoading ? <CircularProgress /> : (

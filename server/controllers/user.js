@@ -48,10 +48,10 @@ export const signup = async (req, res) => {
 };
 
 export const getUser = async (req, res) => {
-  const { name } = req.params;
+  const { id } = req.params;
 
   try {
-    const user = await UserModel.findOne({ name });
+    const user = await UserModel.findById(id);
 
     res.status(200).json(user);
   } catch (error) {

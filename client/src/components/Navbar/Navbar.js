@@ -45,7 +45,7 @@ const Navbar = () => {
       <Toolbar className={classes.toolbar}>
         {user?.result ? (
           <div className={classes.profile}>
-            <Link to={`/user/${user.result.name}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
+            <Link to={`/user/${user.result._id}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
               <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
             </Link>
             <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
