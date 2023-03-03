@@ -5,9 +5,9 @@ import { signin, signup, getUser, getUsers, updateUserProfile, getUserByID} from
 
 router.post("/signin", signin);
 router.post("/signup", signup);
-router.get("/:name", getUser);
+// router.get("/:name", getUser);
+router.get("/:id", getUser);
 router.get("/", getUsers);
-router.get("/user/:name", getUser);
 router.post('/editprofile', updateUserProfile);
 router.get('/userbyid/:id', getUserByID);
 
