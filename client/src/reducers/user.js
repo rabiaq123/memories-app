@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, FETCH_USER_BY_ID } from '../constants/actionTypes';
 
 export default (state = { isLoading: true, user: [] }, action) => { // should it be user: [] instead of user: {}?
   switch (action.type) {
@@ -7,6 +7,8 @@ export default (state = { isLoading: true, user: [] }, action) => { // should it
     case 'END_LOADING':
       return { ...state, isLoading: false };
     case FETCH_USER:
+      return { ...state, user: action.payload.user};
+    case FETCH_USER_BY_ID:
       return { ...state, user: action.payload.user};
     case FETCH_ALL:
       return {

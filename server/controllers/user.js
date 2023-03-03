@@ -95,8 +95,31 @@ export const updateUserProfile = async (req, res) => {
           }
       });
 
+    const updated_user = await UserModel.findById(id);
+    res.status(200).json({"status": 'successfully created user', 'updated_user' : updated_user});
 
-    res.status(200).json({"found_user": user});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+    console.log(error);
+  }
+}
+
+export const getUserByID = async (req, res) => {
+  try {
+    // const users = await UserModel.find();
+    const {id} = req.params;
+    
+    // getting the user that matches the ID that is sent
+
+    const user = await UserModel.findById(id);
+
+    // const updateUser = { email, name, _id : id};
+    // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
+
+
+
+    res.status(200).json({"message": "this endpoint is still under development", "found_user" : user});
   } catch (error) {
     res.status(500).json({ message: error.message });
 
