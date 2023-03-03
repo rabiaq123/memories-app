@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Typography, CircularProgress, Grid, Divider } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import Post from '../Posts/Post/Post';
-import { getPostsByCreator, getPostsByCreatorId } from '../../actions/posts';
+import { getPostsByCreatorId } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getUser } from '../../actions/user';
