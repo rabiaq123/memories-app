@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL, START_LOADING, FETCH_USER_BY_ID } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const getUser = (id) => async (dispatch) => {
@@ -23,12 +23,29 @@ export const getUsers = () => async (dispatch) => {
   }
 }
 
-export const getUserByID = (id) => async (dispatch) => {
+// export const getUserByID = (id) => async (dispatch) => {
+//   try {
+
+//     const { data } = await api.fetchUserByID(id);
+
+//     dispatch({ type: FETCH_USER_BY_ID, payload: { user: data } });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+export const updateUserProfile = (id, email, name) => async (dispatch) => {
   try {
 
-    const { data } = await api.fetchUserByID(id);
+    let user_data = {
+      "id" : id,
+      "name" : name,
+      "email" : email,
+    }
 
-    dispatch({ type: FETCH_USER_BY_ID, payload: { user: data } });
+    const { data } = await api.updateUser(user_data);
+
+    dispatch({ type: UPDATE, payload: data });
   } catch (error) {
     console.log(error);
   }

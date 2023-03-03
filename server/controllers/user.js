@@ -76,7 +76,7 @@ export const getUsers = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const {id, email, name} = req.body;
+    const {id, name, email} = req.body;
     
     // getting the user that matches the ID that is sent
 
@@ -84,7 +84,9 @@ export const updateUserProfile = async (req, res) => {
 
     // const updateUser = { email, name, _id : id};
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
-
+    
+    console.log("The email is" + email);
+    console.log("The name is: " + name);
     // upateing the user profile
     await UserModel.findOneAndUpdate(
       { "_id": id},

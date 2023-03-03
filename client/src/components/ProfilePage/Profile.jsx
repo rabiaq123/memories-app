@@ -6,7 +6,10 @@ import Post from '../Posts/Post/Post';
 import { getPostsByCreatorId } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { getUser } from '../../actions/user';
+import { getUser, updateUserProfile } from '../../actions/user';
+
+
+
 
 const Profile = () => {
   const { id } = useParams(); // user's name from URL
@@ -22,8 +25,16 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUser(id));
     dispatch(getPostsByCreatorId(id));
+    // update_user("6400c5e8dcc14a33a65f7876", "test46@gmail.com", "New Wes March 2 10:24pm")
     // console.log(name);
   }, [id]);
+
+
+  // This is a helper function that can be used for updating a users profile
+  const update_user = (id, email, name) => {
+    dispatch (updateUserProfile (id, email, name));
+    console.log ('updated_user', user);
+  }
 
   return (
     <div>
