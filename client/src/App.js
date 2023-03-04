@@ -25,6 +25,7 @@ const App = () => {
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
           <Route path="/user/:id" exact component={Profile} />
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
+          {/* <Route path="/user/:id/edit" exact component={EditScreen} /> */}
           <Route path="/edit" exact component={EditScreen} />
         </Switch>
       </Container>

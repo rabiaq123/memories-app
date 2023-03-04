@@ -1,43 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Paper, Container, Avatar, Grid } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Button, Typography, Paper, Container, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import FileBase from 'react-file-base64';
-import { useHistory } from 'react-router-dom';
-import ChipInput from 'material-ui-chip-input';
-// import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { getUser, updateUserProfile } from '../../actions/user';
 
-import AccountBoxIcon from '@material-ui/icons/AccountBoxSharp';
-import { createPost, updatePost } from '../../actions/posts';
 import useStyles from './styles';
-import LockOutlined from '@material-ui/icons/LockOutlined';
 import Input from '../Auth/Input';
 
-const user = JSON.parse(localStorage.getItem('profile'));
-const initialState = { firstName: user?.result?.name, lastName: user?.result?.name, email: user?.result?.email};
-
-const EditScreen = ({ currentId, setCurrentId }) => {
+const EditScreen = () => {
   const classes = useStyles();
-  const [form, setForm] = useState(initialState);
+  const dispatch = useDispatch();
 
-  const handleSubmit = () => {
+  const initialState = JSON.parse(localStorage.getItem('profile'));
+  const id = initialState?.result?._id;
+  const { user } = useSelector((state) => state.user);
+  const [name, setName] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
 
+  // This is a helper function that can be used for updating a users profile
+  const update_user = (id, email, name) => {
+    dispatch(updateUserProfile (id, email, name));
+    console.log ('updated_user', user);
   }
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(getUser(id));
+    update_user(id, email, name)
+    setName('');
+    setEmail('');
+  }
+
+  const handleChange = (e) => {
+    switch (e.target.name) {
+      case 'name':
+        setName(e.target.value);
+        break;
+      case 'email':
+        setEmail(e.target.value);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevation={6}>
-        <Avatar className={classes.avatar}>
-          <AccountBoxIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5" align='center'>Edit Profile</Typography>
+        <Typography component="h1" variant="h5" align='center' style={{marginBottom: '16px'}}>
+          Edit Profile
+        </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <>
-              <Input name="firstName" label= {user?.result?.name} handleChange={handleChange} autoFocus half />
-              <Input name="lastName" label= {user?.result?.name} handleChange={handleChange} autoFocus half />
-              <Input name="email" label= {user?.result?.email} handleChange={handleChange}  />
+              {/* TODO: split name into first and last name (by space) */}
+              <Input name="name" label="Name" handleChange={handleChange} autoFocus value={name}/>
+              <Input name="email" label="Email" handleChange={handleChange} value={email} />
             </>
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>

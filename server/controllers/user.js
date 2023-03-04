@@ -85,9 +85,9 @@ export const updateUserProfile = async (req, res) => {
     // const updateUser = { email, name, _id : id};
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
     
-    console.log("The email is" + email);
+    console.log("The email is: " + email);
     console.log("The name is: " + name);
-    // upateing the user profile
+    // updating the user profile
     await UserModel.findOneAndUpdate(
       { "_id": id},
       { 
