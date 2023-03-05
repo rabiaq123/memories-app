@@ -18,6 +18,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { posts, isLoading } = useSelector((state) => state.posts);
+  const initialState = JSON.parse(localStorage.getItem('profile'));
+  const loggedID = initialState?.result?._id;
 
   console.log('id', id);
   console.log('user', user);
@@ -40,7 +42,9 @@ const Profile = () => {
   return (
     <div>
       <Typography variant="h2">{user?.name}</Typography>
-      <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>
+      {(loggedID === id) && (
+        <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>
+      )}
       <Divider style={{ margin: '20px 0 50px 0' }} />
 
       {isLoading ? <CircularProgress /> : (
