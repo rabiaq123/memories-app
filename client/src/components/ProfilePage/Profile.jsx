@@ -1,12 +1,13 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Typography, CircularProgress, Grid, Divider } from '@material-ui/core';
+import { Typography, CircularProgress, Grid, Divider, Button } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import Post from '../Posts/Post/Post';
 import { getPostsByCreatorId } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getUser, updateUserProfile } from '../../actions/user';
+import { Link } from 'react-router-dom';
 
 
 
@@ -17,6 +18,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { posts, isLoading } = useSelector((state) => state.posts);
+  const initialState = JSON.parse(localStorage.getItem('profile'));
+  const loggedID = initialState?.result?._id;
 
   console.log('id', id);
   console.log('user', user);
@@ -39,6 +42,9 @@ const Profile = () => {
   return (
     <div>
       <Typography variant="h2">{user?.name}</Typography>
+      {(loggedID === id) && (
+        <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>
+      )}
       <Divider style={{ margin: '20px 0 50px 0' }} />
 
       {isLoading ? <CircularProgress /> : (

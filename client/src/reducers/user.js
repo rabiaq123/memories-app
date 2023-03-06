@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL, FETCH_USER_BY_ID } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, FETCH_USER_BY_ID, UPDATE } from '../constants/actionTypes';
 
 export default (state = { isLoading: true, user: [] }, action) => { // should it be user: [] instead of user: {}?
   switch (action.type) {
