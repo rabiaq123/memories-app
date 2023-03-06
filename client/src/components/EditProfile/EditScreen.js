@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Typography, Paper, Container, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, updateUserProfile } from '../../actions/user';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import useStyles from './styles';
 import Input from '../Auth/Input';
 
@@ -16,31 +16,29 @@ const EditScreen = () => {
   const { user } = useSelector((state) => state.user);
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
+  const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
 
   if (!initialState) { // if user is not logged in, redirect to login page
     history.push('/auth');
   }
 
-  // This is a helper function that can be used for updating a users profile
+  // helper function that can be used for updating a users profile
   const update_user = (id, email, name) => {
     dispatch(updateUserProfile (id, email, name));
-    console.log ('updated_user', user);
-    
+    // console.log ('updated_user', user);
   }
 
   const handleSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     dispatch(getUser(id));
     update_user(id, email, name)
-    
- 
-    // setName('');
-    // setEmail('');
-    history.push(`/user/${id}`)
-    
+    setDisableUpdate(true);
   }
 
   const handleChange = (e) => {
+    if (name != e.target.name || email != e.target.email) { // enable update button if user changes name or email
+      setDisableUpdate(false);
+    }
     switch (e.target.name) {
       case 'name':
         setName(e.target.value);
@@ -69,10 +67,10 @@ const EditScreen = () => {
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
               </Grid>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} >
-                Update & Return
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || disableUpdate}>
+                Update
               </Button>
-              <Button onClick={() => history.goBack()} fullWidth variant="contained" color="primary"> Back to Profile </Button>
+              <Button onClick={() => history.goBack()} fullWidth variant="contained" color="secondary"> Back to Profile </Button>
             </form>
           </Paper>
         )} 
