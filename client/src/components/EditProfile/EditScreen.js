@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Button, Typography, Paper, Container, Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, updateUserProfile } from '../../actions/user';
-import { useHistory } from 'react-router-dom';
-
+import { Redirect, useHistory } from 'react-router-dom';
 import useStyles from './styles';
 import Input from '../Auth/Input';
 
@@ -26,14 +25,19 @@ const EditScreen = () => {
   const update_user = (id, email, name) => {
     dispatch(updateUserProfile (id, email, name));
     console.log ('updated_user', user);
+    
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     dispatch(getUser(id));
     update_user(id, email, name)
-    setName('');
-    setEmail('');
+    
+ 
+    // setName('');
+    // setEmail('');
+    history.push(`/user/${id}`)
+    
   }
 
   const handleChange = (e) => {
@@ -65,9 +69,10 @@ const EditScreen = () => {
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
               </Grid>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                Update
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} >
+                Update & Return
               </Button>
+              <Button onClick={() => history.goBack()} fullWidth variant="contained" color="primary"> Back to Profile </Button>
             </form>
           </Paper>
         )} 
