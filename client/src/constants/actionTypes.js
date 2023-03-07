@@ -12,3 +12,12 @@ export const FETCH_BY_CREATOR = 'FETCH_BY_CREATOR';
 
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
+
+export const FETCH_USER = 'FETCH_USER';
+
+export const FETCH_USER_BY_ID = 'FETCH_USER_BY_ID';
+// Edit profile:
+export const USER_UPDATE_REQUEST = 'USER_UPDATE_REQUEST';
+export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
+export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL';
+

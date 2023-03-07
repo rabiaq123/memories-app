@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { Container, Grow, Grid, AppBar, TextField, Button, Paper } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Container, Grow, Grid, AppBar, TextField, Button, Paper, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import ChipInput from 'material-ui-chip-input';
-
-import { getPostsBySearch } from '../../actions/posts';
+import { getPostsByCreator, getPostsBySearch } from '../../actions/posts';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import Pagination from '../Pagination';
@@ -23,13 +21,18 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
-  const [tags, setTags] = useState([]);
+  const [isUserSearch, setIsUserSearch] = useState(false);
   const history = useHistory();
 
   const searchPost = () => {
-    if (search.trim() || tags) {
-      dispatch(getPostsBySearch({ search, tags: tags.join(',') }));
-      history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+    if (search == '') {
+      history.push('/');
+    } else if (isUserSearch) {
+      dispatch(getPostsByCreator(search));
+    } else if (search.trim()) {
+      dispatch(getPostsBySearch({ search, tags: search }));
+      console.log('the search query is', search);
+      history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else {
       history.push('/');
     }
@@ -41,9 +44,9 @@ const Home = () => {
     }
   };
 
-  const handleAddChip = (tag) => setTags([...tags, tag]);
-
-  const handleDeleteChip = (chipToDelete) => setTags(tags.filter((tag) => tag !== chipToDelete));
+  const handleChange = (event) => {
+    setIsUserSearch(event.target.checked);
+  };
 
   return (
     <Grow in>
@@ -55,18 +58,18 @@ const Home = () => {
           <Grid item xs={12} sm={6} md={3}>
             <AppBar className={classes.appBarSearch} position="static" color="inherit">
               <TextField onKeyDown={handleKeyPress} name="search" variant="outlined" label="Search Memories" fullWidth value={search} onChange={(e) => setSearch(e.target.value)} />
-              <ChipInput
-                style={{ margin: '10px 0' }}
-                value={tags}
-                onAdd={(chip) => handleAddChip(chip)}
-                onDelete={(chip) => handleDeleteChip(chip)}
-                label="Search Tags"
-                variant="outlined"
-              />
               <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
+              <FormGroup>
+                <FormControlLabel control={
+                  <Checkbox
+                    checked={isUserSearch}
+                    onChange={handleChange}
+                  />
+                } label="Search by User" />
+              </FormGroup>
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
-            {(!searchQuery && !tags.length) && (
+            {(!searchQuery) && (
               <Paper className={classes.pagination} elevation={6}>
                 <Pagination page={page} />
               </Paper>

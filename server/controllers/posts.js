@@ -15,6 +15,7 @@ export const getPosts = async (req, res) => {
         const total = await PostMessage.countDocuments({});
         const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
 
+        // return data, current page, and number of pages to actions (client)
         res.json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)});
     } catch (error) {    
         res.status(404).json({ message: error.message });
@@ -46,6 +47,19 @@ export const getPostsByCreator = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+
+export const getPostsByCreatorId = async (req, res) => {
+    const { id } = req.query;
+
+    try {
+        const posts = await PostMessage.find({ creator: id});
+
+        res.json({ data: posts });
+    } catch (error) {    
+        res.status(404).json({ message: error.message });
+    }
+}
+
 
 export const getPost = async (req, res) => { 
     const { id } = req.params;
