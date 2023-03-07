@@ -50,14 +50,15 @@ class PythonOrgSearch(unittest.TestCase):
 
         signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/a/span[1]')
         signin_button.click()
-            
+        
+        # on signin page
         email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
         password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
         email.send_keys("fe-tests@test.com")
         password.send_keys("fe-tests")
         driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click() # hit submit
         
-        #waiting for the search by user checkbox shows up
+        # on homepage, waiting for the "search by user" checkbox to show up
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[2]/label/span[1]/span[1]/input'))
             WebDriverWait(driver, 10).until(element_present)
@@ -65,14 +66,14 @@ class PythonOrgSearch(unittest.TestCase):
             print 
             "Timed out waiting for page to load"
         
-        #search for user by name
+        # search for user by name
         driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[2]/label/span[1]/span[1]/input').click() #hit search by users
         username  = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input') 
         username.send_keys("Frontend Tests2")
         driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button').click() #hit search
 
         try:
-            # asserting that username is present
+            # asserting that username is present on the homepage/feed
             username_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div/div[1]/div/span/div[2]/h6'), "Frontend Tests2")
             WebDriverWait(driver, 10).until(username_present)
             self.assertIn("Frontend Tests2", driver.page_source)
