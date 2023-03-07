@@ -1,8 +1,8 @@
 import requests
 import json
 
-# BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
-BASE_URL = 'http://localhost:5500/'
+BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
+# BASE_URL = 'http://localhost:5500/'
 
 class bcolors:
     HEADER = '\033[95m'
@@ -156,10 +156,12 @@ def get_user_by_id_test(id):
 
 def main():
 
+    print (f'The base URL that is being tested is: '+bcolors.OKBLUE + f'{BASE_URL}' + bcolors.ENDC)
+
     # root_endpoint_test("Hello to memories API from Wes ")
     # find_post_by_id_test('63e526df26cfdd0014b607b7', 'Wes Test 1 ')
     # find_post_by_id_test('63e3fab8e637334c78f1cb1d', 'Yeehaw')
     # user_endpoint_test("Wes%20Test")
-    # edit_profile_test("6400c5e8dcc14a33a65f7876", "test45@test.com", "Wes Update 4:04")
-    get_user_by_id_test("6400c5e8dcc14a33a65f7876")
+    edit_profile_test("6400c5e8dcc14a33a65f7876", "test45@test.com", "Wes Update 9:57AM")
+    # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
 main()
