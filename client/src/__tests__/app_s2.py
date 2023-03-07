@@ -57,6 +57,7 @@ class PythonOrgSearch(unittest.TestCase):
         password.send_keys("fe-tests")
         driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click() # hit submit
         
+        #waiting for the search by user checkbox shows up
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[2]/label/span[1]/span[1]/input'))
             WebDriverWait(driver, 10).until(element_present)
@@ -64,10 +65,11 @@ class PythonOrgSearch(unittest.TestCase):
             print 
             "Timed out waiting for page to load"
         
-        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[2]/label/span[1]/span[1]/input').click()
+        #search for user by name
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[2]/label/span[1]/span[1]/input').click() #hit search by users
         username  = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input') 
         username.send_keys("Frontend Tests2")
-        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button').click()
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button').click() #hit search
 
         try:
             # asserting that username is present
