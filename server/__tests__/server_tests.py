@@ -157,7 +157,7 @@ def get_user_by_id_test(id):
 
 def main():
 
-
+    print (f'The base URL that is being tested is: '+bcolors.OKBLUE + f'{BASE_URL}' + bcolors.ENDC)
 
     # root_endpoint_test("Hello to memories API from Wes ")
     # find_post_by_id_test('63e526df26cfdd0014b607b7', 'Wes Test 1 ')
