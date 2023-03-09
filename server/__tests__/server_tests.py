@@ -47,7 +47,8 @@ def find_post_by_id_test(id, title_text):
     """
 
     url = BASE_URL + 'posts/' + id
-  
+    
+    # print (f"The url being tested is: {url}")
 
     submit_post_data = {
     }
@@ -55,6 +56,8 @@ def find_post_by_id_test(id, title_text):
     request = requests.get(url, headers={},)    
     
     recieved_results = request.json()
+    # print (recieved_results)
+    # print (request.text)
     
     if recieved_results['title'] == title_text:
         print (f'Testing searching for a post id with the id of: {id}; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
@@ -120,10 +123,6 @@ def edit_profile_test(id, email, name):
         print (f'Testing that the root API call is returning a value; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
         print ("****The expected results are******")
         print ("id = " + id + ", email = " + email + ", name = " + name)
-    # print ('****The recieve results are****')
-    # recieved_results = request.json()
-    # print(json.dumps(recieved_results, sort_keys=False, indent=4))
-    # print (request.text)
     
     return
 
@@ -148,10 +147,6 @@ def get_user_by_id_test(id):
         print (f'Testing that the root API call is returning a value; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
         print ("****The expected results are******")
         print ("id = " + id + ", email = test45@test.com, name = Wes Update 4:01")
-    # print ('****The recieve results are****')
-    # recieved_results = request.json()
-    # print(json.dumps(recieved_results, sort_keys=False, indent=4))
-    # print (request.text)
     
     return
 
@@ -159,10 +154,9 @@ def main():
 
     print (f'The base URL that is being tested is: '+bcolors.OKBLUE + f'{BASE_URL}' + bcolors.ENDC)
 
-    # root_endpoint_test("Hello to memories API from Wes ")
-    # find_post_by_id_test('63e526df26cfdd0014b607b7', 'Wes Test 1 ')
-    # find_post_by_id_test('63e3fab8e637334c78f1cb1d', 'Yeehaw')
-    # user_endpoint_test("Wes%20Test")
+    root_endpoint_test("Hello to memories API from Wes ")
+    find_post_by_id_test('63e5917726cfdd0014b607bb', 'Rabia Testing Tags')
+    find_post_by_id_test('63e3fab8e637334c78f1cb1d', 'Yeehaw')
     edit_profile_test("6400c5e8dcc14a33a65f7876", "test45@test.com", "Wes Update 4:01")
     get_user_by_id_test("6400c5e8dcc14a33a65f7876")
 main()
