@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Avatar, Button, useTheme } from '@material-ui/core';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
+import { IconButton } from '@material-ui/core';
+import { Brightness4, Brightness7 } from '@material-ui/icons';
+import { toggleTheme } from '../../reducers/theme';
 
 import memoriesLogo from '../../images/memoriesLogo.png';
 import memoriesText from '../../images/memoriesText.png';
 import * as actionType from '../../constants/actionTypes';
 import useStyles from './styles';
 
-const Navbar = () => {
+
+const Navbar = ({toggleColorMode}) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const dispatch = useDispatch();
   const location = useLocation();
@@ -17,6 +21,12 @@ const Navbar = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [isDiscoverClicked, setIsDiscoverClicked] = useState(location.pathname.includes('/posts/discover'));
+  const darkMode = useSelector((state) => state.theme.darkMode);
+
+  const toggleDarkMode = () => {
+    toggleColorMode();
+    // dispatch(toggleTheme());
+  };
 
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
@@ -44,6 +54,9 @@ const Navbar = () => {
       </Link>
       <Toolbar className={classes.toolbar}>
         <Link to="/posts/discover" style={{ textDecoration: 'none', color: isDiscoverClicked ? theme.palette.secondary.main : '#3f51b5' }}>Discover</Link>
+        <IconButton sx={{ ml: 1 }} onClick={toggleDarkMode} color="inherit">
+          {darkMode ? <Brightness7 /> : <Brightness4 />}
+        </IconButton>
         {user?.result ? (
           <div className={classes.profile}>
             <Link to={`/user/${user.result._id}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
