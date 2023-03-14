@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema({
   password: { type: String, required: true },
   id: { type: String },
   following: { type: [String], required: true, default: [] },
+  followers: { type: [String], required: true, default: [] },
 });
 
 export default mongoose.model("User", userSchema);
