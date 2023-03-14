@@ -6,7 +6,7 @@ import Post from '../Posts/Post/Post';
 import { getPostsByCreatorId } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { getUser, addNewFollowerAction } from '../../actions/user';
+import { getUser, addNewFollowerAction, removeFollowerAction } from '../../actions/user';
 import { Link } from 'react-router-dom';
 
 
@@ -28,10 +28,15 @@ const Profile = () => {
     
   }
 
+  const remove_user_following = (id, remove_user_id) => {
+    dispatch(removeFollowerAction (id, remove_user_id));
+  }
+
   useEffect(() => {
     dispatch(getUser(id));
     dispatch(getPostsByCreatorId(id));
-    add_new_user('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
+    // add_new_user('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
+    // remove_user_following ('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
   }, [id]);
 
   return (

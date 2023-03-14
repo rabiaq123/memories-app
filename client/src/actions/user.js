@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const getUser = (id) => async (dispatch) => {
@@ -62,6 +62,22 @@ export const addNewFollowerAction = (id, new_follower_id) => async (dispatch) =>
     const { data } = await api.addNewFollower(user_data);
 
     dispatch({ type: UPDATE_NEW_FOLLOWER, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removeFollowerAction = (id, remove_follower_id) => async (dispatch) => {
+  try {
+
+    let user_data = {
+      "id" : id,
+      "follower_to_remove" : remove_follower_id,
+    }
+
+    const { data } = await api.addRemoveFollowerAPICall(user_data);
+
+    dispatch({ type: REMOVE_FOLLOWER, payload: data });
   } catch (error) {
     console.log(error);
   }
