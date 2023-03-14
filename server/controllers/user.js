@@ -131,7 +131,7 @@ export const getUserByID = async (req, res) => {
 
 // This functiona accepts a user id and a new follower id and 
 // adds that user to thier following list if they do not already exist
-export const addFollowers = async (req, res) => {
+export const addFollower = async (req, res) => {
 
   const {id, new_follower} = req.body;
   try {
@@ -146,18 +146,18 @@ export const addFollowers = async (req, res) => {
     // console.log("The id of the new follower is: " + new_follower);
     
     
-    const new_follower_user = await UserModel.findById(new_follower);
+    const followed_user = await UserModel.findById(new_follower);
 
-    if (new_follower_user == null){
+    if (followed_user == null){
       console.log("The new follower with id: " + new_follower + " was not found");
       res.status(400).json({ 'message': "The new follower with id: " + new_follower + " was not found"});
       return
     }
 
     // adding the user to the new_follower users followers list
-    if (new_follower_user.followers.includes(id) == false) {
-      new_follower_user.followers.push(id);
-      new_follower_user.save();
+    if (followed_user.followers.includes(id) == false) {
+      followed_user.followers.push(id);
+      followed_user.save();
     }
     else {
       console.log("The user was already on the new_users followers list");
@@ -178,6 +178,64 @@ export const addFollowers = async (req, res) => {
     }
   }catch (error) {
     res.status(500).json({ message: error.message });
+  }
+
+}
+
+
+export const removeFollower = async (req, res) => {
+
+  const {id, follower_to_remove} = req.body;
+  try {
+
+    // checking to see if the user exists
+    const user = await UserModel.findById(id);
+
+    if (user == null){
+      console.log("The user with id: " + id + " was not found");
+      res.status(400).json({ 'message': "The user id: " + id + " was not found"});
+      return
+    }
+
+    // checking to see if the removed user exists
+    const removed_user = await UserModel.findById(follower_to_remove);
+    if (removed_user == null){
+      console.log("The user with id: " + removed_user + " was not found, this was the requested user to remove");
+      res.status(400).json({ 'message': "The new follower with id: " + removed_user + " was not found"});
+      return
+    }
+
+
+    let index = user.following.indexOf(follower_to_remove);
+
+    if (index > -1) {
+      // found the user to remove from the following list
+      user.following.splice(index, 1);
+      user.save()
+      console.log("removed the requested id from the users following list");
+
+      // removing the current user from the followed users list
+      let index_of_removed = removed_user.followers.indexOf(id);
+      if (index_of_removed > -1) {
+        removed_user.followers.splice(index_of_removed, 1);
+        removed_user.save()
+        console.log ("Removed the id of the requester from the removed users followers list");
+      }
+      else {
+        console.log("The id of the requester was not in the followers list of the id to be removed.")
+      }
+
+
+    }
+    else {
+      console.log("The id of the user to remove was not found in the users following list");
+    }
+  
+    res.status(200).json({user});
+
+  }catch (error) {
+    res.status(500).json({ message: error.message });
+    return
   }
 
 }

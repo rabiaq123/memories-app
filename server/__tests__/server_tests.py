@@ -204,6 +204,35 @@ def add_users_follower(id, new_follower):
 
     return
 
+def remove_follower(id, new_follower):
+    """
+    This test confirms the connection to the API
+    """
+
+    url = BASE_URL + 'user/remove-follower'
+  
+
+    submit_post_data = {
+        "id" : id,
+        "follower_to_remove" : new_follower,
+    }
+
+    request = requests.post(url, json=submit_post_data, headers={},)    
+    
+    recieved_results = request.json()
+    
+    # if recieved_results["found_user"]["_id"] == id and recieved_results["found_user"]["name"] == "Wes Update 4:01" and recieved_results["found_user"]["email"] == "test45@test.com":
+    #     print (f'Testing that the root API call is returning a value; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
+    # else:
+    #     print (f'Testing that the root API call is returning a value; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
+    #     print ("****The expected results are******")
+    #     print ("id = " + id + ", email = test45@test.com, name = Wes Update 4:01")
+    
+    print ("****The expected results are******")
+    print(json.dumps(recieved_results, sort_keys=False, indent=4))
+
+    return
+
 def main():
 
     print (f'The base URL that is being tested is: '+bcolors.OKBLUE + f'{BASE_URL}' + bcolors.ENDC)
@@ -215,4 +244,6 @@ def main():
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
     # get_user_by_id_print("6400c5e8dcc14a33a65f7876")
     add_users_follower("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
+    # remove_follower("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
+
 main()
