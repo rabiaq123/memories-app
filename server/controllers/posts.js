@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import PostMessage from '../models/postMessage.js';
+import UserModel from "../models/user.js";
 
 const router = express.Router();
 
@@ -145,6 +146,70 @@ export const commentPost = async (req, res) => {
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
 
     res.json(updatedPost);
+};
+
+
+export const getPostFromFollowing = async (req, res) => {
+    const {id} = req.query;
+    console.log ("hello from the get followers post endpoint");
+    
+    try {
+      
+      // checking to see if the user exists
+      const user = await UserModel.findById(id);
+  
+      if (user == null){
+        console.log("The user with id: " + id + " was not found");
+        res.status(400).json({ 'message': "The user id: " + id + " was not found"});
+        return
+      }
+  
+      const found_following_posts = [];
+  
+    //   user.following.forEach( function (current_following) {
+    //     const { id } = req.query;
+
+    //     try {
+    //         const posts = await PostMessage.find({ creator: id});
+
+    //         res.json({ data: posts });
+    //     } catch (error) {    
+    //         res.status(404).json({ message: error.message });
+    //         return
+    //     }
+    //   })
+      // console.log(user.following);
+
+      // iterating through each of the following users to get their posts
+      for (var i = 0; i < user.following.length; i++) { 
+        // console.log(user.following[i]); 
+        let posts = await PostMessage.find({ creator: user.following[i]});
+        // console.log("Founds posts are:")
+        // console.log(posts);
+        if (posts.length != 0){
+          for (var j = 0; j < posts.length; j++) { 
+            console.log("Found a post and pushing it onto the array")
+            found_following_posts.push(posts[j]);
+          }
+        }
+      }
+    //   for (const current_following in user.following) {
+    //     console.log("the current following user id is: " + current_following);
+    //     let posts = await PostMessage.find({ creator: current_following});
+    //     if (posts != null){
+    //         found_following_posts.concat(posts);
+    //     }
+    //   }
+      
+      // console.log('found following posts is:\n' + found_following_posts);
+
+      res.json({ data: found_following_posts });
+      return
+    }catch (error) {
+      res.status(500).json({ message: error.message });
+      return
+    }
+  
 };
 
 export default router;
