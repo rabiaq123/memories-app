@@ -37,3 +37,4 @@ export const fetchUserId = (id) => API.get(`/user/${id}`);
 export const getUser = (name) => API.get(`/user/${name}`);
 export const getUsers = () => API.get('/user');
 export const updateUser = (updatedUser) => API.post(`/user/editprofile`, updatedUser);
+export const addNewFollower = (followerInfo) => API.post(`/user/add-follower`, followerInfo);

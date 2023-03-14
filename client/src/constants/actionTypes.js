@@ -21,3 +21,6 @@ export const USER_UPDATE_REQUEST = 'USER_UPDATE_REQUEST';
 export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
 export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL';
 
+//Followers and Following
+export const UPDATE_NEW_FOLLOWER = 'UPDATE_NEW_FOLLOWER';
+
