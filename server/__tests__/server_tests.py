@@ -175,15 +175,17 @@ def get_user_by_id_test(id):
     
     return
 
-def update_users_followers():
+def add_users_follower(id, new_follower):
     """
     This test confirms the connection to the API
     """
 
-    url = BASE_URL + 'user/updateUsersFollowers'
+    url = BASE_URL + 'user/add-follower'
   
 
     submit_post_data = {
+        "id" : id,
+        "new_follower" : new_follower,
     }
 
     request = requests.post(url, json=submit_post_data, headers={},)    
@@ -212,5 +214,5 @@ def main():
     # edit_profile_test("6400c5e8dcc14a33a65f7876", "test45@test.com", "Wes Update 4:01")
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
     # get_user_by_id_print("6400c5e8dcc14a33a65f7876")
-    update_users_followers()
+    add_users_follower("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
 main()

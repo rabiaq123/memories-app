@@ -10,6 +10,6 @@ router.get("/:id", getUser);
 router.get("/", getUsers);
 router.post('/editprofile', updateUserProfile);
 router.get('/userbyid/:id', getUserByID);
-router.post('/add-followers', addFollowers);
+router.post('/add-follower', addFollowers);
 
 export default router;

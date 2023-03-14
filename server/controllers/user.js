@@ -129,13 +129,57 @@ export const getUserByID = async (req, res) => {
   }
 }
 
+// This functiona accepts a user id and a new follower id and 
+// adds that user to thier following list if they do not already exist
 export const addFollowers = async (req, res) => {
 
-  const {id, new_follower} = req.params;
+  const {id, new_follower} = req.body;
+  try {
+    const user = await UserModel.findById(id);
+    // console.log("The user id sent is: " + id);
+    // console.log("The new_follower id sent is: " + new_follower);
+    if (user == null){
+      console.log("User with id: " + id + " was not found");
+      res.status(400).json({ 'message': "User with id: " + id + " was not found"});
+      return
+    }
+    // console.log("The id of the new follower is: " + new_follower);
+    
+    
+    const new_follower_user = await UserModel.findById(new_follower);
 
-  const user = await UserModel.findById(id);
-  console.log("hello world");
-  res.status(200).json({"message": "this endpoint is still under development", "found_user" : user});
+    if (new_follower_user == null){
+      console.log("The new follower with id: " + new_follower + " was not found");
+      res.status(400).json({ 'message': "The new follower with id: " + new_follower + " was not found"});
+      return
+    }
+
+    // adding the user to the new_follower users followers list
+    if (new_follower_user.followers.includes(id) == false) {
+      new_follower_user.followers.push(id);
+      new_follower_user.save();
+    }
+    else {
+      console.log("The user was already on the new_users followers list");
+    }
+
+    if (user.following.includes(new_follower) == false) {
+      console.log ("Adding the follower: " + new_follower + "to the followers array");
+
+      user.following.push(new_follower);
+      user.save();
+      res.status(200).json({user});
+      return
+    }
+    else {
+      console.log("The user " + new_follower +  " is already on their following list");
+      res.status(200).json({user});
+      return
+    }
+  }catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+
 }
 
 
