@@ -129,6 +129,15 @@ export const getUserByID = async (req, res) => {
   }
 }
 
+export const addFollowers = async (req, res) => {
+
+  const {id, new_follower} = req.params;
+
+  const user = await UserModel.findById(id);
+  console.log("hello world");
+  res.status(200).json({"message": "this endpoint is still under development", "found_user" : user});
+}
+
 
 // Edit user profile
 // export const updateUserProfile = asyncHandler(async (req, res) => {
