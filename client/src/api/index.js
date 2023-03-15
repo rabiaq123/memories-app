@@ -30,6 +30,7 @@ export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 export const comment = (value, id) => API.post(`/posts/${id}/commentPost`, { value });
 export const updatePost = (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost);
 export const deletePost = (id) => API.delete(`/posts/${id}`);
+export const getFollowingPosts = (id) => API.get(`/posts/getfollowingposts?id=${id}`);
 
 export const signIn = (formData) => API.post('/user/signin', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);
@@ -37,3 +38,5 @@ export const fetchUserId = (id) => API.get(`/user/${id}`);
 export const getUser = (name) => API.get(`/user/${name}`);
 export const getUsers = () => API.get('/user');
 export const updateUser = (updatedUser) => API.post(`/user/editprofile`, updatedUser);
+export const addNewFollower = (followerInfo) => API.post(`/user/add-follower`, followerInfo);
+export const addRemoveFollowerAPICall = (followerInfo) => API.post(`/user/remove-follower`, followerInfo);

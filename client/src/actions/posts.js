@@ -1,4 +1,4 @@
-import { START_LOADING, END_LOADING, FETCH_ALL, FETCH_POST, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE, COMMENT, FETCH_BY_CREATOR } from '../constants/actionTypes';
+import { START_LOADING, END_LOADING, FETCH_ALL, FETCH_POST, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE, COMMENT, FETCH_BY_CREATOR, GET_FOLLOWERS_POSTS } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 // below are Action Creators (functions that return actions by dispatching them to the reducer)
@@ -119,6 +119,19 @@ export const deletePost = (id) => async (dispatch) => {
     await await api.deletePost(id);
 
     dispatch({ type: DELETE, payload: id });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const getFollowingPostsAction = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
+    const { data: { data } } = await api.getFollowingPosts(id);
+
+    dispatch({ type: GET_FOLLOWERS_POSTS, payload: { data } });
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
