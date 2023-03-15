@@ -13,8 +13,8 @@ export default (state = { isLoading: true, user: [] }, action) => { // should it
     case FETCH_ALL:
       return {
         ...state,
-        users: action.payload.data,
-      };
+        users: action.payload.users,
+    };
     case UPDATE:
       return { ...state, user: action.payload.user };
     case UPDATE_NEW_FOLLOWER:

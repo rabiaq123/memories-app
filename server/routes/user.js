@@ -13,5 +13,6 @@ router.post('/editprofile', updateUserProfile);
 router.get('/userbyid/:id', getUserByID);
 router.post('/add-follower', addFollower);
 router.post('/remove-follower', removeFollower);
+router.get('/accounts', getUsers);
 
 export default router;

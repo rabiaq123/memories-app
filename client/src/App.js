@@ -9,6 +9,7 @@ import Auth from './components/Auth/Auth';
 import EditScreen from './components/EditProfile/EditScreen';
 import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import Profile from './components/ProfilePage/Profile';
+import Accounts from './components/Accounts/Accounts';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
           {/* <Route path="/user/:id/edit" exact component={EditScreen} /> */}
           <Route path="/edit" exact component={EditScreen} />
+          <Route path="/accounts" exact component={Accounts} />
         </Switch>
       </Container>
     </BrowserRouter>
