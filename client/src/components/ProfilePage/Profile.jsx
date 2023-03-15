@@ -38,10 +38,10 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(getUser(id));
-    // dispatch(getPostsByCreatorId(id));
+    dispatch(getPostsByCreatorId(id));
     // add_new_user('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
     // remove_user_following ('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
-    get_posts_from_following(id);
+    // get_posts_from_following(id);
   }, [id]);
 
   return (
