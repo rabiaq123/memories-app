@@ -43,7 +43,6 @@ const Navbar = () => {
         <img className={classes.image} src={memoriesLogo} alt="icon" height="40px" />
       </Link>
       <Toolbar className={classes.toolbar}>
-        <Button component={Link} to="/user" variant="contained" color="primary" style={{ marginRight: '10px' }}>View Users</Button>
         {user?.result ? (
           <div className={classes.profile}>
             <Link to={`/user/${user.result._id}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
