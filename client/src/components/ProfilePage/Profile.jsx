@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Typography, CircularProgress, Grid, Divider, Button } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import Post from '../Posts/Post/Post';
-import { getPostsByCreatorId } from '../../actions/posts';
+import { getPostsByCreatorId, getFollowingPostsAction } from '../../actions/posts';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getUser, addNewFollowerAction, removeFollowerAction } from '../../actions/user';
@@ -32,11 +32,16 @@ const Profile = () => {
     dispatch(removeFollowerAction (id, remove_user_id));
   }
 
+  const get_posts_from_following = (id) => {
+    dispatch(getFollowingPostsAction (id));
+  }
+
   useEffect(() => {
     dispatch(getUser(id));
-    dispatch(getPostsByCreatorId(id));
+    // dispatch(getPostsByCreatorId(id));
     // add_new_user('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
     // remove_user_following ('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
+    get_posts_from_following(id);
   }, [id]);
 
   return (

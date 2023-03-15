@@ -24,4 +24,5 @@ export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL';
 //Followers and Following
 export const UPDATE_NEW_FOLLOWER = 'UPDATE_NEW_FOLLOWER';
 export const REMOVE_FOLLOWER = 'REMOVE_FOLLOWER';
+export const GET_FOLLOWERS_POSTS = 'GET_FOLLOWERS_POSTS';
 
