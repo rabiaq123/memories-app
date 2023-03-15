@@ -7,33 +7,32 @@ import { getUsers } from '../../actions/user';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 
-// import Post from './Post/Post';
 import useStyles from './styles';
 
 const Accounts = () => {
-  const { user, isLoading } = useSelector((state) => state.user); // state.posts because posts is the name of the reducer
+  const { users, isLoading } = useSelector((state) => state.user); // state.user because user is the name of the reducer
   const classes = useStyles();
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     dispatch(getUsers());
-  }, [user]);
+  }, []);
 
-  console.log("users",user);
-  if (!user.length && !isLoading) return 'No users';
+  console.log("users", users);
+  // if (!users.length && !isLoading) return 'No users'; // TODO: UNCOMMENT THIS
 
   return (
     isLoading ? <CircularProgress /> : (
-        <><Link to="/accounts">Accounts</Link>
-        <Link to="/posts">Posts</Link></>
-    //   <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-    //     {posts?.map((post) => (
-    //       <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-    //         <Post post={post} setCurrentId={setCurrentId} />
-    //       </Grid>
-    //     ))}
-    //   </Grid>
+      <>
+        <Link to="/accounts">Accounts</Link>
+        <Link to="/">Posts</Link>
+        {users?.map((user) => (
+          <div key={user._id}>
+            <h3>User: {user.name}</h3>
+            <p>Email: {user.email}</p>
+          </div>
+        ))}
+      </>
     )
   );
 };
