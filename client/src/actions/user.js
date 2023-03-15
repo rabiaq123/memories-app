@@ -15,9 +15,10 @@ export const getUser = (id) => async (dispatch) => {
 
 export const getUsers = () => async (dispatch) => {
   try {
-    const { users } = await api.getUsers();
+    const { data } = await api.getUsers();
+    // console.log("The users are: " + data);
 
-    dispatch({ type: FETCH_ALL, payload: {users} });
+    dispatch({ type: FETCH_ALL, payload: {users: data} });
   } catch (error) {
     console.log(error);
   }
