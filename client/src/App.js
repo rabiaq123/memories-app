@@ -27,7 +27,6 @@ const App = () => {
           <Route path="/user" exact component={UsersPage} />
           <Route path="/user/:id" exact component={Profile} />
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
-          {/* <Route path="/user/:id/edit" exact component={EditScreen} /> */}
           <Route path="/edit" exact component={EditScreen} />
         </Switch>
       </Container>
