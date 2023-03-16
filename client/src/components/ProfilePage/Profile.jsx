@@ -26,8 +26,11 @@ const Profile = () => {
   
   const [open, setOpen] = React.useState(false);
   const [followersClicked, setFollowersClicked] = useState(false);
+  // const [followingClicked, setFollowingClicked] = useState(false);
   const handleOpen = () => { // allow opening modal if user has followers
-    if (user?.followers?.length > 0) setOpen(true);
+    // if (followersClicked && user?.followers?.length > 0) setOpen(true);
+    // if (followingClicked && user?.following?.length > 0) setOpen(true);
+    setOpen(true);
   }
   const handleClose = () => setOpen(false);
 
@@ -37,11 +40,13 @@ const Profile = () => {
 
   const handleFollowersClick = () => {
     setFollowersClicked(true);
+    // setFollowingClicked(false);
     handleOpen();
   }
 
   const handleFollowingClick = () => {
     setFollowersClicked(false);
+    // setFollowingClicked(true);
     handleOpen();
   }
 
@@ -63,7 +68,7 @@ const Profile = () => {
   const FollowButton = () => {
     if (loggedID && loggedID !== id) {
       if (isFollowed) {
-        return <Button variant="contained" color="transparent" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
+        return <Button variant="contained" color="inherit" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
       } else {
         return <Button variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
       }
