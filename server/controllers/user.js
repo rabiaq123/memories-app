@@ -204,18 +204,18 @@ export const removeFollower = async (req, res) => {
     }
 
 
-    let index = user.following.indexOf(follower_to_remove);
+    let index = user.followers.indexOf(follower_to_remove);
 
     if (index > -1) {
       // found the user to remove from the following list
-      user.following.splice(index, 1);
+      user.followers.splice(index, 1);
       user.save()
       console.log("removed the requested id from the users following list");
 
       // removing the current user from the followed users list
-      let index_of_removed = removed_user.followers.indexOf(id);
+      let index_of_removed = removed_user.following.indexOf(id);
       if (index_of_removed > -1) {
-        removed_user.followers.splice(index_of_removed, 1);
+        removed_user.following.splice(index_of_removed, 1);
         removed_user.save()
         console.log ("Removed the id of the requester from the removed users followers list");
       }
