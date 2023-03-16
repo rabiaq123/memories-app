@@ -119,8 +119,6 @@ export const getUserByID = async (req, res) => {
     // const updateUser = { email, name, _id : id};
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
 
-
-
     res.status(200).json({"message": "this endpoint is still under development", "found_user" : user});
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -129,8 +127,8 @@ export const getUserByID = async (req, res) => {
   }
 }
 
-// This functiona accepts a user id and a new follower id and 
-// adds that user to thier following list if they do not already exist
+// This function accepts a user id and a new follower id and 
+// adds that user to their following list if they do not already exist
 export const addFollower = async (req, res) => {
 
   const {id, new_follower} = req.body;
@@ -155,18 +153,18 @@ export const addFollower = async (req, res) => {
     }
 
     // adding the user to the new_follower users followers list
-    if (followed_user.followers.includes(id) == false) {
-      followed_user.followers.push(id);
+    if (followed_user.following.includes(id) == false) {
+      followed_user.following.push(id);
       followed_user.save();
     }
     else {
       console.log("The user was already on the new_users followers list");
     }
 
-    if (user.following.includes(new_follower) == false) {
-      console.log ("Adding the follower: " + new_follower + "to the followers array");
+    if (user.followers.includes(new_follower) == false) {
+      console.log ("Adding the follower: " + new_follower + " to the followers array");
 
-      user.following.push(new_follower);
+      user.followers.push(new_follower);
       user.save();
       res.status(200).json({user});
       return
