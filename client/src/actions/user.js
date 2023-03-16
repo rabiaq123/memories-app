@@ -77,7 +77,7 @@ export const removeFollowerAction = (id, remove_follower_id) => async (dispatch)
 
     const { data } = await api.addRemoveFollowerAPICall(user_data);
 
-    dispatch({ type: REMOVE_FOLLOWER, payload: data });
+    dispatch({ type: REMOVE_FOLLOWER, payload: {user: data} });
   } catch (error) {
     console.log(error);
   }

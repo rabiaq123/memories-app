@@ -181,58 +181,53 @@ export const addFollower = async (req, res) => {
 
 }
 
-
 export const removeFollower = async (req, res) => {
 
   const {id, follower_to_remove} = req.body;
   try {
 
     // checking to see if the user exists
-    const user = await UserModel.findById(id);
+    const unfollowedUser = await UserModel.findById(id);
 
-    if (user == null){
+    if (unfollowedUser == null){
       console.log("The user with id: " + id + " was not found");
       res.status(400).json({ 'message': "The user id: " + id + " was not found"});
       return
     }
 
     // checking to see if the removed user exists
-    const removed_user = await UserModel.findById(follower_to_remove);
-    if (removed_user == null){
-      console.log("The user with id: " + removed_user + " was not found, this was the requested user to remove");
-      res.status(400).json({ 'message': "The new follower with id: " + removed_user + " was not found"});
+    const activeUser = await UserModel.findById(follower_to_remove);
+    if (activeUser == null){
+      console.log("The user with id: " + activeUser + " was not found, this was the requesting unfollower");
+      res.status(400).json({ 'message': "The new follower with id: " + activeUser + " was not found"});
       return
     }
 
-
-    let index = user.followers.indexOf(follower_to_remove);
+    let index = unfollowedUser.followers.indexOf(follower_to_remove);
 
     if (index > -1) {
-      // found the user to remove from the following list
-      user.followers.splice(index, 1);
-      user.save()
-      console.log("removed the requested id from the users following list");
+      // found the user to remove from the followers list
+      unfollowedUser.followers.splice(index, 1);
+      unfollowedUser.save()
+      console.log("Removed the requester's id from the user's followers list");
 
-      // removing the current user from the followed users list
-      let index_of_removed = removed_user.following.indexOf(id);
-      if (index_of_removed > -1) {
-        removed_user.following.splice(index_of_removed, 1);
-        removed_user.save()
-        console.log ("Removed the id of the requester from the removed users followers list");
+      // removing the user from the requester's list
+      let index_of_unfollowed = activeUser.following.indexOf(id);
+      if (index_of_unfollowed > -1) {
+        activeUser.following.splice(index_of_unfollowed, 1);
+        activeUser.save()
+        console.log ("Removed the user's id from the requester's following list");
       }
       else {
-        console.log("The id of the requester was not in the followers list of the id to be removed.")
+        console.log("The user's id was not found in the requester's following list.")
       }
-
-
     }
     else {
-      console.log("The id of the user to remove was not found in the users following list");
+      console.log("The requester's id was not found in the user's followers list.");
     }
   
-    res.status(200).json({user});
-
-  }catch (error) {
+    res.status(200).json(unfollowedUser);
+  } catch (error) {
     res.status(500).json({ message: error.message });
     return
   }
