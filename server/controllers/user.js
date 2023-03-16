@@ -132,46 +132,47 @@ export const getUserByID = async (req, res) => {
 export const addFollower = async (req, res) => {
 
   const {id, new_follower} = req.body;
+  // console.log("The user id sent is: " + id);
+  // console.log("The new_follower id sent is: " + new_follower);
+  
   try {
-    const user = await UserModel.findById(id);
-    // console.log("The user id sent is: " + id);
-    // console.log("The new_follower id sent is: " + new_follower);
-    if (user == null){
+    const followedUser = await UserModel.findById(id); // followed user
+
+    if (followedUser == null){
       console.log("User with id: " + id + " was not found");
       res.status(400).json({ 'message': "User with id: " + id + " was not found"});
       return
     }
     // console.log("The id of the new follower is: " + new_follower);
     
-    
-    const followed_user = await UserModel.findById(new_follower);
+    const activeUser = await UserModel.findById(new_follower);
 
-    if (followed_user == null){
+    if (activeUser == null){
       console.log("The new follower with id: " + new_follower + " was not found");
       res.status(400).json({ 'message': "The new follower with id: " + new_follower + " was not found"});
       return
     }
 
     // adding the user to the new_follower users followers list
-    if (followed_user.following.includes(id) == false) {
-      followed_user.following.push(id);
-      followed_user.save();
+    if (activeUser.following.includes(id) == false) {
+      activeUser.following.push(id);
+      activeUser.save();
     }
     else {
-      console.log("The user was already on the new_users followers list");
+      console.log("The active user was already following the user");
     }
 
-    if (user.followers.includes(new_follower) == false) {
+    if (followedUser.followers.includes(new_follower) == false) {
       console.log ("Adding the follower: " + new_follower + " to the followers array");
 
-      user.followers.push(new_follower);
-      user.save();
-      res.status(200).json({user});
+      followedUser.followers.push(new_follower);
+      followedUser.save();
+      res.status(200).json(followedUser);
       return
     }
     else {
-      console.log("The user " + new_follower +  " is already on their following list");
-      res.status(200).json({user});
+      console.log("The active user " + new_follower +  " is already on their following list");
+      res.status(200).json(followedUser);
       return
     }
   }catch (error) {

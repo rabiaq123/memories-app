@@ -61,7 +61,7 @@ export const addNewFollowerAction = (id, new_follower_id) => async (dispatch) =>
 
     const { data } = await api.addNewFollower(user_data);
 
-    dispatch({ type: UPDATE_NEW_FOLLOWER, payload: data });
+    dispatch({ type: UPDATE_NEW_FOLLOWER, payload: {user: data} });
   } catch (error) {
     console.log(error);
   }
