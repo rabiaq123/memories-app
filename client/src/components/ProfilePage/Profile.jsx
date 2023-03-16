@@ -3,65 +3,79 @@ import { useParams } from 'react-router-dom'
 import { Typography, CircularProgress, Grid, Divider, Button } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import Post from '../Posts/Post/Post';
-import { getPostsByCreatorId, getFollowingPostsAction } from '../../actions/posts';
-import { useEffect } from 'react';
+import { getPostsByCreatorId } from '../../actions/posts';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getUser, addNewFollowerAction, removeFollowerAction } from '../../actions/user';
 import { Link } from 'react-router-dom';
-
+import useStyles from './styles';
 
 const Profile = () => {
   const { id } = useParams(); // user's name from URL
 
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user); // user whose profile is being viewed
   const { posts, isLoading } = useSelector((state) => state.posts);
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const loggedID = initialState?.result?._id;
+  const [isFollowed, setIsFollowed] = useState(user?.followers?.includes(loggedID));
+  const classes = useStyles();
 
   // console.log('id', id);
-  console.log('user', user);
+  console.log('viewed user:', user);
   // console.log('user_posts', posts)
 
-  const add_new_user = (id, new_follower_id) => {
+  const handleFollow = (id, new_follower_id) => {
+    setIsFollowed(true);
     dispatch(addNewFollowerAction(id, new_follower_id));
-    
   }
 
-  const remove_user_following = (id, remove_user_id) => {
+  const handleUnfollow = (id, remove_user_id) => {
+    setIsFollowed(false);
     dispatch(removeFollowerAction (id, remove_user_id));
-  }
-
-  const get_posts_from_following = (id) => {
-    dispatch(getFollowingPostsAction (id));
   }
 
   useEffect(() => {
     dispatch(getUser(id));
     dispatch(getPostsByCreatorId(id));
-    // add_new_user('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
-    // remove_user_following ('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
-    // get_posts_from_following(id);
+    // handleFollow('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
+    // handleUnfollow ('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
   }, [id]);
+  
+  const FollowButton = () => {
+    if (loggedID && loggedID !== id) {
+      if (isFollowed) {
+        return <Button variant="contained" color="primary" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
+      } else {
+        return <Button variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
+      }
+    }
+    return null;
+  }
 
   return (
     <div>
-      <Typography variant="h2">{user?.name}</Typography>
-      {(loggedID === id) && (
-        <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>
-      )}
+      <div className={classes.profileInfo}> 
+        <Typography variant="h2" className={classes.userName}>{user?.name}</Typography>
+        <div className={classes.followingInfo}>
+          {(loggedID === id) && <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>}
+          <FollowButton />
+        </div>
+        
+      </div>
       <Divider style={{ margin: '20px 0 50px 0' }} />
 
+      {posts?.length == 0 && !isLoading && <p>No posts</p>}
+
       {isLoading ? <CircularProgress /> : (
-      <Grid container alignItems="stretch" spacing={3}>
-        {posts?.map((post) => (
-        <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-          <Post post={post} key={post._id}/>
+        <Grid container alignItems="stretch" spacing={3}>
+          {posts?.map((post) => (
+          <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
+            <Post post={post} key={post._id}/>
+          </Grid>
+          ))}
         </Grid>
-        ))}
-      </Grid>
       )}
-      {!posts && <Typography variant="h2">No posts</Typography>}
 
     </div>
   )
