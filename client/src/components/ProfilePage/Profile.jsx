@@ -25,6 +25,7 @@ const Profile = () => {
   const [isFollowed, setIsFollowed] = useState(user?.followers?.includes(loggedID));
   
   const [open, setOpen] = React.useState(false);
+  const [followersClicked, setFollowersClicked] = useState(false);
   const handleOpen = () => { // allow opening modal if user has followers
     if (user?.followers?.length > 0) setOpen(true);
   }
@@ -33,6 +34,16 @@ const Profile = () => {
   // console.log('id', id);
   console.log('viewed user:', user);
   // console.log('user_posts', posts)
+
+  const handleFollowersClick = () => {
+    setFollowersClicked(true);
+    handleOpen();
+  }
+
+  const handleFollowingClick = () => {
+    setFollowersClicked(false);
+    handleOpen();
+  }
 
   const handleFollow = (id, new_follower_id) => {
     setIsFollowed(true);
@@ -67,8 +78,8 @@ const Profile = () => {
         <div className={classes.followingInfo}>
           {(loggedID === id) && <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>}
           <FollowButton />
-          <p className={classes.userCount} onClick={handleOpen}>{user?.followers?.length} Followers</p>
-          <p>{user?.following?.length} Following</p>
+          <p className={classes.userCount} onClick={handleFollowersClick}>{user?.followers?.length} Followers</p>
+          <p className={classes.userCount} onClick={handleFollowingClick}>{user?.following?.length} Following</p>
         </div>
       </div>
       <Divider style={{ margin: '20px 0 50px 0' }} />
@@ -81,10 +92,12 @@ const Profile = () => {
       >
         <Box className={classes.modal}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Followers
+            {followersClicked ? 'Followers' : 'Following'}
           </Typography>
           <Typography id="modal-modal-description">
-            {user?.followers?.map((follower) => (
+            {followersClicked ? user?.followers?.map((follower) => (
+              <li key={follower}>{follower}</li>
+            )) : user?.following?.map((follower) => (
               <li key={follower}>{follower}</li>
             ))}
           </Typography>
