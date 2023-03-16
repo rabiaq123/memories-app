@@ -1,25 +1,34 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Typography, CircularProgress, Grid, Divider, Button } from '@material-ui/core';
+import { Typography, CircularProgress, Grid, Divider, Button, Box, Modal } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import Post from '../Posts/Post/Post';
-import { getPostsByCreatorId } from '../../actions/posts';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getUser, addNewFollowerAction, removeFollowerAction } from '../../actions/user';
 import { Link } from 'react-router-dom';
+
 import useStyles from './styles';
+import { getUser, addNewFollowerAction, removeFollowerAction } from '../../actions/user';
+import { getPostsByCreatorId } from '../../actions/posts';
+import Post from '../Posts/Post/Post';
 
 const Profile = () => {
   const { id } = useParams(); // user's name from URL
 
   const dispatch = useDispatch();
+  const classes = useStyles();
   const { user } = useSelector((state) => state.user); // user whose profile is being viewed
   const { posts, isLoading } = useSelector((state) => state.posts);
+
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const loggedID = initialState?.result?._id;
+
   const [isFollowed, setIsFollowed] = useState(user?.followers?.includes(loggedID));
-  const classes = useStyles();
+  
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => { // allow opening modal if user has followers
+    if (user?.followers?.length > 0) setOpen(true);
+  }
+  const handleClose = () => setOpen(false);
 
   // console.log('id', id);
   console.log('viewed user:', user);
@@ -38,8 +47,6 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUser(id));
     dispatch(getPostsByCreatorId(id));
-    // handleFollow('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
-    // handleUnfollow ('6400c5e8dcc14a33a65f7876', '63e5266426cfdd0014b607b6');
   }, [id]);
   
   const FollowButton = () => {
@@ -60,12 +67,29 @@ const Profile = () => {
         <div className={classes.followingInfo}>
           {(loggedID === id) && <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>}
           <FollowButton />
-          <p>{user?.followers?.length} Followers</p>
+          <p className={classes.userCount} onClick={handleOpen}>{user?.followers?.length} Followers</p>
           <p>{user?.following?.length} Following</p>
         </div>
-        
       </div>
       <Divider style={{ margin: '20px 0 50px 0' }} />
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className={classes.modal}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Followers
+          </Typography>
+          <Typography id="modal-modal-description">
+            {user?.followers?.map((follower) => (
+              <li key={follower}>{follower}</li>
+            ))}
+          </Typography>
+        </Box>
+      </Modal>
 
       {posts?.length == 0 && !isLoading && <p>No posts</p>}
 
