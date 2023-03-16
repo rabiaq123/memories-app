@@ -60,6 +60,8 @@ const Profile = () => {
         <div className={classes.followingInfo}>
           {(loggedID === id) && <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>}
           <FollowButton />
+          <p>{user?.followers?.length} Followers</p>
+          <p>{user?.following?.length} Following</p>
         </div>
         
       </div>
