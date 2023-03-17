@@ -8,8 +8,9 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 
 import useStyles from './styles';
+import Account from './Account/Account'
 
-const Accounts = ({setCurrentId}) => {
+const Accounts = () => {
   const { users, isLoading } = useSelector((state) => state.user); // state.user because user is the name of the reducer
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -30,12 +31,13 @@ const Accounts = ({setCurrentId}) => {
           &nbsp;
           <Link to="/" style={{ textDecoration: 'none' }}>Posts</Link>
         </div>
-        {users?.map((user) => (
-          <div key={user._id}>
-            <h3>User: {user.name}</h3>
-            <p>Email: {user.email}</p>
-          </div>
-        ))}
+        <Grid className={classes.container} container alignItems="stretch" spacing={3}>
+          {users?.map((user) => (
+            <Grid key={user._id} item xs={12} sm={12} md={6} lg={3}>
+              <Account user={user}/>
+            </Grid>
+          ))}
+        </Grid>
       </>
     )
   );
