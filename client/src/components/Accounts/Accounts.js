@@ -29,22 +29,41 @@ const Accounts = () => {
     if (search == '') {
       history.push('/accounts');
     } else if (search.trim()) {
-      // var found = false;
-      // for (let i = 0 ; i < users?.length ; i++ ) {
-      //   if (users[i].name == search) {
-      //     found = true;
-      //     users = users[i];
-      //     console.log('the search query is', search);
-      //     history.push(`/account`);
-      //   }
-      // }
-      // if (found === false) {
-      //   history.push('/accounts');
-      // }
+      // some if statement is there is nothing found try closestSearch
+      console.log(closestSearch(search));
     } else {
       history.push('/accounts');
     }
   };
+
+  const closestSearch = (search) => {
+    let greatestMatch = 0;
+    let greatestMatchName = "";
+
+    for(let i = 0 ; i < users.length ; i++) {
+      let matchScore = 0;
+      if (search.length >= (users[i].name).length) {
+        for(let x = 0 ; x < (users[i].name).length ; x ++) {
+          if (users[i].name[x] == search[x]) {
+            matchScore++;
+          }
+        }
+      } else {
+        for(let x = 0 ; x < search.length ; x ++) {
+          if (users[i].name[x] == search[x]) {
+            matchScore++;
+          }
+        }
+      }
+
+      if (matchScore > greatestMatch) {
+        greatestMatch = matchScore;
+        greatestMatchName = users[i].name;
+      }
+    }
+
+    return greatestMatchName;
+  }
 
   const handleKeyPress = (e) => {
     if (e.keyCode === 13) {
