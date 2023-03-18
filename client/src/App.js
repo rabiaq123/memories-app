@@ -29,6 +29,7 @@ const App = () => {
           {/* <Route path="/user/:id/edit" exact component={EditScreen} /> */}
           <Route path="/edit" exact component={EditScreen} />
           <Route path="/accounts" exact component={Accounts} />
+          <Route path="/accounts/:searchUser" exact component={Accounts}/>
         </Switch>
       </Container>
     </BrowserRouter>
