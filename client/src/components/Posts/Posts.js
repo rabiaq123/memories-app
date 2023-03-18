@@ -26,7 +26,7 @@ const Posts = ({ setCurrentId }) => {
           const following = initialState?.result?.following;
 
           console.log(searched);
-          if(typeof searched !== 'undefined') {
+          if(typeof searched !== 'undefined' || typeof following === 'undefined') {
             console.log("hi");
             return post
           }
