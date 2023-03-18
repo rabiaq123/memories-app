@@ -89,9 +89,9 @@ export const getUser = async (req, res) => {
     //   }
     // });
 
-    appended_user['followers_info'] = followers_info;
+    appended_user['followers'] = followers_info;
     // console.log(followers_info);
-    appended_user['following_info'] = following_info;
+    appended_user['following'] = following_info;
 
     
 
