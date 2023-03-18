@@ -26,10 +26,7 @@ const Profile = () => {
   
   const [open, setOpen] = React.useState(false);
   const [followersClicked, setFollowersClicked] = useState(false);
-  // const [followingClicked, setFollowingClicked] = useState(false);
   const handleOpen = () => { // allow opening modal if user has followers
-    // if (followersClicked && user?.followers?.length > 0) setOpen(true);
-    // if (followingClicked && user?.following?.length > 0) setOpen(true);
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
@@ -40,13 +37,11 @@ const Profile = () => {
 
   const handleFollowersClick = () => {
     setFollowersClicked(true);
-    // setFollowingClicked(false);
     handleOpen();
   }
 
   const handleFollowingClick = () => {
     setFollowersClicked(false);
-    // setFollowingClicked(true);
     handleOpen();
   }
 
