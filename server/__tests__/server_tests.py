@@ -324,6 +324,33 @@ def get_all_posts_test():
 
     return
 
+def get_user_by_name_test(name):
+    """
+    This test confirms the connection to the API
+    """
+
+    url = BASE_URL + f'user/get-user-by-name/'+name
+  
+
+    submit_post_data = {
+    }
+
+    request = requests.get(url, json=submit_post_data, headers={},)    
+    
+    recieved_results = request.json()
+    
+    # if recieved_results["found_user"]["_id"] == id and recieved_results["found_user"]["name"] == "Wes Update 4:01" and recieved_results["found_user"]["email"] == "test45@test.com":
+    #     print (f'Testing that the root API call is returning a value; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
+    # else:
+    #     print (f'Testing that the root API call is returning a value; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
+    #     print ("****The expected results are******")
+    #     print ("id = " + id + ", email = test45@test.com, name = Wes Update 4:01")
+    
+    print ("****The expected results are******")
+    print(json.dumps(recieved_results, sort_keys=False, indent=4))
+
+    return
+
 def main():
 
     print (f'The base URL that is being tested is: '+bcolors.OKBLUE + f'{BASE_URL}' + bcolors.ENDC)
@@ -332,8 +359,9 @@ def main():
     # get_user_by_id_print("6400c5e8dcc14a33a65f7876")
     # add_users_follower("6400c5e8dcc14a33a65f7876", "63e58ed226cfdd0014b607b8")
     # remove_follower("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
-    get_posts_following_test ("6400c5e8dcc14a33a65f7876")
+    # get_posts_following_test ("6400c5e8dcc14a33a65f7876")
     # get_all_posts_test()
+    get_user_by_name_test('Zayn Abbas')
 
 
     # **** Unit tests ******
@@ -344,6 +372,7 @@ def main():
     # edit_profile_test("6400c5e8dcc14a33a65f7876", "test45@test.com", "Wes Update 4:01")
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
     # add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
+    
 
 
 main()

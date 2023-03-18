@@ -35,7 +35,7 @@ const Profile = () => {
   const handleClose = () => setOpen(false);
 
   // console.log('id', id);
-  // console.log('viewed user:', user);
+  console.log('current user is:', user);
   // console.log('user_posts', posts)
 
   const handleFollowersClick = () => {
