@@ -278,6 +278,21 @@ export const removeFollower = async (req, res) => {
 }
 
 
+export const getUserByName = async (req, res) => {
+   
+    const {name} = req.params;
+    
+    // getting the user that matches the ID that is sent
+
+    const user = await UserModel.findOne({ name });
+
+    // const updateUser = { email, name, _id : id};
+    // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
+
+    res.status(200).json({user});
+}
+
+
 // Edit user profile
 // export const updateUserProfile = asyncHandler(async (req, res) => {
 //     const user = await UserModal.findById(req.user._id);

@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import useStyles from './styles';
 import { getUser, addNewFollowerAction, removeFollowerAction } from '../../actions/user';
 import { getPostsByCreatorId } from '../../actions/posts';
+import { getUserByName } from '../../actions/secondaryuser';
 import Post from '../Posts/Post/Post';
 
 const Profile = () => {
@@ -18,6 +19,7 @@ const Profile = () => {
   const classes = useStyles();
   const { user } = useSelector((state) => state.user); // user whose profile is being viewed
   const { posts, isLoading } = useSelector((state) => state.posts);
+  const { secondaryuser } = useSelector((state) => state.secondaryuser);
 
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const loggedID = initialState?.result?._id;
@@ -37,6 +39,7 @@ const Profile = () => {
   // console.log('id', id);
   // console.log('viewed user:', user);
   // console.log('user_posts', posts)
+  console.log('the secondary user is: ', secondaryuser);
 
   const handleFollowersClick = () => {
     setFollowersClicked(true);
@@ -63,6 +66,7 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUser(id));
     dispatch(getPostsByCreatorId(id));
+    dispatch(getUserByName('Zayn Abbas'));
   }, [id]);
   
   const FollowButton = () => {
