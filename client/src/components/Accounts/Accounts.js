@@ -30,42 +30,66 @@ const Accounts = () => {
       history.push('/accounts');
     } else if (search.trim()) {
       // some if statement is there is nothing found try closestSearch
-      console.log(closestSearch(search));
+      console.log(orderedSearch(search));
     } else {
       history.push('/accounts');
     }
   };
 
-  const closestSearch = (search) => {
-    let greatestMatch = 0;
-    let greatestMatchName = "";
+  const orderedSearch = (search) => {
+    
+    let newArray = []
+    // npm install string-similarity --save
+    var stringSimilarity = require("string-similarity");
 
-    for(let i = 0 ; i < users.length ; i++) {
-      let matchScore = 0;
+    for(let i = 0; i < users.length; i++){
+      // let currScore = levenshteinDistance(search, users[i].name)
+      // let sim = stringSimilarity.compare
+    
+      let similarity = stringSimilarity.compareTwoStrings(search, users[i].name);
+      console.log("Similarity score: ", similarity, search, users[i].name)
 
-      //score up how many letters are the same
-      if (search.length >= (users[i].name).length) {
-        for(let x = 0 ; x < (users[i].name).length ; x ++) {
-          if (users[i].name[x] == search[x]) {
-            matchScore++;
-          }
-        }
-      } else {
-        for(let x = 0 ; x < search.length ; x ++) {
-          if (users[i].name[x] == search[x]) {
-            matchScore++;
-          }
-        }
+      let user = {
+        "name": users[i].name,
+        "score": similarity
       }
 
-      //changes match if there is a greater score
-      if (matchScore > greatestMatch) {
-        greatestMatch = matchScore;
-        greatestMatchName = users[i].name;
+      newArray.push(user)
+      
+    }
+
+    // Sort array by score
+    newArray.sort(function(a,b){
+        if(a.score < b.score){
+          return 1;
+        }else if(a.score > b.score){
+          return -1;
+        }else{
+          return 0;
+        }
+    });
+
+    console.log("Sorted: ", newArray)
+
+    let newUsersArray = []
+    for(let i = 0; i < 5; i++){
+      // console.log(newArray[i].name, users[i].name)
+      for(let j = 0; j < users.length; j++){
+        if(newArray[i].name == users[j].name){
+          if(newArray[i].score != 0){
+            newUsersArray.push(users[j])
+            break;
+          }
+        }
       }
     }
 
-    return greatestMatchName;
+    console.log("NEW ARRAY:", newUsersArray)
+
+    for(let i = 0; i < newUsersArray.length; i++){
+      console.log("score: ", newArray[i].score, " name: ", newArray[i].name, " orderd user:", newUsersArray[i].name)
+    }
+    return newUsersArray
   }
 
   const handleKeyPress = (e) => {
