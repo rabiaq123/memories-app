@@ -29,11 +29,11 @@ const Home = () => {
       history.push('/');
     } else if (isUserSearch) {
       dispatch(getPostsByCreator(search));
-      history.push(`/posts/${search || 'none'}`);
+      history.push(`/posts/search=${search || 'none'}`);
     } else if (search.trim()) {
       dispatch(getPostsBySearch({ search, tags: search }));
       console.log('the search query is', search);
-      history.push(`/posts/${search || 'none'}`);
+      history.push(`/posts/search=${search || 'none'}`);
     } else {
       history.push('/');
     }
