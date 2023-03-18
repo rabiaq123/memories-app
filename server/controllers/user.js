@@ -52,8 +52,51 @@ export const getUser = async (req, res) => {
 
   try {
     const user = await UserModel.findById(id);
+    
+    // creating a new user object with all the required fields
+    // and the additional follower information
+    let appended_user = {};
+    appended_user['email'] = user['email'];
+    appended_user['followers'] = user['followers'];
+    appended_user['following'] = user['following'];
+    appended_user['name'] = user['name'];
+    appended_user['password'] = user['password'];
+    appended_user['__v'] = user['__v'];
+    appended_user['_id'] = user['_id'];
+    
+    // iterating through the followers info to get all info for that follower
 
-    res.status(200).json(user);
+    let followers_info = [];
+    let following_info = [];
+
+    const users = await UserModel.find();
+    for (var j = 0; j<users.length; j++){
+      if (appended_user['followers'].includes(users[j]['_id'])){
+        followers_info.push(users[j]);
+      }
+    }
+
+    for (var j = 0; j<users.length; j++){
+      if (appended_user['following'].includes(users[j]['_id'])){
+        following_info.push(users[j]);
+      }
+    }
+    // UserModel.find().where('_id').in(appended_user['followers']).exec((err, records) => {
+    //   // console.log('found followers are:', records);
+    //   for (var j = 0; j < records.length; j++) { 
+    //     followers_info.push(records[j]);
+    //     console.log('The found follower info is:', records[j])
+    //   }
+    // });
+
+    appended_user['followers_info'] = followers_info;
+    // console.log(followers_info);
+    appended_user['following_info'] = following_info;
+
+    
+
+    // console.log(typeof(user));
+    res.status(200).json(appended_user);
   } catch (error) {
     res.status(500).json({ message: error.message });
 
