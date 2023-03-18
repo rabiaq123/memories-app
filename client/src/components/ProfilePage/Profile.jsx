@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Typography, CircularProgress, Grid, Divider, Button, Box, Modal } from '@material-ui/core';
+import { Typography, CircularProgress, Grid, Divider, Button, Box, Modal, Avatar } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -15,7 +15,6 @@ const Profile = () => {
   const { id } = useParams(); // user's name from URL
 
   const dispatch = useDispatch();
-  const history = useHistory();
   const classes = useStyles();
   const { user } = useSelector((state) => state.user); // user whose profile is being viewed
   const { posts, isLoading } = useSelector((state) => state.posts);
@@ -92,20 +91,22 @@ const Profile = () => {
         aria-describedby="modal-modal-description"
       >
         <Box className={classes.modal}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:10}}>
             {followersClicked ? 'Followers' : 'Following'}
           </Typography>
           <Typography id="modal-modal-description">
             {followersClicked ? user?.followers?.map((follower) => (
               <li key={follower._id} style={{ listStyle: "none" }}>
-                <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)} style={{textDecoration: "none"}}>
+                <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
+                  <Avatar style={{backgroundColor: '#3f51b5'}}>{follower.name.charAt(0)}</Avatar>
                   {follower.name}
                 </Link>
               </li>
             )) : user?.following?.map((following) => (
               // remove bullet point element from list and underline from hyperlink
               <li key={following._id} style={{ listStyle: "none" }}>
-                <Link to={`/user/${following._id}`} onClick={() => setOpen(false)} style={{textDecoration: "none"}}>
+                <Link to={`/user/${following._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
+                  <Avatar style={{backgroundColor: '#3f51b5'}}>{following.name.charAt(0)}</Avatar>
                   {following.name}
                 </Link>
               </li>
