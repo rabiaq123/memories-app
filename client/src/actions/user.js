@@ -13,15 +13,15 @@ export const getUser = (id) => async (dispatch) => {
   }
 };
 
-// export const getUsers = () => async (dispatch) => {
-//   try {
-//     const { users } = await api.getUsers();
+export const getUsers = () => async (dispatch) => {
+  try {
+    const { users } = await api.getUsers();
 
-//     dispatch({ type: FETCH_ALL, payload: {users} });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    dispatch({ type: FETCH_ALL, payload: {users} });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // export const getUserByID = (id) => async (dispatch) => {
 //   try {
