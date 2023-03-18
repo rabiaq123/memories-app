@@ -7,8 +7,9 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import useStyles from './styles';
-import { getUser, addNewFollowerAction, removeFollowerAction } from '../../actions/user';
+import { getUser, addNewFollowerAction, removeFollowerAction} from '../../actions/user';
 import { getPostsByCreatorId } from '../../actions/posts';
+import { getUsers } from '../../actions/allusers';
 import Post from '../Posts/Post/Post';
 
 const Profile = () => {
@@ -17,6 +18,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { user } = useSelector((state) => state.user); // user whose profile is being viewed
+  const { allusers } = useSelector((state) => state.allusers); // user whose profile is being viewed
   const { posts, isLoading } = useSelector((state) => state.posts);
 
   const initialState = JSON.parse(localStorage.getItem('profile'));
@@ -35,7 +37,8 @@ const Profile = () => {
   const handleClose = () => setOpen(false);
 
   // console.log('id', id);
-  // console.log('viewed user:', user);
+  console.log('user:', user);
+  console.log("all users are", allusers);
   // console.log('user_posts', posts)
 
   const handleFollowersClick = () => {
@@ -63,6 +66,8 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUser(id));
     dispatch(getPostsByCreatorId(id));
+    dispatch(getUsers());
+    
   }, [id]);
   
   const FollowButton = () => {
