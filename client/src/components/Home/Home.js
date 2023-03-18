@@ -7,7 +7,6 @@ import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import Pagination from '../Pagination';
 import useStyles from './styles';
-import Accounts from '../Accounts/Accounts';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
