@@ -42,6 +42,8 @@ const Accounts = () => {
 
     for(let i = 0 ; i < users.length ; i++) {
       let matchScore = 0;
+
+      //score up how many letters are the same
       if (search.length >= (users[i].name).length) {
         for(let x = 0 ; x < (users[i].name).length ; x ++) {
           if (users[i].name[x] == search[x]) {
@@ -56,6 +58,7 @@ const Accounts = () => {
         }
       }
 
+      //changes match if there is a greater score
       if (matchScore > greatestMatch) {
         greatestMatch = matchScore;
         greatestMatchName = users[i].name;
