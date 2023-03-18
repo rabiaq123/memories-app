@@ -13,19 +13,12 @@ const Account = ({ user }) => {
   };
 
   return (
-    <Card className={classes.card} raised elevation={6}>
-      <ButtonBase
-        component="span"
-        name="test"
-        className={classes.cardAction}
-        onClick={openProfile}
-      >
+    <div className={classes.card}>
         <center>
-          <Avatar className={classes.purple} alt={user.name} src={user.imageUrl}>{user.name.charAt(0)}</Avatar>
-          <Typography variant="h6">{user.name}</Typography>
+          <Avatar onClick={openProfile} className={classes.avatar} alt={user.name} src={user.imageUrl}>{user.name.charAt(0)}</Avatar>
+          <Typography onClick={openProfile} variant="h6" className={classes.title}>{user.name}</Typography>
         </center>
-      </ButtonBase>
-    </Card>
+    </div>
   );
 };
 

@@ -75,14 +75,19 @@ export default makeStyles((theme) => ({
   searchButton: {
     marginTop: '10px',
   },
-  pagination: {
-    borderRadius: 4,
-    marginTop: '1rem',
-    padding: '16px',
-  },
   gridContainer: {
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column-reverse',
     },
   },
+  list:  {
+    padding: "8px 12px",
+    borderRadius: "3px",
+  },
+  listItems: {
+    cursor: "pointer",
+    '&:hover': {
+      backgroundColor: "#D3D3D3"
+    }
+  }
 }));
