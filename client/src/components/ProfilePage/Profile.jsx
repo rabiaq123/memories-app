@@ -75,7 +75,7 @@ const Profile = () => {
     <div>
       <div className={classes.profileInfo}> 
         <Typography variant="h2" className={classes.userName}>{user?.name}</Typography>
-        <div className={classes.followingInfo}>
+        <div className={classes.socialInfo}>
           {(loggedID === id) && <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>}
           <FollowButton />
           <p className={classes.userCount} onClick={handleFollowersClick}>{user?.followers?.length} Followers</p>
@@ -96,9 +96,13 @@ const Profile = () => {
           </Typography>
           <Typography id="modal-modal-description">
             {followersClicked ? user?.followers?.map((follower) => (
-              <li key={follower}>{follower}</li>
-            )) : user?.following?.map((follower) => (
-              <li key={follower}>{follower}</li>
+              <li key={follower._id}>
+                <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)}>{follower.name}</Link>
+              </li>
+            )) : user?.following?.map((following) => (
+              <li key={following._id}>
+                <Link to={`/user/${following._id}`} onClick={() => setOpen(false)}>{following.name}</Link>
+              </li>
             ))}
           </Typography>
         </Box>

@@ -8,7 +8,7 @@ export default makeStyles({
   userName: {
     marginRight: '30px',
   },
-  followingInfo: {
+  socialInfo: {
     display: 'flex',
     alignItems: 'center', // aligns items vertically (alignItems focuses on the cross axis)
     gap: '20px', // adds space between all flex items
@@ -27,4 +27,5 @@ export default makeStyles({
     boxShadow: 24,
     padding: 20,
   },
+
 });
