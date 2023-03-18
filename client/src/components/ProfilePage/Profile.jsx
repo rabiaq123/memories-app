@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { Typography, CircularProgress, Grid, Divider, Button, Box, Modal } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -15,6 +15,7 @@ const Profile = () => {
   const { id } = useParams(); // user's name from URL
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
   const { user } = useSelector((state) => state.user); // user whose profile is being viewed
   const { posts, isLoading } = useSelector((state) => state.posts);
@@ -96,12 +97,17 @@ const Profile = () => {
           </Typography>
           <Typography id="modal-modal-description">
             {followersClicked ? user?.followers?.map((follower) => (
-              <li key={follower._id}>
-                <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)}>{follower.name}</Link>
+              <li key={follower._id} style={{ listStyle: "none" }}>
+                <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)} style={{textDecoration: "none"}}>
+                  {follower.name}
+                </Link>
               </li>
             )) : user?.following?.map((following) => (
-              <li key={following._id}>
-                <Link to={`/user/${following._id}`} onClick={() => setOpen(false)}>{following.name}</Link>
+              // remove bullet point element from list and underline from hyperlink
+              <li key={following._id} style={{ listStyle: "none" }}>
+                <Link to={`/user/${following._id}`} onClick={() => setOpen(false)} style={{textDecoration: "none"}}>
+                  {following.name}
+                </Link>
               </li>
             ))}
           </Typography>
