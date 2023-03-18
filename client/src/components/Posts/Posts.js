@@ -27,14 +27,12 @@ const Posts = ({ setCurrentId }) => {
 
           console.log(searched);
           if(typeof searched !== 'undefined' || typeof following === 'undefined') {
-            console.log("hi");
             return post
           }
 
           console.log(following)
           for (let i = 0 ; i < following.length ; i++) {
             if (post.creator === following[i]) {
-              console.log("there")
               return post
             }
           }
