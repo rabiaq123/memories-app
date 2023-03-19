@@ -64,9 +64,9 @@ const Profile = () => {
   const FollowButton = () => {
     if (loggedID && loggedID !== id) {
       if (isFollowed) {
-        return <Button variant="contained" color="inherit" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
+        return <Button class="follow-button" variant="contained" color="inherit" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
       } else {
-        return <Button variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
+        return <Button class="follow-button" variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
       }
     }
     return null;
