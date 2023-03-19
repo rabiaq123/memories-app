@@ -15,7 +15,8 @@ import Account from './Account/Account';
 function getdisplayUsers (searchUser, users, secondaryuser) {
   console.log(searchUser, secondaryuser)
   if (!searchUser) {
-    return users;
+    console.log("LOCAL STORAGE SEARCH", localStorage.getItem("search"))
+    return orderedSearch(localStorage.getItem("search"), users);
   } else {
     
     console.log("ORDERED SEARCH", orderedSearch(searchUser, users))
@@ -99,10 +100,17 @@ const Accounts = () => {
   const [search, setSearch] = useState('');
   const [currentId, setCurrentId] = useState(0);
   const history = useHistory();
+  // let userSearch = localStorage.getItem("search")
+  // searchUser = localStorage.getItem("search")
+  // var displayUsers = getdisplayUsers (searchUser, users, secondaryuser);
   var displayUsers = getdisplayUsers (searchUser, users, secondaryuser);
+
   // let displayUsers = users;
   console.log("DISPLAY USERS: ", displayUsers)
 
+  console.log("SEARCH ITEM: ", localStorage.getItem("search"))
+  // let userSearch = localStorage.setItem("search")
+  // window.onload = alert(localStorage.getItem("search"));
   // for (let i = 0; i < displayUsers.length; i++){
   //   console.log(displayUsers[i].name)
   // }
@@ -122,7 +130,6 @@ const Accounts = () => {
       history.push('/accounts');
     } else if (search.trim()) {
       // console.log("Search for: ", search)
-
       history.push(`/accounts/${search}`);
     } else {
       history.push('/accounts');
