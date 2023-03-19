@@ -9,6 +9,7 @@ import Auth from './components/Auth/Auth';
 import EditScreen from './components/EditProfile/EditScreen';
 import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import Profile from './components/ProfilePage/Profile';
+import Discover from './components/Discover/Discover'
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/" exact component={() => <Redirect to="/posts" />} />
           <Route path="/posts" exact component={Home} />
           <Route path="/posts/search" exact component={Home} />
+          <Route path="/posts/discover" exact component={Discover} />
           <Route path="/posts/:id" exact component={PostDetails} />
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
           <Route path="/user/:id" exact component={Profile} />

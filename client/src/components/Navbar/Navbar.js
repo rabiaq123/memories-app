@@ -43,6 +43,7 @@ const Navbar = () => {
         <img className={classes.image} src={memoriesLogo} alt="icon" height="40px" />
       </Link>
       <Toolbar className={classes.toolbar}>
+        <Link to="/posts/discover" style={{ textDecoration: 'none', color: '#3f51b5' }}>Discover</Link>
         {user?.result ? (
           <div className={classes.profile}>
             <Link to={`/user/${user.result._id}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>

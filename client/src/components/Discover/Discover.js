@@ -11,7 +11,7 @@ import useStyles from './styles';
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
-const Home = () => {
+const Discover = () => {
   const classes = useStyles();
   const query = useQuery();
   const page = query.get('page') || 1;
@@ -71,7 +71,7 @@ const Home = () => {
             <Form currentId={currentId} setCurrentId={setCurrentId} />
             {(!searchQuery) && (
               <Paper className={classes.pagination} elevation={6}>
-                <Pagination page={page} isHomePage={true} />
+                <Pagination page={page} />
               </Paper>
             )}
           </Grid>
@@ -81,4 +81,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Discover;
