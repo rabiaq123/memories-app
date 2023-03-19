@@ -64,9 +64,9 @@ const Profile = () => {
   const FollowButton = () => {
     if (loggedID && loggedID !== id) {
       if (isFollowed) {
-        return <Button class="follow-button" variant="contained" color="inherit" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
+        return <Button variant="contained" color="inherit" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
       } else {
-        return <Button class="follow-button" variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
+        return <Button id="follow-button" variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
       }
     }
     return null;
@@ -78,7 +78,7 @@ const Profile = () => {
         user?.followers?.map((follower) => (
           <li key={follower._id} style={{ listStyle: "none" }}>
             <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
-              <Avatar style={{backgroundColor: '#3f51b5'}}>{follower.name.charAt(0)}</Avatar>
+              <Avatar style={{backgroundColor: '#3f51b5'}}>{follower?.name?.charAt(0)}</Avatar>
               {follower.name}
             </Link>
           </li>
@@ -96,7 +96,7 @@ const Profile = () => {
         user?.following?.map((following) => (
           <li key={following._id} style={{ listStyle: "none" }}>
             <Link to={`/user/${following._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
-              <Avatar style={{backgroundColor: '#3f51b5'}}>{following.name.charAt(0)}</Avatar>
+              <Avatar style={{backgroundColor: '#3f51b5'}}>{following?.name?.charAt(0)}</Avatar>
               {following.name}
             </Link>
           </li>
