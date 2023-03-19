@@ -7,6 +7,7 @@ import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import Pagination from '../Pagination';
 import useStyles from './styles';
+import Typography from '@material-ui/core/Typography';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -49,8 +50,10 @@ const Discover = () => {
   };
 
   return (
+    <>
     <Grow in>
       <Container maxWidth="xl">
+        <Typography variant="h4" align="left" style={{paddingBottom:'10px'}}>Discover</Typography>
         <Grid container justify="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
           <Grid item xs={12} sm={6} md={9}>
             <Posts setCurrentId={setCurrentId} />
@@ -60,12 +63,9 @@ const Discover = () => {
               <TextField onKeyDown={handleKeyPress} name="search" variant="outlined" label="Search Memories" fullWidth value={search} onChange={(e) => setSearch(e.target.value)} />
               <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
               <FormGroup>
-                <FormControlLabel control={
-                  <Checkbox
-                    checked={isUserSearch}
-                    onChange={handleChange}
-                  />
-                } label="Search by User" />
+                <FormControlLabel control={<Checkbox
+                  checked={isUserSearch}
+                  onChange={handleChange} />} label="Search by User" />
               </FormGroup>
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
@@ -78,6 +78,7 @@ const Discover = () => {
         </Grid>
       </Container>
     </Grow>
+    </>
   );
 };
 
