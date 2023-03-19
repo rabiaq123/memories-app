@@ -31,6 +31,7 @@ export default makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: 'auto',
     },
+    gap: '20px',
   },
   profile: {
     display: 'flex',
