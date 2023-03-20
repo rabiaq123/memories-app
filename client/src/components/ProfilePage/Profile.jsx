@@ -21,9 +21,13 @@ const Profile = () => {
 
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const loggedID = initialState?.result?._id;
+  let following = false
 
-  const [isFollowed, setIsFollowed] = useState(user?.followers?.includes(loggedID));
-  
+  for (let i = 0; i < user?.followers?.length; i++) {
+    if (user?.followers[i]._id === loggedID) following = true;
+  }
+  const [isFollowed, setIsFollowed] = useState(following);
+
   const [open, setOpen] = React.useState(false);
   const [followersClicked, setFollowersClicked] = useState(false);
   const handleOpen = () => { // allow opening modal if user has followers
@@ -31,8 +35,12 @@ const Profile = () => {
   }
   const handleClose = () => setOpen(false);
 
-  // console.log('id', id);
-  console.log('current user is:', user);
+  useEffect(() => {
+    setIsFollowed(following);
+  }, [following]);
+  
+  // console.log('current user is:', user);
+  // console.log('isFollowed', isFollowed);
   // console.log('user_posts', posts)
 
   const handleFollowersClick = () => {
