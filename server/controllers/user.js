@@ -289,7 +289,7 @@ export const getUserByName = async (req, res) => {
     // const updateUser = { email, name, _id : id};
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
 
-    res.status(200).json({user});
+    res.status(200).json(user);
 }
 
 
