@@ -12,6 +12,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 const Home = () => {
+
   const classes = useStyles();
   const query = useQuery();
   const page = query.get('page') || 1;
@@ -32,6 +33,8 @@ const Home = () => {
     } else if (search.trim()) {
       dispatch(getPostsBySearch({ search, tags: search }));
       console.log('the search query is', search);
+      localStorage.setItem("search", search)
+      console.log("Search Item:", localStorage.getItem("search"))
       history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else {
       history.push('/');
@@ -47,6 +50,8 @@ const Home = () => {
   const handleChange = (event) => {
     setIsUserSearch(event.target.checked);
   };
+
+  
 
   return (
     <Grow in>

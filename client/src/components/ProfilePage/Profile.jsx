@@ -1,6 +1,6 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
-import { Typography, CircularProgress, Grid, Divider, Button, Box, Modal } from '@material-ui/core';
+import { useParams, useHistory } from 'react-router-dom'
+import { Typography, CircularProgress, Grid, Divider, Button, Box, Modal, Avatar } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -21,32 +21,35 @@ const Profile = () => {
 
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const loggedID = initialState?.result?._id;
+  let following = false
 
-  const [isFollowed, setIsFollowed] = useState(user?.followers?.includes(loggedID));
-  
+  for (let i = 0; i < user?.followers?.length; i++) {
+    if (user?.followers[i]._id === loggedID) following = true;
+  }
+  const [isFollowed, setIsFollowed] = useState(following);
+
   const [open, setOpen] = React.useState(false);
   const [followersClicked, setFollowersClicked] = useState(false);
-  // const [followingClicked, setFollowingClicked] = useState(false);
   const handleOpen = () => { // allow opening modal if user has followers
-    // if (followersClicked && user?.followers?.length > 0) setOpen(true);
-    // if (followingClicked && user?.following?.length > 0) setOpen(true);
     setOpen(true);
   }
   const handleClose = () => setOpen(false);
 
-  // console.log('id', id);
-  // console.log('viewed user:', user);
+  useEffect(() => {
+    setIsFollowed(following);
+  }, [following]);
+  
+  // console.log('current user is:', user);
+  // console.log('isFollowed', isFollowed);
   // console.log('user_posts', posts)
 
   const handleFollowersClick = () => {
     setFollowersClicked(true);
-    // setFollowingClicked(false);
     handleOpen();
   }
 
   const handleFollowingClick = () => {
     setFollowersClicked(false);
-    // setFollowingClicked(true);
     handleOpen();
   }
 
@@ -65,6 +68,7 @@ const Profile = () => {
     dispatch(getPostsByCreatorId(id));
   }, [id]);
   
+
   const FollowButton = () => {
     if (loggedID && loggedID !== id) {
       if (isFollowed) {
@@ -76,11 +80,48 @@ const Profile = () => {
     return null;
   }
 
+  const FollowersList = () => {
+    if (user?.followers?.length > 0) {
+      return (
+        user?.followers?.map((follower) => (
+          <li key={follower._id} style={{ listStyle: "none" }}>
+            <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
+              <Avatar style={{backgroundColor: '#3f51b5'}}>{follower.name.charAt(0)}</Avatar>
+              {follower.name}
+            </Link>
+          </li>
+        ))
+      )
+    }
+    return (
+      <>This account has no followers yet.</>
+    )
+  }
+
+  const FollowingList = () => {
+    if (user?.following?.length > 0) {
+      return (
+        user?.following?.map((following) => (
+          <li key={following._id} style={{ listStyle: "none" }}>
+            <Link to={`/user/${following._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
+              <Avatar style={{backgroundColor: '#3f51b5'}}>{following.name.charAt(0)}</Avatar>
+              {following.name}
+            </Link>
+          </li>
+        ))
+      )
+    }
+    return (
+      <>This account is not following anyone yet.</>
+    )
+  }
+
+
   return (
     <div>
       <div className={classes.profileInfo}> 
         <Typography variant="h2" className={classes.userName}>{user?.name}</Typography>
-        <div className={classes.followingInfo}>
+        <div className={classes.socialInfo}>
           {(loggedID === id) && <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>}
           <FollowButton />
           <p className={classes.userCount} onClick={handleFollowersClick}>{user?.followers?.length} Followers</p>
@@ -96,15 +137,11 @@ const Profile = () => {
         aria-describedby="modal-modal-description"
       >
         <Box className={classes.modal}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginBottom:10}}>
             {followersClicked ? 'Followers' : 'Following'}
           </Typography>
           <Typography id="modal-modal-description">
-            {followersClicked ? user?.followers?.map((follower) => (
-              <li key={follower}>{follower}</li>
-            )) : user?.following?.map((follower) => (
-              <li key={follower}>{follower}</li>
-            ))}
+            {followersClicked ? <FollowersList /> : <FollowingList />}
           </Typography>
         </Box>
       </Modal>

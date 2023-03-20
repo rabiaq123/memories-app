@@ -8,7 +8,7 @@ export default makeStyles({
   userName: {
     marginRight: '30px',
   },
-  followingInfo: {
+  socialInfo: {
     display: 'flex',
     alignItems: 'center', // aligns items vertically (alignItems focuses on the cross axis)
     gap: '20px', // adds space between all flex items
@@ -17,7 +17,7 @@ export default makeStyles({
     cursor: 'pointer',
   },
   modal: {
-    position: 'absolute',
+    position: 'absolute', // should this be fixed?
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -26,5 +26,16 @@ export default makeStyles({
     border: '2px solid #000',
     boxShadow: 24,
     padding: 20,
+    maxHeight: '25vh',
+    overflow: 'auto',
+    // zIndex: 1000, // is this necessary?
+  },
+  listedAccount: {
+    textDecoration: "none",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "5px 0",
+    // borderBottom: "1px solid #ccc",
   },
 });

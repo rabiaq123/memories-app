@@ -10,6 +10,7 @@ import EditScreen from './components/EditProfile/EditScreen';
 import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag';
 import Profile from './components/ProfilePage/Profile';
 import Discover from './components/Discover/Discover'
+import Accounts from './components/Accounts/Accounts';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -29,6 +30,8 @@ const App = () => {
           <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/posts" />)} />
           {/* <Route path="/user/:id/edit" exact component={EditScreen} /> */}
           <Route path="/edit" exact component={EditScreen} />
+          <Route path="/accounts" exact component={Accounts} />
+          <Route path="/accounts/:searchUser" exact component={Accounts}/>
         </Switch>
       </Container>
     </BrowserRouter>
