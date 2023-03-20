@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { getPosts } from '../actions/posts';
 import useStyles from './styles';
 
-const Paginate = ({ page }) => {
+const Paginate = ({ page, isHomePage = false }) => {
   const { numberOfPages } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
 
@@ -15,9 +15,12 @@ const Paginate = ({ page }) => {
 
   useEffect(() => {
     if (page) {
-      dispatch(getPosts(page));
+      if (isHomePage) dispatch(getPosts(page)); // TODO: (part of US8, task 64) change this to a dispatch to get posts by users being followed
+      else dispatch(getPosts(page));
     }
   }, [dispatch, page]);
+
+  const link = (item) => isHomePage ? `/posts?page=${item.page}` : `/posts/discover?page=${item.page}`;
 
   return (
     <Pagination
@@ -27,7 +30,7 @@ const Paginate = ({ page }) => {
       variant="outlined"
       color="primary"
       renderItem={(item) => (
-        <PaginationItem {...item} component={Link} to={`/posts?page=${item.page}`} />
+        <PaginationItem {...item} component={Link} to={link(item)} />
       )}
     />
   );
