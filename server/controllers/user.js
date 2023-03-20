@@ -210,12 +210,52 @@ export const addFollower = async (req, res) => {
 
       followedUser.followers.push(new_follower);
       followedUser.save();
-      res.status(200).json(followedUser);
+      
+
+      // let appended_user = {};
+      // appended_user['email'] = followedUser['email'];
+      // appended_user['followers'] = followedUser['followers'];
+      // appended_user['following'] = followedUser['following'];
+      // appended_user['name'] = followedUser['name'];
+      // appended_user['password'] = followedUser['password'];
+      // appended_user['__v'] = followedUser['__v'];
+      // appended_user['_id'] = followedUser['_id'];
+      
+      // // iterating through the followers info to get all info for that follower
+
+      // let followers_info = [];
+      // let following_info = [];
+
+      // const users = await UserModel.find();
+      // for (var j = 0; j<users.length; j++){
+      //   if (appended_user['followers'].includes(users[j]['_id'])){
+      //     followers_info.push(users[j]);
+      //   }
+      // }
+
+      // for (var j = 0; j<users.length; j++){
+      //   if (appended_user['following'].includes(users[j]['_id'])){
+      //     following_info.push(users[j]);
+      //   }
+      // }
+
+      // appended_user['followers'] = followers_info;
+      // // console.log(followers_info);
+      // appended_user['following'] = following_info;
+
+      let appended_user = await create_followers_appended_user(followedUser);
+
+
+      console.log("Hello from above send appended_user");
+      res.status(200).json(appended_user);
       return
     }
     else {
       console.log("The active user " + new_follower +  " is already on their following list");
-      res.status(200).json(followedUser);
+
+      let appended_user = await create_followers_appended_user(followedUser);
+
+      res.status(200).json(appended_user);
       return
     }
   }catch (error) {
@@ -290,6 +330,43 @@ export const getUserByName = async (req, res) => {
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
 
     res.status(200).json(user);
+}
+
+
+const create_followers_appended_user = async (user) => {
+
+  let appended_user = {};
+  appended_user['email'] = user['email'];
+  appended_user['followers'] = user['followers'];
+  appended_user['following'] = user['following'];
+  appended_user['name'] = user['name'];
+  appended_user['password'] = user['password'];
+  appended_user['__v'] = user['__v'];
+  appended_user['_id'] = user['_id'];
+  
+  // iterating through the followers info to get all info for that follower
+
+  let followers_info = [];
+  let following_info = [];
+
+  const users = await UserModel.find();
+  for (var j = 0; j<users.length; j++){
+    if (appended_user['followers'].includes(users[j]['_id'])){
+      followers_info.push(users[j]);
+    }
+  }
+
+  for (var j = 0; j<users.length; j++){
+    if (appended_user['following'].includes(users[j]['_id'])){
+      following_info.push(users[j]);
+    }
+  }
+
+  appended_user['followers'] = followers_info;
+  // console.log(followers_info);
+  appended_user['following'] = following_info;
+  // console.log (appended_user);
+  return appended_user;
 }
 
 
