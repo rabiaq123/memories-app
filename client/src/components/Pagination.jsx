@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { getPosts } from '../actions/posts';
 import useStyles from './styles';
 
-const Paginate = ({ page, isHomePage = false }) => {
+const Paginate = ({ page, isUserFeed = true }) => {
   const { numberOfPages } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
 
@@ -15,15 +15,16 @@ const Paginate = ({ page, isHomePage = false }) => {
 
   useEffect(() => {
     if (page) {
-      if (isHomePage) dispatch(getPosts(page)); // TODO: (part of US8, task 64) change this to a dispatch to get posts by users being followed
+      if (isUserFeed) dispatch(getPosts(page)); // TODO: (part of US8, task 64) change this to a dispatch to get posts by users being followed
       else dispatch(getPosts(page));
     }
   }, [dispatch, page]);
 
-  const link = (item) => isHomePage ? `/posts?page=${item.page}` : `/posts/discover?page=${item.page}`;
+  const link = (item) => isUserFeed ? `/posts?page=${item.page}` : `/posts/discover?page=${item.page}`;
 
   return (
     <Pagination
+      isUserFeed={false}
       classes={{ ul: classes.ul }}
       count={numberOfPages}
       page={Number(page) || 1}
