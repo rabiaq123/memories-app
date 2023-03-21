@@ -22,7 +22,6 @@ function prevSearch(searchQuery, dispatch, history) {
 }
 
 const Home = () => {
-
   const classes = useStyles();
   const query = useQuery();
   const page = query.get('page') || 1;
@@ -66,8 +65,6 @@ const Home = () => {
   const handleChange = (event) => {
     setIsUserSearch(event.target.checked);
   };
-
-  
 
   return (
     <Grow in>

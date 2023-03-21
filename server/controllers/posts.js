@@ -10,7 +10,7 @@ export const getPosts = async (req, res) => {
     const { page } = req.query;
     
     try {
-        const LIMIT = 8;
+        const LIMIT = 4;
         const startIndex = (Number(page) - 1) * LIMIT; // get the starting index of every page
     
         const total = await PostMessage.countDocuments({});
@@ -116,7 +116,7 @@ export const likePost = async (req, res) => {
 
     if (!req.userId) {
         return res.json({ message: "Unauthenticated" });
-      }
+    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
     
@@ -150,60 +150,50 @@ export const commentPost = async (req, res) => {
 
 
 export const getPostFromFollowing = async (req, res) => {
-    const {id} = req.query;
+    const { id } = req.params;
+    console.log ("_id is: " + id);
+    const { page } = req.query;
     console.log ("hello from the get followers post endpoint");
-    
+    let user;
+    let posts;
+    const LIMIT = 4;
+    const startIndex = (Number(page) - 1) * LIMIT; // get the starting index of every page
+
     try {
-      
-      // checking to see if the user exists
-      const user = await UserModel.findById(id);
-  
+      // return all posts if user is not signed in
+      if (id == undefined) {
+        console.log("The user id is undefined. Returning all posts.");
+        posts = await PostMessage.find().sort({ id: -1 }).limit(LIMIT).skip(startIndex);
+        res.json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(posts.length / LIMIT)});  
+        return
+      }
+
+      // checking to see if the user exists in database
+      user = await UserModel.findById(id);
       if (user == null){
         console.log("The user with id: " + id + " was not found");
         res.status(400).json({ 'message': "The user id: " + id + " was not found"});
         return
       }
+    
   
-      const found_following_posts = [];
-  
-    //   user.following.forEach( function (current_following) {
-    //     const { id } = req.query;
+      // // iterating through each of the following users to get their posts
+      // for (var i = 0; i < user.following.length; i++) { 
+      //   // console.log(user.following[i]); 
+      //   let posts = await PostMessage.find({ creator: user.following[i]});
+      //   // console.log("Founds posts are:")
+      //   // console.log(posts);
+      //   if (posts.length != 0){
+      //     for (var j = 0; j < posts.length; j++) { 
+      //       console.log("Found a post and pushing it onto the array")
+      //       found_following_posts.push(posts[j]);
+      //     }
+      //   }
+      // }
+      // console.log(...user.following)
+      posts = await PostMessage.find({creator: {$in: [user.following]}}).sort({ id: -1 }).limit(LIMIT).skip(startIndex);
 
-    //     try {
-    //         const posts = await PostMessage.find({ creator: id});
-
-    //         res.json({ data: posts });
-    //     } catch (error) {    
-    //         res.status(404).json({ message: error.message });
-    //         return
-    //     }
-    //   })
-      // console.log(user.following);
-
-      // iterating through each of the following users to get their posts
-      for (var i = 0; i < user.following.length; i++) { 
-        // console.log(user.following[i]); 
-        let posts = await PostMessage.find({ creator: user.following[i]});
-        // console.log("Founds posts are:")
-        // console.log(posts);
-        if (posts.length != 0){
-          for (var j = 0; j < posts.length; j++) { 
-            console.log("Found a post and pushing it onto the array")
-            found_following_posts.push(posts[j]);
-          }
-        }
-      }
-    //   for (const current_following in user.following) {
-    //     console.log("the current following user id is: " + current_following);
-    //     let posts = await PostMessage.find({ creator: current_following});
-    //     if (posts != null){
-    //         found_following_posts.concat(posts);
-    //     }
-    //   }
-      
-      // console.log('found following posts is:\n' + found_following_posts);
-
-      res.json({ data: found_following_posts });
+      res.json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)});  
       return
     }catch (error) {
       res.status(500).json({ message: error.message });

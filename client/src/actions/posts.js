@@ -125,12 +125,12 @@ export const deletePost = (id) => async (dispatch) => {
 };
 
 
-export const getFollowingPostsAction = (id) => async (dispatch) => {
+export const getFollowingPostsAction = (id, page) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
-    const { data: { data } } = await api.getFollowingPosts(id);
+    const { data: { data, currentPage, numberOfPages } } = await api.getFollowingPosts(id, page);
 
-    dispatch({ type: GET_FOLLOWERS_POSTS, payload: { data } });
+    dispatch({ type: GET_FOLLOWERS_POSTS, payload: { data, currentPage, numberOfPages } });
     dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);

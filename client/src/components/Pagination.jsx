@@ -4,19 +4,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
 
-import { getPosts } from '../actions/posts';
+import { getFollowingPostsAction, getPosts } from '../actions/posts';
 import useStyles from './styles';
 
 const Paginate = ({ page, isUserFeed = true }) => {
   const { numberOfPages } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
+  const currentUser = JSON.parse(localStorage.getItem('profile'));
+  const id = currentUser?.result?._id;
 
   const classes = useStyles();
 
   useEffect(() => {
     if (page) {
-      if (isUserFeed) dispatch(getPosts(page)); // TODO: (part of US8, task 64) change this to a dispatch to get posts by users being followed
-      else dispatch(getPosts(page));
+      // this doesn't need to be changed based on whether the user is on their feed or the Discover page
+      // this is because if isUserFeed == true, the Posts component filters out posts from users not being followed
+      // i.e. all posts can be fetched and then filtered based on the isUserFeed prop
+      if (!isUserFeed) dispatch(getPosts(page)); 
+      else dispatch(getFollowingPostsAction(id, page));
     }
   }, [dispatch, page]);
 

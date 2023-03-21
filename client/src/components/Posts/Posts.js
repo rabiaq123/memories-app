@@ -38,7 +38,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
           &nbsp;
           <u>Posts</u>
         </div>)}
-        {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>}
+        {(posts?.length === 0 && !isUserFeed) && <Typography variant="h3">No posts found.</Typography>}
 
         {isUserFeed ? (
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
