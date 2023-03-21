@@ -20,7 +20,7 @@ const Posts = ({ setCurrentId }) => {
   return (
     isLoading ? <CircularProgress /> : (
       <>
-      {(searchQuery !== null && searchQuery !== " ") && (<div>
+      {(searchQuery !== null) && (<div>
         <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
         &nbsp;
         &nbsp;

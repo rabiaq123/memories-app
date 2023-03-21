@@ -13,9 +13,7 @@ function useQuery() {
 }
 
 function prevSearch(searchQuery, dispatch, history) {
-  if (searchQuery == null && localStorage.getItem("search") == "none") {
-    localStorage.setItem("search", " ")
-  } else if (searchQuery?.substr(0, searchQuery.length - 1) === localStorage.getItem("search")) {
+  if (searchQuery?.substr(0, searchQuery.length - 1) === localStorage.getItem("search")) {
     let search = localStorage.getItem("search");
     dispatch(getPostsBySearch({ search, tags: search }));
     history.push(`/posts/search?searchQuery=${search || 'none'}`);
@@ -43,7 +41,7 @@ const Home = () => {
 
   const searchPost = () => {
     if (search == '') {
-      history.push(`/posts/search?searchQuery=${' '}`);
+      history.push(`/`);
     } else if (isUserSearch) {
       localStorage.setItem("search", search)
       dispatch(getPostsByCreator(search));
@@ -55,7 +53,7 @@ const Home = () => {
       console.log("Search Item:", localStorage.getItem("search"))
       history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else {
-      history.push(`/posts/search?searchQuery=${' '}`);
+      history.push(`/`);
     }
   };
 
