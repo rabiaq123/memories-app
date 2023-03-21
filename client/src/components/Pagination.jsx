@@ -3,11 +3,18 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { getFollowingPostsAction, getPosts } from '../actions/posts';
 import useStyles from './styles';
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const Paginate = ({ page, isUserFeed = true }) => {
+  const query = useQuery()
+  const pageTest = query.get('page') || 1;
   const { numberOfPages } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const currentUser = JSON.parse(localStorage.getItem('profile'));
@@ -16,16 +23,17 @@ const Paginate = ({ page, isUserFeed = true }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    if (page) {
-      // this doesn't need to be changed based on whether the user is on their feed or the Discover page
-      // this is because if isUserFeed == true, the Posts component filters out posts from users not being followed
-      // i.e. all posts can be fetched and then filtered based on the isUserFeed prop
-      if (!isUserFeed) dispatch(getPosts(page)); 
-      else dispatch(getFollowingPostsAction(id, page));
+    if (pageTest) {
+      if (!isUserFeed) { // discover page
+        dispatch(getPosts(pageTest));
+      } else if (id != null) {
+        console.log("id is " + id)
+        dispatch(getFollowingPostsAction(id, pageTest));
+      }
     }
-  }, [dispatch, page]);
+  }, [dispatch, pageTest]);
 
-  const link = (item) => isUserFeed ? `/posts?page=${item.page}` : `/posts/discover?page=${item.page}`;
+  const link = (item) => isUserFeed ? `/posts?page=${item.pageTest}` : `/posts/discover?page=${item.pageTest}`;
 
   return (
     <Pagination
