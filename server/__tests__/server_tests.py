@@ -1,8 +1,8 @@
 import requests
 import json
 
-# BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
-BASE_URL = 'http://localhost:5500/'
+BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
+# BASE_URL = 'http://localhost:5500/'
 
 class bcolors:
     HEADER = '\033[95m'
@@ -249,16 +249,25 @@ def add_users_follower_unit_test(id, new_follower):
     request = requests.post(url, json=submit_post_data, headers={},)    
     
     recieved_results = request.json()
-    # print(json.dumps(recieved_results, sort_keys=False, indent=4))
+    print(json.dumps(recieved_results, sort_keys=False, indent=4))
+
+    found_new_following = False
 
     try:
-        following_list = recieved_results['user']['following']
+        following_list = recieved_results['followers']
+        # print(json.dumps(following_list, sort_keys=False, indent=4))
+
+        for current_follower in following_list:
+            if current_follower["_id"] ==  new_follower:
+                found_new_following = True
+
     except: 
         print (f'Testing the endpoint that adds a user to the followers list; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
         print (f"The user {new_follower} was not found in the following list")
+        return
 
     
-    if new_follower in following_list:
+    if found_new_following:
         print (f'Testing the endpoint that adds a user to the followers list; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
     else:
         print (f'Testing the endpoint that adds a user to the followers list; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
@@ -361,7 +370,7 @@ def main():
     # remove_follower("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
     # get_posts_following_test ("6400c5e8dcc14a33a65f7876")
     # get_all_posts_test()
-    get_user_by_name_test('Zayn Abbas')
+    # get_user_by_name_test('Zayn Abbas')
 
 
     # **** Unit tests ******
@@ -371,7 +380,7 @@ def main():
     # find_post_by_id_test('63e3fab8e637334c78f1cb1d', 'Yeehaw')
     # edit_profile_test("6400c5e8dcc14a33a65f7876", "test45@test.com", "Wes Update 4:01")
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
-    # add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
+    add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
     
 
 
