@@ -21,9 +21,13 @@ const Profile = () => {
 
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const loggedID = initialState?.result?._id;
+  let following = false
 
-  const [isFollowed, setIsFollowed] = useState(user?.followers?.includes(loggedID));
-  
+  for (let i = 0; i < user?.followers?.length; i++) {
+    if (user?.followers[i]._id === loggedID) following = true;
+  }
+  const [isFollowed, setIsFollowed] = useState(following);
+
   const [open, setOpen] = React.useState(false);
   const [followersClicked, setFollowersClicked] = useState(false);
   const handleOpen = () => { // allow opening modal if user has followers
@@ -31,8 +35,12 @@ const Profile = () => {
   }
   const handleClose = () => setOpen(false);
 
-  // console.log('id', id);
-  console.log('current user is:', user);
+  useEffect(() => {
+    setIsFollowed(following);
+  }, [following]);
+  
+  // console.log('current user is:', user);
+  // console.log('isFollowed', isFollowed);
   // console.log('user_posts', posts)
 
   const handleFollowersClick = () => {
@@ -60,16 +68,54 @@ const Profile = () => {
     dispatch(getPostsByCreatorId(id));
   }, [id]);
   
+
   const FollowButton = () => {
     if (loggedID && loggedID !== id) {
       if (isFollowed) {
         return <Button variant="contained" color="inherit" onClick={() => handleUnfollow(id, loggedID)}>Unfollow</Button>
       } else {
-        return <Button variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
+        return <Button id="follow-button" variant="contained" color="primary" onClick={() => handleFollow(id, loggedID)}>Follow</Button>
       }
     }
     return null;
   }
+
+  const FollowersList = () => {
+    if (user?.followers?.length > 0) {
+      return (
+        user?.followers?.map((follower) => (
+          <li key={follower._id} style={{ listStyle: "none" }}>
+            <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
+              <Avatar style={{backgroundColor: '#3f51b5'}}>{follower?.name?.charAt(0)}</Avatar>
+              {follower.name}
+            </Link>
+          </li>
+        ))
+      )
+    }
+    return (
+      <>This account has no followers yet.</>
+    )
+  }
+
+  const FollowingList = () => {
+    if (user?.following?.length > 0) {
+      return (
+        user?.following?.map((following) => (
+          <li key={following._id} style={{ listStyle: "none" }}>
+            <Link to={`/user/${following._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
+              <Avatar style={{backgroundColor: '#3f51b5'}}>{following?.name?.charAt(0)}</Avatar>
+              {following.name}
+            </Link>
+          </li>
+        ))
+      )
+    }
+    return (
+      <>This account is not following anyone yet.</>
+    )
+  }
+
 
   return (
     <div>
@@ -95,22 +141,7 @@ const Profile = () => {
             {followersClicked ? 'Followers' : 'Following'}
           </Typography>
           <Typography id="modal-modal-description">
-            {followersClicked ? user?.followers?.map((follower) => (
-              <li key={follower._id} style={{ listStyle: "none" }}>
-                <Link to={`/user/${follower._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
-                  <Avatar style={{backgroundColor: '#3f51b5'}}>{follower.name.charAt(0)}</Avatar>
-                  {follower.name}
-                </Link>
-              </li>
-            )) : user?.following?.map((following) => (
-              // remove bullet point element from list and underline from hyperlink
-              <li key={following._id} style={{ listStyle: "none" }}>
-                <Link to={`/user/${following._id}`} onClick={() => setOpen(false)} className={classes.listedAccount}>
-                  <Avatar style={{backgroundColor: '#3f51b5'}}>{following.name.charAt(0)}</Avatar>
-                  {following.name}
-                </Link>
-              </li>
-            ))}
+            {followersClicked ? <FollowersList /> : <FollowingList />}
           </Typography>
         </Box>
       </Modal>

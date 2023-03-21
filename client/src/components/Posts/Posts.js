@@ -1,11 +1,12 @@
 import React from 'react';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress, Typography } from '@material-ui/core';
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getUser } from '../../actions/user';
 import { useEffect } from 'react';
-import { Typography} from '@material-ui/core';
+
 
 import Post from './Post/Post';
 import useStyles from './styles';
@@ -28,10 +29,16 @@ const Posts = ({ setCurrentId }) => {
     dispatch(getUser(id))
   },[])
 
-  if (!posts.length && !isLoading) return 'No posts';
-
   return (
     isLoading ? <CircularProgress /> : (
+      <>
+      {(searchQuery !== null) && (<div>
+        <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
+        &nbsp;
+        &nbsp;
+        <u>Posts</u>
+      </div>)}
+      {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>}
       <Grid className={classes.container} container alignItems="stretch" spacing={3}>
         {(typeof user.following[0] === "undefined") && <Typography variant="h3">Following no users.</Typography>}
         {posts?.filter(post => {
@@ -51,7 +58,7 @@ const Posts = ({ setCurrentId }) => {
             <Post post={post} setCurrentId={setCurrentId} />
           </Grid>
         ))}
-      </Grid>
+      </Grid></>
     )
   );
 };

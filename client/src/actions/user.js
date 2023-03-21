@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER, END_LOADING } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const getUser = (id) => async (dispatch) => {
@@ -15,9 +15,10 @@ export const getUser = (id) => async (dispatch) => {
 
 export const getUsers = () => async (dispatch) => {
   try {
-    const { users } = await api.getUsers();
+    const { data } = await api.getUsers();
 
-    dispatch({ type: FETCH_ALL, payload: {users} });
+    dispatch({ type: FETCH_ALL, payload: {users: data} });
+
   } catch (error) {
     console.log(error);
   }

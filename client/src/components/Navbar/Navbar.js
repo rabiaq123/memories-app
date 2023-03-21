@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Avatar, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Avatar, Button, useTheme } from '@material-ui/core';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
@@ -15,26 +15,25 @@ const Navbar = () => {
   const location = useLocation();
   const history = useHistory();
   const classes = useStyles();
+  const theme = useTheme();
+  const [isDiscoverClicked, setIsDiscoverClicked] = useState(location.pathname.includes('/posts/discover'));
 
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
-
     history.push('/auth');
-
     setUser(null);
   };
 
   useEffect(() => {
     const token = user?.token;
-
     if (token) {
       const decodedToken = decode(token);
-
       if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
-
     setUser(JSON.parse(localStorage.getItem('profile')));
+    setIsDiscoverClicked(location.pathname.includes('/posts/discover')); // set to true if user is on discover page
   }, [location]);
+
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
@@ -43,6 +42,7 @@ const Navbar = () => {
         <img className={classes.image} src={memoriesLogo} alt="icon" height="40px" />
       </Link>
       <Toolbar className={classes.toolbar}>
+        <Link to="/posts/discover" style={{ textDecoration: 'none', color: isDiscoverClicked ? theme.palette.secondary.main : '#3f51b5' }}>Discover</Link>
         {user?.result ? (
           <div className={classes.profile}>
             <Link to={`/user/${user.result._id}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
