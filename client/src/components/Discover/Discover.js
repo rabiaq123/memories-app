@@ -56,7 +56,7 @@ const Discover = () => {
         <Typography variant="h4" align="left" style={{paddingBottom:'10px'}}>Discover</Typography>
         <Grid container justify="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
           <Grid item xs={12} sm={6} md={9}>
-            <Posts setCurrentId={setCurrentId} />
+            <Posts setCurrentId={setCurrentId} isUserFeed={false}/>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppBar className={classes.appBarSearch} position="static" color="inherit">
@@ -71,7 +71,7 @@ const Discover = () => {
             <Form currentId={currentId} setCurrentId={setCurrentId} />
             {(!searchQuery) && (
               <Paper className={classes.pagination} elevation={6}>
-                <Pagination page={page} />
+                <Pagination page={page} isUserFeed={false} />
               </Paper>
             )}
           </Grid>
