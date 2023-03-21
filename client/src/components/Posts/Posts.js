@@ -32,13 +32,13 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
   return (
     isLoading ? <CircularProgress /> : (
       <>
-        {(searchQuery !== null) && (<div>
-          <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
-          &nbsp;
-          &nbsp;
-          <u>Posts</u>
-        </div>)}
-        {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>}
+        {(searchQuery !== null) && (
+          <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>
+            <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
+            <u>Posts</u>
+          </div>
+        )}
+        {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>} {/* all posts in the database */}
 
         {isUserFeed ? (
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
