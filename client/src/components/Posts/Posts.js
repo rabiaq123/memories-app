@@ -1,38 +1,48 @@
 import React from 'react';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getUser } from '../../actions/user';
+import { useEffect } from 'react';
+import { Typography} from '@material-ui/core';
 
 import Post from './Post/Post';
 import useStyles from './styles';
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const Posts = ({ setCurrentId }) => {
-  const { searched } = useParams();
+  const query = useQuery();
+  const searchQuery = query.get('searchQuery');
   const { posts, isLoading } = useSelector((state) => state.posts); // state.posts because posts is the name of the reducer
   const classes = useStyles();
+  const initialState = JSON.parse(localStorage.getItem('profile'));
+  const id = initialState?.result?._id;
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-  }, [searched]);
+    dispatch(getUser(id))
+  },[])
 
   if (!posts.length && !isLoading) return 'No posts';
 
   return (
     isLoading ? <CircularProgress /> : (
       <Grid className={classes.container} container alignItems="stretch" spacing={3}>
+        {(typeof user.following[0] === "undefined") && <Typography variant="h3">Following no users.</Typography>}
         {posts?.filter(post => {
 
-          const initialState = JSON.parse(localStorage.getItem('profile'));
-          const following = initialState?.result?.following;
-
-          console.log(searched);
-          if(typeof searched !== 'undefined' || typeof following === 'undefined') {
+          if(searchQuery !== null) {
             return post
           }
 
-          console.log(following)
-          for (let i = 0 ; i < following.length ; i++) {
-            if (post.creator === following[i]) {
+          for (let i = 0 ; i < user.following.length ; i++) {
+            console.log(user.following[i])
+            if (post.creator === user.following[i]._id) {
               return post
             }
           }
