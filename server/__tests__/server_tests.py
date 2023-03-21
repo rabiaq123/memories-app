@@ -1,8 +1,8 @@
 import requests
 import json
 
-BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
-# BASE_URL = 'http://localhost:5500/'
+# BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
+BASE_URL = 'http://localhost:5500/'
 
 class bcolors:
     HEADER = '\033[95m'
@@ -233,6 +233,7 @@ def remove_follower(id, new_follower):
 
     return
 
+# Sprint 3 unit test
 def add_users_follower_unit_test(id, new_follower):
     """
     This test confirms the connection to the API
@@ -249,7 +250,7 @@ def add_users_follower_unit_test(id, new_follower):
     request = requests.post(url, json=submit_post_data, headers={},)    
     
     recieved_results = request.json()
-    print(json.dumps(recieved_results, sort_keys=False, indent=4))
+    # print(json.dumps(recieved_results, sort_keys=False, indent=4))
 
     found_new_following = False
 
@@ -360,6 +361,41 @@ def get_user_by_name_test(name):
 
     return
 
+# Sprint 3 unit test
+def post_of_following__unit_test(id, following_id):
+    """
+    This test confirms the connection to the API
+    """
+
+    url = BASE_URL + f'posts/getfollowingposts?id={id}'
+  
+
+    submit_post_data = {
+        "id" : id,
+    }
+
+    request = requests.get(url, json=submit_post_data, headers={},)    
+    
+    recieved_results = request.json()
+    # print(json.dumps(recieved_results, sort_keys=False, indent=4))
+
+    found_posts = recieved_results['data']
+    # print(json.dumps(found_posts, sort_keys=False, indent=4))
+
+    found_correct_post = False
+
+    for current_post in found_posts:
+        if current_post['creator'] == following_id:
+            found_correct_post = True
+    
+    if found_correct_post:
+        print (f'Testing the endpoint that returns all the posts of a users following list; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
+    else:
+        print (f'Testing the endpoint that returns all the posts of a users following list; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
+        print (f"Posts from the user {following_id} were not found")
+
+
+
 def main():
 
     print (f'The base URL that is being tested is: '+bcolors.OKBLUE + f'{BASE_URL}' + bcolors.ENDC)
@@ -380,7 +416,8 @@ def main():
     # find_post_by_id_test('63e3fab8e637334c78f1cb1d', 'Yeehaw')
     # edit_profile_test("6400c5e8dcc14a33a65f7876", "test45@test.com", "Wes Update 4:01")
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
-    add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
+    # add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
+    post_of_following__unit_test("6400c5e8dcc14a33a65f7876", "63ebe2df07578e0014da8d55")
     
 
 
