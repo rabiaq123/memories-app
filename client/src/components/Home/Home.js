@@ -3,6 +3,7 @@ import { Container, Grow, Grid, AppBar, TextField, Button, Paper, Checkbox, Form
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getPostsByCreator, getPostsBySearch } from '../../actions/posts';
+import { useEffect } from 'react';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import Pagination from '../Pagination';

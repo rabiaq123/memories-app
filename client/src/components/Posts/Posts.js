@@ -40,17 +40,19 @@ const Posts = ({ setCurrentId }) => {
       </div>)}
       {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>}
       <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-        {(typeof user.following[0] === "undefined") && <Typography variant="h3">Following no users.</Typography>}
+        {((typeof user.following === "undefined" || typeof user.following[0] === "undefined") && (searchQuery == null)) && <Typography variant="h3">Following no users.</Typography>}
         {posts?.filter(post => {
 
           if(searchQuery !== null) {
             return post
           }
 
-          for (let i = 0 ; i < user.following.length ; i++) {
-            console.log(user.following[i])
-            if (post.creator === user.following[i]._id) {
-              return post
+          if (typeof user.following !== "undefined") {
+            for (let i = 0 ; i < user?.following.length ; i++) {
+              console.log(user.following[i])
+              if (post.creator === user.following[i]._id) {
+                return post
+              }
             }
           }
         }).map((post) => (
