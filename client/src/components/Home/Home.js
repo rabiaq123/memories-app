@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Grow, Grid, AppBar, TextField, Button, Paper, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -31,7 +31,7 @@ const Home = () => {
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [isUserSearch, setIsUserSearch] = useState(false);
   const history = useHistory();
 
@@ -74,7 +74,7 @@ const Home = () => {
       <Container maxWidth="xl">
         <Grid container justify="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
           <Grid item xs={12} sm={6} md={9}>
-            <Posts setCurrentId={setCurrentId} />
+            <Posts setCurrentId={setCurrentId}/>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppBar className={classes.appBarSearch} position="static" color="inherit">
