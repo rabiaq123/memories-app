@@ -100,6 +100,7 @@ const Accounts = () => {
   const [search, setSearch] = useState('');
   const [currentId, setCurrentId] = useState(0);
   const history = useHistory();
+  const sendSearch = localStorage.getItem("search") + " ";
   // let userSearch = localStorage.getItem("search")
   // searchUser = localStorage.getItem("search")
   // var displayUsers = getdisplayUsers (searchUser, users, secondaryuser);
@@ -125,15 +126,9 @@ const Accounts = () => {
   if (users?.length == 0 && !isLoading) return 'No users';
 
   const searchAccount = () => {
-    // console.log("ENTER SEARCH")
-    if (search == '') {
-      history.push('/accounts');
-    } else if (search.trim()) {
-      // console.log("Search for: ", search)
+    if (search.trim()) {
       localStorage.setItem("search", search)
       history.push(`/accounts/${search}`);
-    } else {
-      history.push('/accounts');
     }
   };
 
@@ -160,7 +155,7 @@ const Accounts = () => {
                   <u>Accounts</u>
                   &nbsp;
                   &nbsp;
-                  <Link to={"/posts/search"} style={{ textDecoration: 'none' }}>Search Posts</Link>
+                  <Link to={`/posts/search?searchQuery=${sendSearch}`} style={{ textDecoration: 'none' }}>Search Posts</Link>
                 </div>
                 <br/>
                 <Grid className={classes.container} container alignItems="stretch" spacing={3}>

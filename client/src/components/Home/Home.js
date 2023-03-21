@@ -3,7 +3,6 @@ import { Container, Grow, Grid, AppBar, TextField, Button, Paper, Checkbox, Form
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getPostsByCreator, getPostsBySearch } from '../../actions/posts';
-import { useParams } from 'react-router-dom';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import Pagination from '../Pagination';
@@ -12,6 +11,18 @@ import useStyles from './styles';
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
+
+function prevSearch(searchQuery, dispatch, history) {
+  if (searchQuery == null && localStorage.getItem("search") == "none") {
+    localStorage.setItem("search", " ")
+  } else if (searchQuery?.substr(0, searchQuery.length - 1) === localStorage.getItem("search")) {
+    let search = localStorage.getItem("search");
+    dispatch(getPostsBySearch({ search, tags: search }));
+    history.push(`/posts/search?searchQuery=${search || 'none'}`);
+    localStorage.setItem("search", " ");
+  }
+}
+
 const Home = () => {
 
   const classes = useStyles();
@@ -26,20 +37,17 @@ const Home = () => {
   const [isUserSearch, setIsUserSearch] = useState(false);
   const history = useHistory();
 
-  const { searched } = useParams();
-
   useEffect(() => {
-    if (typeof searched !== "undefined") {
-      dispatch(getPostsBySearch({ searched, tags: searched }))
-    }
-  }, [searched]);
+    prevSearch(searchQuery, dispatch, history);
+  }, []);
 
   const searchPost = () => {
     if (search == '') {
-      history.push('/');
+      history.push(`/posts/search?searchQuery=${' '}`);
     } else if (isUserSearch) {
       localStorage.setItem("search", search)
       dispatch(getPostsByCreator(search));
+      history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else if (search.trim()) {
       dispatch(getPostsBySearch({ search, tags: search }));
       console.log('the search query is', search);
@@ -47,7 +55,7 @@ const Home = () => {
       console.log("Search Item:", localStorage.getItem("search"))
       history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else {
-      history.push('/');
+      history.push(`/posts/search?searchQuery=${' '}`);
     }
   };
 

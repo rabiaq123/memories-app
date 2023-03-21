@@ -17,11 +17,10 @@ const Posts = ({ setCurrentId }) => {
   const { posts, isLoading } = useSelector((state) => state.posts); // state.posts because posts is the name of the reducer
   const classes = useStyles();
 
-  console.log(searchQuery);
   return (
     isLoading ? <CircularProgress /> : (
       <>
-      {(searchQuery !== null) && (<div>
+      {(searchQuery !== null && searchQuery !== " ") && (<div>
         <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
         &nbsp;
         &nbsp;
