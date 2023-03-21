@@ -130,6 +130,7 @@ const Accounts = () => {
       history.push('/accounts');
     } else if (search.trim()) {
       // console.log("Search for: ", search)
+      localStorage.setItem("search", search)
       history.push(`/accounts/${search}`);
     } else {
       history.push('/accounts');
@@ -159,7 +160,7 @@ const Accounts = () => {
                   <u>Accounts</u>
                   &nbsp;
                   &nbsp;
-                  <Link to="/" style={{ textDecoration: 'none' }}>Posts</Link>
+                  <Link to={"/posts/search"} style={{ textDecoration: 'none' }}>Search Posts</Link>
                 </div>
                 <br/>
                 <Grid className={classes.container} container alignItems="stretch" spacing={3}>

@@ -3,6 +3,7 @@ import { Container, Grow, Grid, AppBar, TextField, Button, Paper, Checkbox, Form
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { getPostsByCreator, getPostsBySearch } from '../../actions/posts';
+import { useParams } from 'react-router-dom';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import Pagination from '../Pagination';
@@ -25,10 +26,19 @@ const Home = () => {
   const [isUserSearch, setIsUserSearch] = useState(false);
   const history = useHistory();
 
+  const { searched } = useParams();
+
+  useEffect(() => {
+    if (typeof searched !== "undefined") {
+      dispatch(getPostsBySearch({ searched, tags: searched }))
+    }
+  }, [searched]);
+
   const searchPost = () => {
     if (search == '') {
       history.push('/');
     } else if (isUserSearch) {
+      localStorage.setItem("search", search)
       dispatch(getPostsByCreator(search));
     } else if (search.trim()) {
       dispatch(getPostsBySearch({ search, tags: search }));
