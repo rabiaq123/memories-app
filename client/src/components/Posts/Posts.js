@@ -26,7 +26,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUser(id))
+    if (typeof id !== "undefined") dispatch(getUser(id))
   },[])
 
   return (
@@ -42,20 +42,18 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
 
         {isUserFeed ? (
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {((typeof user.following === "undefined" || typeof user.following[0] === "undefined") && (searchQuery == null)) && <Typography variant="h3">Following no users.</Typography>}
-            {posts?.filter(post => {
-              if(searchQuery !== null) {
+            {typeof id !=="undefined" && posts?.filter(post => {
+              if(searchQuery !== null && searchQuery !== "") {
                 return post
               }
-              if (typeof user.following !== "undefined") {
-                for (let i = 0 ; i < user?.following.length ; i++) {
-                  console.log(user.following[i])
-                  if (post.creator === user.following[i]._id) {
-                    return post
-                  }
+              for (let i = 0 ; i < user?.following?.length ; i++) {
+                // console.log(user.following[i])
+                if (post.creator === user?.following[i]?._id) {
+                  return post
                 }
               }
-            }).map((post) => (
+            }
+            ).map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
               </Grid>

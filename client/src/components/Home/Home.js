@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grow, Grid, AppBar, TextField, Button, Paper, Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+
 import { getPostsByCreator, getPostsBySearch } from '../../actions/posts';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
@@ -22,11 +24,12 @@ function prevSearch(searchQuery, dispatch, history) {
 }
 
 const Home = () => {
-
   const classes = useStyles();
   const query = useQuery();
   const page = query.get('page') || 1;
   const searchQuery = query.get('searchQuery');
+  const currentUser = localStorage.getItem("profile");
+  const id = JSON.parse(currentUser)?.result?._id;
 
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
@@ -34,6 +37,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [isUserSearch, setIsUserSearch] = useState(false);
   const history = useHistory();
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     prevSearch(searchQuery, dispatch, history);
@@ -66,7 +70,6 @@ const Home = () => {
   const handleChange = (event) => {
     setIsUserSearch(event.target.checked);
   };
-
   
 
   return (
@@ -74,6 +77,8 @@ const Home = () => {
       <Container maxWidth="xl">
         <Grid container justify="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
           <Grid item xs={12} sm={6} md={9}>
+            {(typeof id=="undefined") && <Typography variant="h4">Sign in to access your feed.</Typography>}
+            {(user?.following?.length == 0) && <Typography variant="h5">Follow some users to grow your feed!</Typography>}
             <Posts setCurrentId={setCurrentId}/>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
