@@ -26,7 +26,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUser(id))
+    if (typeof id !== "undefined") dispatch(getUser(id))
   },[])
 
   return (
