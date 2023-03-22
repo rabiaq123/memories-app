@@ -18,6 +18,9 @@ const App = () => {
   const { authData } = useSelector((state) => state.auth); // authData is a prop in the auth reducer's return value 
   // console.log(authData)
 
+  // pages/components that can be accessed without logging in: Auth, User Profiles, Discover, Tag pages
+  // pages/components that can only be accessed after logging in: User Feed, Post/Account Search results, PostDetails, EditScreen
+
   return (
     <BrowserRouter>
       <Container maxWidth="xl">
@@ -25,15 +28,15 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Redirect to="/posts" />)} />
           <Route path="/posts" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Home />)} />
-          <Route path="/posts/search" exact component={Home} />
+          <Route path="/posts/search" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Home />)} />
           <Route path="/posts/discover" exact component={Discover} />
-          <Route path="/posts/:id" exact component={PostDetails} />
+          <Route path="/posts/:id" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <PostDetails />)} />
+          <Route path="/accounts" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Accounts />)} />
+          <Route path="/accounts/:searchUser" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Accounts />)}/>
           <Route path={['/creators/:name', '/tags/:name']} component={CreatorOrTag} />
           <Route path="/user/:id" exact component={Profile} />
           <Route path="/auth" exact component={() => (!authData && !user ? <Auth /> : <Redirect to="/posts" />)} />
           <Route path="/edit" exact component={EditScreen} />
-          <Route path="/accounts" exact component={Accounts} />
-          <Route path="/accounts/:searchUser" exact component={Accounts}/>
         </Switch>
       </Container>
     </BrowserRouter>
