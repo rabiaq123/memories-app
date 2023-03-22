@@ -28,8 +28,8 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Redirect to="/posts" />)} />
           <Route path="/posts" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Home />)} />
-          <Route path="/posts/search" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Home />)} />
           <Route path="/posts/discover" exact component={Discover} />
+          <Route path="/posts/search" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Discover />)} />
           <Route path="/posts/:id" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <PostDetails />)} />
           <Route path="/accounts" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Accounts />)} />
           <Route path="/accounts/:searchUser" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Accounts />)}/>

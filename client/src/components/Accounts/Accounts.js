@@ -124,6 +124,7 @@ const Accounts = () => {
       <>
         <Grow in>
           <Container maxWidth="xl">
+            <Typography variant="h4" align="left" style={{paddingBottom:'10px'}}>Discover</Typography>
             <Grid container justify="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
               <Grid item xs={12} sm={6} md={9}>
                 <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>

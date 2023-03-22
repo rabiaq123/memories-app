@@ -12,6 +12,16 @@ import Typography from '@material-ui/core/Typography';
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
+
+function prevSearch(searchQuery, dispatch, history) {
+  if (searchQuery?.substr(0, searchQuery.length - 1) === localStorage.getItem("search")) {
+    let search = localStorage.getItem("search");
+    dispatch(getPostsBySearch({ search, tags: search }));
+    history.push(`/posts/search?searchQuery=${search || 'none'}`);
+    localStorage.setItem("search", " ");
+  }
+}
+
 const Discover = () => {
   const classes = useStyles();
   const query = useQuery();
@@ -25,17 +35,25 @@ const Discover = () => {
   const [isUserSearch, setIsUserSearch] = useState(false);
   const history = useHistory();
 
+  useEffect(() => {
+    prevSearch(searchQuery, dispatch, history);
+  }, []);
+
   const searchPost = () => {
     if (search == '') {
-      history.push('/');
+      history.push(`/`);
     } else if (isUserSearch) {
+      localStorage.setItem("search", search)
       dispatch(getPostsByCreator(search));
+      history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else if (search.trim()) {
       dispatch(getPostsBySearch({ search, tags: search }));
       console.log('the search query is', search);
+      localStorage.setItem("search", search)
+      console.log("Search Item:", localStorage.getItem("search"))
       history.push(`/posts/search?searchQuery=${search || 'none'}`);
     } else {
-      history.push('/');
+      history.push(`/`);
     }
   };
 
