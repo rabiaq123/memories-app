@@ -17,6 +17,11 @@ class PythonOrgSearch(unittest.TestCase):
     # allow any app visitor to view the number of followers/following of any user - DONE 
     # allow any app visitor to view the list of followers/following of any user - DONE
     # allow following anyone after signing in and show 'unfollow' button upon following - DONE
+    # search for and view specific user - DONE
+    # search for and display similar user - DONE
+    # search for a user that does not exist - DONE
+    # display empty landing pag eif no users are followed - DONE
+    # display following user's posts on landing page - DONE
     
     def setUp(self):
         self.driver = webdriver.Chrome()
@@ -164,6 +169,140 @@ class PythonOrgSearch(unittest.TestCase):
         #     "Timed out waiting for page to load"
         # self.assertIn("tee hee", driver.page_source) # assert presence of follower's name in the list
 
+    # search for and view specific user - DONE
+    def test_user_specific_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("http://localhost:3000/posts")
+
+        searchBar = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')
+        searchBar.send_keys("test test")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button/span[1]').click()
+        
+        # Switch to accounts view
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+        # Check if user is displayed
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[2]/div/div/center/div')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+            
+            self.assertIn("test test", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    # search for a user that does not exist - DONE
+    def test_no_user_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("http://localhost:3000/posts")
+
+        searchBar = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')
+        searchBar.send_keys("x")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button/span[1]').click()
+        
+        # Switch to accounts view
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+            
+        # Check if user is displayed        
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[2]/h3')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+            
+            self.assertIn("No User Found", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    # search for and display similar user - DONE
+    def test_user_similar_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("http://localhost:3000/posts")
+
+        searchBar = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')
+        searchBar.send_keys("test")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button/span[1]').click()
+        
+        # Switch to accounts view
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+            
+        # Check if user is displayed
+        userNames = ["test test", "Test example", "Wes2 Test", "test_Zayn test", "testing testing"]
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[2]/div[1]/div/center/div')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+            for i in range(5):
+                self.assertIn(userNames[i], driver.page_source)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    # Test to show landing page of a profile that follows no accounts
+    def test_no_followers_landing_page(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("http://localhost:3000/auth")
+
+        # locate and enter email and password and submit
+        email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
+        password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        email.send_keys("zayn@new")
+        password.send_keys("new")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]/span[1]').click()
+        # wait for home page to load
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div/h3')) 
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    # Test to display only users that are being followed posts
+    def test_display_page(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("http://localhost:3000/auth")
+
+        # locate and enter email and password and submit
+        email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
+        password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        email.send_keys("py@py.com")
+        password.send_keys("py")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]/span[1]').click()
+        # wait for home page to load
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div/div/div/span/div[1]')) 
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
     def tearDown(self):
         self.driver.close()
