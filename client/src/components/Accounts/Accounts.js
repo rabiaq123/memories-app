@@ -76,7 +76,6 @@ function orderedSearch (search, users) {
 }
 
 
-
 const Accounts = () => {
   const { searchUser } = useParams();
   const { users, isLoading } = useSelector((state) => state.user); // state.user because user is the name of the reducer

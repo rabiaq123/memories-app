@@ -49,7 +49,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
               }
               if (typeof user.following !== "undefined") {
                 for (let i = 0 ; i < user?.following.length ; i++) {
-                  console.log(user.following[i])
+                  // console.log(user.following[i])
                   if (post.creator === user.following[i]._id) {
                     return post
                   }

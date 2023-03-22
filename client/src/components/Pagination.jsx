@@ -10,7 +10,6 @@ import useStyles from './styles';
 const Paginate = ({ page, isUserFeed = true }) => {
   const { numberOfPages } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
-
   const classes = useStyles();
 
   useEffect(() => {
