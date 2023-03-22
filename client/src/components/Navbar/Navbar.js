@@ -21,6 +21,7 @@ const Navbar = () => {
   const logout = () => {
     dispatch({ type: actionType.LOGOUT });
     history.push('/auth');
+    history.go(0); // refresh page
     setUser(null);
   };
 
