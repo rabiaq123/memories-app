@@ -19,7 +19,7 @@ const App = () => {
   // console.log(authData)
 
   // pages/components that can be accessed without logging in: Auth, User Profiles, Discover, Tag pages
-  // pages/components that can only be accessed after logging in: User Feed, Post/Account Search results, PostDetails, EditScreen
+  // pages/components that can only be accessed after logging in: User Feed, PostDetails, EditScreen
 
   return (
     <BrowserRouter>
