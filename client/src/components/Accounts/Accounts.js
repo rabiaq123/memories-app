@@ -2,15 +2,16 @@ import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
-import { getUsers } from '../../actions/user';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Typography, Container, Grow, Grid, AppBar, TextField, Button, Paper, CircularProgress} from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
-import { getUserByName } from '../../actions/secondaryuser';
-import Form from '../Form/Form';
 
-import useStyles from './styles';
+import { getUsers } from '../../actions/user';
+import { getUserByName } from '../../actions/secondaryuser';
 import Account from './Account/Account';
+import Form from '../Form/Form';
+import useStyles from './styles';
 
 function getDisplayUsers (searchUser, users, secondaryuser) {
   console.log(searchUser, secondaryuser)
@@ -85,6 +86,7 @@ const Accounts = () => {
   const [search, setSearch] = useState('');
   const [currentId, setCurrentId] = useState(0);
   const history = useHistory();
+  const location = useLocation();
   const sendSearch = localStorage.getItem("search") + " ";
   var displayUsers = getDisplayUsers (searchUser, users, secondaryuser);
 
@@ -124,9 +126,13 @@ const Accounts = () => {
       <>
         <Grow in>
           <Container maxWidth="xl">
+            {location.pathname.startsWith('/posts/discover') && (
+              <Typography variant="h4" align="left" style={{paddingBottom:'10px'}}>Discover</Typography>
+            )}
             <Grid container justify="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
               <Grid item xs={12} sm={6} md={9}>
                 <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>
+                  <Link to="/posts/discover" style={{ textDecoration: 'none' }}><ArrowBack /></Link>
                   <u>Accounts</u>
                   <Link to={`/posts/search?searchQuery=${sendSearch}`} style={{ textDecoration: 'none' }}>Search Posts</Link>
                 </div>

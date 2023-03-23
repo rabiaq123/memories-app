@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getUser } from '../../actions/user';
 import { useEffect } from 'react';
-
+import { ArrowBack } from '@material-ui/icons';
 
 import Post from './Post/Post';
 import useStyles from './styles';
@@ -34,6 +34,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
       <>
         {(searchQuery !== null) && (
           <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>
+            <Link to="/posts/discover" style={{ textDecoration: 'none' }}><ArrowBack /></Link>
             <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
             <u>Posts</u>
           </div>

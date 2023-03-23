@@ -19,7 +19,7 @@ const App = () => {
   // console.log(authData)
 
   // pages/components that can be accessed without logging in: Auth, User Profiles, Discover, Tag pages
-  // pages/components that can only be accessed after logging in: User Feed, Post/Account Search results, PostDetails, EditScreen
+  // pages/components that can only be accessed after logging in: User Feed, PostDetails, EditScreen
 
   return (
     <BrowserRouter>
@@ -28,8 +28,8 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Redirect to="/posts" />)} />
           <Route path="/posts" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Home />)} />
-          <Route path="/posts/search" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Home />)} />
           <Route path="/posts/discover" exact component={Discover} />
+          <Route path="/posts/search" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Discover />)} />
           <Route path="/posts/:id" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <PostDetails />)} />
           <Route path="/accounts" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Accounts />)} />
           <Route path="/accounts/:searchUser" exact component={() => (!authData && !user ? <Redirect to="/auth" /> : <Accounts />)}/>
