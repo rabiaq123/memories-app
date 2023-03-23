@@ -12,7 +12,7 @@ import Form from '../Form/Form';
 import useStyles from './styles';
 import Account from './Account/Account';
 
-function getdisplayUsers (searchUser, users, secondaryuser) {
+function getDisplayUsers (searchUser, users, secondaryuser) {
   console.log(searchUser, secondaryuser)
   if (!searchUser) {
     console.log("LOCAL STORAGE SEARCH", localStorage.getItem("search"))
@@ -29,38 +29,30 @@ function orderedSearch (search, users) {
     search = "";
   }
   let newArray = []
-  // npm install string-similarity --save
   var stringSimilarity = require("string-similarity");
 
-  for(let i = 0; i < users?.length; i++){
-    // let currScore = levenshteinDistance(search, users[i].name)
-    // let sim = stringSimilarity.compare
-  
+  for(let i = 0; i < users?.length; i++) {
     let similarity = stringSimilarity.compareTwoStrings(search, users[i].name);
-
     // Return a single user if exact match
     if (similarity === 1){
       let singleUser = [users[i]]
       return singleUser
     }
     // console.log("Similarity score: ", similarity, search, users[i].name)
-
     let user = {
       "name": users[i].name,
       "score": similarity
     }
-
     newArray.push(user)
-    
   }
 
   // Sort array by score
-  newArray.sort(function(a,b){
-      if(a.score < b.score){
+  newArray.sort(function(a,b) {
+      if (a.score < b.score) {
         return 1;
-      }else if(a.score > b.score){
+      } else if (a.score > b.score) {
         return -1;
-      }else{
+      } else {
         return 0;
       }
   });
@@ -80,18 +72,11 @@ function orderedSearch (search, users) {
     }
   }
 
-  // console.log("NEW ARRAY:", newUsersArray)
-
-  // for(let i = 0; i < newUsersArray.length; i++){
-  //   console.log("score: ", newArray[i].score, " name: ", newArray[i].name, " orderd user:", newUsersArray[i].name)
-  // }
   return newUsersArray
 }
 
 
-
 const Accounts = () => {
-  // console.log("joi");
   const { searchUser } = useParams();
   const { users, isLoading } = useSelector((state) => state.user); // state.user because user is the name of the reducer
   const { secondaryuser } = useSelector((state) => state.secondaryuser);
@@ -101,20 +86,10 @@ const Accounts = () => {
   const [currentId, setCurrentId] = useState(0);
   const history = useHistory();
   const sendSearch = localStorage.getItem("search") + " ";
-  // let userSearch = localStorage.getItem("search")
-  // searchUser = localStorage.getItem("search")
-  // var displayUsers = getdisplayUsers (searchUser, users, secondaryuser);
-  var displayUsers = getdisplayUsers (searchUser, users, secondaryuser);
+  var displayUsers = getDisplayUsers (searchUser, users, secondaryuser);
 
-  // let displayUsers = users;
   console.log("DISPLAY USERS: ", displayUsers)
-
   console.log("SEARCH ITEM: ", localStorage.getItem("search"))
-  // let userSearch = localStorage.setItem("search")
-  // window.onload = alert(localStorage.getItem("search"));
-  // for (let i = 0; i < displayUsers.length; i++){
-  //   console.log(displayUsers[i].name)
-  // }
 
   useEffect(() => {
     dispatch(getUsers());
@@ -151,10 +126,8 @@ const Accounts = () => {
           <Container maxWidth="xl">
             <Grid container justify="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
               <Grid item xs={12} sm={6} md={9}>
-                <div>
+                <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>
                   <u>Accounts</u>
-                  &nbsp;
-                  &nbsp;
                   <Link to={`/posts/search?searchQuery=${sendSearch}`} style={{ textDecoration: 'none' }}>Search Posts</Link>
                 </div>
                 <br/>

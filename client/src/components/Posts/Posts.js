@@ -26,18 +26,18 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUser(id))
+    if (typeof id !== "undefined") dispatch(getUser(id))
   },[])
 
   return (
     isLoading ? <CircularProgress /> : (
       <>
-        {(searchQuery !== null) && (<div>
-          <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
-          &nbsp;
-          &nbsp;
-          <u>Posts</u>
-        </div>)}
+        {(searchQuery !== null) && (
+          <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>
+            <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
+            <u>Posts</u>
+          </div>
+        )}
         {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>}
 
         {isUserFeed ? (
@@ -49,7 +49,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
               }
               if (typeof user.following !== "undefined") {
                 for (let i = 0 ; i < user?.following.length ; i++) {
-                  console.log(user.following[i])
+                  // console.log(user.following[i])
                   if (post.creator === user.following[i]._id) {
                     return post
                   }

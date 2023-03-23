@@ -67,7 +67,6 @@ const Home = () => {
     setIsUserSearch(event.target.checked);
   };
 
-  
 
   return (
     <Grow in>
@@ -92,7 +91,7 @@ const Home = () => {
             <Form currentId={currentId} setCurrentId={setCurrentId} />
             {(!searchQuery) && (
               <Paper className={classes.pagination} elevation={6}>
-                <Pagination page={page} isHomePage={true} />
+                <Pagination page={page} isUserFeed={true} />
               </Paper>
             )}
           </Grid>
