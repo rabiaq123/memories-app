@@ -2,7 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import UserModel from "../models/user.js";
-
+import PostMessage from '../models/postMessage.js';
+import mongoose from 'mongoose';
 const secret = 'test';
 
 export const signin = async (req, res) => {
@@ -369,31 +370,59 @@ const create_followers_appended_user = async (user) => {
   return appended_user;
 }
 
+export const deleteUser = async (req, res) => {
+  const { user_id } = req.params;
 
-// Edit user profile
-// export const updateUserProfile = asyncHandler(async (req, res) => {
-//     const user = await UserModal.findById(req.user._id);
-//     // if the user exists then update the following fields
-//     if (user) {
-//       user.name = req.body.name || user.name; 
-//       user.email = req.body.email || user.email;
-//       // Are we adding a picture? 
+  if (!mongoose.Types.ObjectId.isValid(user_id)) return res.status(404).send(`The user_id: ${user_id} is not a valid object ID`);
 
-//       if(req.body.password) {
-//         user.password = req.body.password;
-//       }
+  // await PostMessage.findByIdAndRemove(id);
 
-//       const updatedUser = await user.save();
+  // getting the user object of the user that is to be deleted
+  const user_to_delete = await UserModel.findById(user_id);
 
-//       res.json({
-//         _id:updatedUser._id,
-//         name:updatedUser.name, 
-//         email:updatedUser.email,
+  // iterating through all of the users followers and removing this user from thier following list
+  for (var j = 0; j<user_to_delete['followers'].length; j++){
+    // console.log (`User: ${user_to_delete['followers'][j]} is following this user`);
+    const current_user_following = await UserModel.findById(user_to_delete['followers'][j]);
 
-//       });
-//     }else {
-//       res.status(404)
-//       throw new Error("User not found!");
-//     }
 
-// });
+    // checking to see if the user is in this current users following list and if so, removing them.
+    let index = current_user_following['following'].indexOf(user_id);
+    if (index > -1) {
+      
+      console.log(`Current user being looked at is: ${current_user_following['_id']}`);
+      console.log(`Found the requested user (${user_id}) in thier following list. Removing this user from their following list`);
+      
+      // found the user to remove from the followers list
+      current_user_following['following'].splice(index, 1);
+      current_user_following.save();
+
+    }
+  }
+
+  // going through each of the posts created by this user and deteing them
+ 
+  const users_posts = await PostMessage.find({creator : user_id});
+  for (var i = 0; i<users_posts.length; i++){
+    await PostMessage.findByIdAndRemove(users_posts[i]['_id']);
+    console.log (`Removed a post with the title ${users_posts[i]['title']}`);
+  }
+
+  // finding all the posts that have likes from the user that will be deleted 
+  const all_posts = await PostMessage.find();
+
+  for (var i = 0; i< all_posts.length; i++){
+
+    if (all_posts[i]['likes'].includes(user_id)) {
+      console.log (`Found a post that the user: ${user_id} (the user to be deleted) liked\nThat post has the title: ${all_posts[i]['title']}`)
+    }
+  }
+
+  // PostMessage.findByIdAndRemove(id);
+
+  
+
+
+
+  res.status(200).json({ "message" : `The user_id that was sent to the deleteUser endpoint is: ${user_id}`, 'found_user' : user_to_delete});
+}
