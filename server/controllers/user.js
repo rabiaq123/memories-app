@@ -373,12 +373,17 @@ const create_followers_appended_user = async (user) => {
 export const deleteUser = async (req, res) => {
   const { user_id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(user_id)) return res.status(404).send(`The user_id: ${user_id} is not a valid object ID`);
+  if (!mongoose.Types.ObjectId.isValid(user_id)) return res.status(404).json({ 'message': "The user_id: " + user_id + " is not a valid object id"});
 
   // await PostMessage.findByIdAndRemove(id);
 
   // getting the user object of the user that is to be deleted
   const user_to_delete = await UserModel.findById(user_id);
+
+  if (user_to_delete === null) {
+    res.status(400).json({ 'message': "The user with id: " + user_id + " could not be found"});
+    return
+  }
 
   // iterating through all of the users followers and removing this user from thier following list
   for (var j = 0; j<user_to_delete['followers'].length; j++){
@@ -400,6 +405,33 @@ export const deleteUser = async (req, res) => {
     }
   }
 
+  user_to_delete['followers'] = [];
+  // user_to_delete.save();
+
+  // going through the users following list and removing this user
+  // from each users follower list
+  for (var j = 0; j<user_to_delete['following'].length; j++){
+    // console.log (`User: ${user_to_delete['followers'][j]} is following this user`);
+    const current_user_following = await UserModel.findById(user_to_delete['following'][j]);
+
+
+    // checking to see if the user is in this current users following list and if so, removing them.
+    let index = current_user_following['followers'].indexOf(user_id);
+    if (index > -1) {
+      
+      console.log(`Current user being looked at is: ${current_user_following['_id']}`);
+      console.log(`Found the requested user (${user_id}) in thier followers list. Removing this user from their following list`);
+      
+      // found the user to remove from the followers list
+      current_user_following['followers'].splice(index, 1);
+      current_user_following.save();
+
+    }
+  }
+
+  user_to_delete['following'] = [];
+  user_to_delete.save();
+
   // going through each of the posts created by this user and deteing them
  
   const users_posts = await PostMessage.find({creator : user_id});
@@ -414,15 +446,38 @@ export const deleteUser = async (req, res) => {
   for (var i = 0; i< all_posts.length; i++){
 
     if (all_posts[i]['likes'].includes(user_id)) {
-      console.log (`Found a post that the user: ${user_id} (the user to be deleted) liked\nThat post has the title: ${all_posts[i]['title']}`)
+      console.log (`***\nFound a post that the user: ${user_id} (the user to be deleted) liked\nThat post has the title: ${all_posts[i]['title']}`)
+      let index = all_posts[i]['likes'].indexOf(user_id);
+      if (index > -1) {
+        console.log (`removing ${user_id} from the likes list`);
+        all_posts[i]['likes'].splice(index, 1);
+        all_posts[i].save();
+      }
     }
   }
 
-  // PostMessage.findByIdAndRemove(id);
+  // finding any comments that the user left on posts and removing them
+  console.log ("*****\n");
+  for (var i = 0; i< all_posts.length; i++){
+    let current_comments = all_posts[i]['comments'];
 
+    // iterating through each of the comments and splicing the name
+    // to check if the name is the same as the user that is being
+    // deleted
+    for (var j = 0; j<current_comments.length; j++){
+      let split_comment = current_comments[j].split(':');
+
+      if (split_comment[0] === user_to_delete['name']){
+        console.log (`Found a comment authored by the user to delete (${user_to_delete['name']})\nThe comment is: ${split_comment[1]}`);
+        all_posts[i]['comments'].splice(j, 1);
+        all_posts[i].save();
+      }
+    }
+  }
+
+  //deleting the user profile
+  await UserModel.findByIdAndRemove(user_id);
   
-
-
-
-  res.status(200).json({ "message" : `The user_id that was sent to the deleteUser endpoint is: ${user_id}`, 'found_user' : user_to_delete});
+  
+  res.status(200).json({ "message" : `The user with id ${user_id} was successfully deleted`, 'user_deleted' : user_to_delete});
 }
