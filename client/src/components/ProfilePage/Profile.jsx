@@ -146,7 +146,7 @@ const Profile = () => {
         </Box>
       </Modal>
 
-      {posts?.length == 0 && !isLoading && <p>No posts</p>}
+      {posts?.length == 0 && !isLoading && <Typography variant="h6">No posts yet.</Typography>}
 
       {isLoading ? <CircularProgress /> : (
         <Grid container alignItems="stretch" spacing={3}>

@@ -29,22 +29,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
     if (typeof id !== "undefined") dispatch(getUser(id))
   },[])
 
-  return (
-    isLoading ? <CircularProgress /> : (
-      <>
-        {(searchQuery !== null) && (
-          <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>
-            <Link to="/posts/discover" style={{ textDecoration: 'none' }}><ArrowBack /></Link>
-            <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
-            <u>Posts</u>
-          </div>
-        )}
-        {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>}
-
-        {isUserFeed ? (
-          <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {((typeof user.following === "undefined" || typeof user.following[0] === "undefined") && (searchQuery == null)) && <Typography variant="h3">Following no users.</Typography>}
-            {posts?.filter(post => {
+  const followingPosts = posts?.filter(post => {
               if(searchQuery !== null) {
                 return post
               }
@@ -56,7 +41,25 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
                   }
                 }
               }
-            }).map((post) => (
+            })
+
+  return (
+    isLoading ? <CircularProgress /> : (
+      <>
+        {(searchQuery !== null) && (
+          <div style={{display:'flex', gap:'20px', paddingBottom:'10px'}}>
+            <Link to="/posts/discover" style={{ textDecoration: 'none' }}><ArrowBack /></Link>
+            <Link to="/accounts" style={{ textDecoration: 'none' }}>Search Accounts</Link>
+            <u>Posts</u>
+          </div>
+        )}
+        {(posts?.length === 0 && !isUserFeed) && <Typography variant="h3">No posts found.</Typography>}
+        {(followingPosts?.length === 0 && isUserFeed) && <Typography variant="h5">Follow some users fill up your feed.</Typography>}
+
+        {isUserFeed ? (
+          <Grid className={classes.container} container alignItems="stretch" spacing={3}>
+            {((typeof user.following === "undefined" || typeof user.following[0] === "undefined") && (searchQuery == null)) && <Typography variant="h3">Following no users.</Typography>}
+            {followingPosts.map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
               </Grid>
