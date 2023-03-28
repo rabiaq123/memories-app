@@ -1,5 +1,14 @@
 import requests
 import json
+from select_files_data import selected_files
+import jwt
+
+"""
+Required pip libraries to install:
+- json
+- requests
+- pyjwt
+"""
 
 # BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
 BASE_URL = 'http://localhost:5500/'
@@ -394,18 +403,63 @@ def post_of_following__unit_test(id, following_id):
         print (f'Testing the endpoint that returns all the posts of a users following list; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
         print (f"Posts from the user {following_id} were not found")
 
-def delete_user_unit_test(id):
+
+def delete_user_unit_test(id, email, user_name):
     """
-    This test confirms the connection to the API
+    This test deletes a user and confirms the deletion happened correctly. In 
+    order for this test to execute successfully the user must be created on
+    the application.
     """
+
+    # creating three posts on the user that was supplied
+    create_post_test("Python Unit test Title 1", "Python Unit test Message 1", id, email, user_name, False)
+    create_post_test("Python Unit test Title 2", "Python Unit test Message 2", id, email, user_name, False)
+    create_post_test("Python Unit test Title 3", "Python Unit test Message 3", id, email, user_name, False)
+
 
     url = BASE_URL + f'user/delete-user/{id}'
 
 
     request = requests.delete(url, headers={},)    
+    # print (request.text)
+    recieved_results = request.json()
+    # print(json.dumps(recieved_results, sort_keys=False, indent=4))
+
+   
+    
+    if recieved_results['message'] == f"The user with id {id} was successfully deleted":
+        print (f'Testing the endpoint that delets a user; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
+    else:
+        print (f'Testing the endpoint that delets a user; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
+        print (f"Posts from the user {following_id} were not found")
+
+def create_post_test(title, message, creator_id, creator_email, creator_name, print_boolean):
+    """
+    This test creates a post
+    """
+
+    url = BASE_URL + f'posts/'
+
+    post_data = {
+        
+    }
+
+    submit_post_data = {
+        'title' : title,
+        'message' : message,
+        'tags' : [],
+        'selectedFile' : selected_files[0],
+        'comments' : [],
+        'name' : creator_name
+    }
+
+    encoded_jwt = jwt.encode({"email": creator_email, "id": creator_id}, "test", algorithm="HS256")
+    # print (f"The JWT token created is: {encoded_jwt}")
+    request = requests.post(url, json=submit_post_data, headers={"Authorization" : f"Bearer {encoded_jwt}"},)    
     
     recieved_results = request.json()
-    print(json.dumps(recieved_results, sort_keys=False, indent=4))
+    if print_boolean:
+        print(json.dumps(recieved_results, sort_keys=False, indent=4))
 
     # found_posts = recieved_results['data']
     # # print(json.dumps(found_posts, sort_keys=False, indent=4))
@@ -436,7 +490,7 @@ def main():
     # get_posts_following_test ("6400c5e8dcc14a33a65f7876")
     # get_all_posts_test()
     # get_user_by_name_test('Zayn Abbas')
-    delete_user_unit_test ('6400c5e8dcc14a33a65f7876')
+    # create_post_test("python script test title", "python scrip test message", "6423182c777ee2001401ed1e", "test46@test.com", "Wes 3 Test")
 
 
     # **** Unit tests ******
@@ -448,6 +502,7 @@ def main():
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
     # add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
     # post_of_following__unit_test("6400c5e8dcc14a33a65f7876", "63ebe2df07578e0014da8d55")
+    delete_user_unit_test ('642349701e04884890270d2e', 'test46@test.com', 'Wes 3 Test')
     
 
 
