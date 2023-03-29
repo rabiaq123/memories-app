@@ -3,8 +3,8 @@ import axios from 'axios';
 // TODO: figure out why I don't see an error in the Network tab 
 // when using http://localhost:5000 to access /user/:name, but 
 // I do when using the Heroku link
-// const API = axios.create({ baseURL: 'http://localhost:5500' });
-const API = axios.create({ baseURL: 'https://memories-server-cis4250.herokuapp.com' });
+const API = axios.create({ baseURL: 'http://localhost:5500' });
+// const API = axios.create({ baseURL: 'https://memories-server-cis4250.herokuapp.com' });
 
 
 API.interceptors.request.use((req) => {
@@ -40,3 +40,7 @@ export const updateUser = (updatedUser) => API.post(`/user/editprofile`, updated
 export const addNewFollower = (followerInfo) => API.post(`/user/add-follower`, followerInfo);
 export const addRemoveFollowerAPICall = (followerInfo) => API.post(`/user/remove-follower`, followerInfo);
 export const fetchUserByName = (name) => API.get(`/user/get-user-by-name/${name}`);
+
+// this is the actual API call that is made when the delete user dispatch
+// is called
+export const deleteUserAPICall = (id) => API.delete(`/user/delete-user/${id}`);

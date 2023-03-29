@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER, END_LOADING } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER, END_LOADING, DELETE_USER } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const getUser = (id) => async (dispatch) => {
@@ -79,6 +79,21 @@ export const removeFollowerAction = (id, remove_follower_id) => async (dispatch)
     const { data } = await api.addRemoveFollowerAPICall(user_data);
 
     dispatch({ type: REMOVE_FOLLOWER, payload: {user: data} });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// This is the action that is called from a dispatch statement that will make a call
+// to the server and then delete the user. There is not state varialbes that are
+// updated with this call.
+export const deleteUserAction = (id) => async (dispatch) => {
+  try {
+
+
+    const { data } = await api.deleteUserAPICall(id);
+
+    dispatch({ type: DELETE_USER });
   } catch (error) {
     console.log(error);
   }
