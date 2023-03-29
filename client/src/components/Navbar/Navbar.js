@@ -32,7 +32,9 @@ const Navbar = () => {
       if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
     setUser(JSON.parse(localStorage.getItem('profile')));
-    setIsDiscoverClicked(location.pathname.includes('/posts/discover')); // set to true if user is on discover page
+
+    // if user is on discover page, set isDiscoverClicked to true so that the discover link is highlighted
+    setIsDiscoverClicked(location.pathname.includes('/posts/discover'));
   }, [location]);
 
 
