@@ -142,6 +142,18 @@ export const updateUserProfile = async (req, res) => {
       });
 
     const updated_user = await UserModel.findById(id);
+    // TODO: update all the posts that the user has created
+    // const users_posts = await PostMessage.find({ creator: id });
+    // for (var i = 0; i < users_posts.length; i++) {
+    //   await PostMessage.findByIdAndUpdate(
+    //     { "_id": users_posts[i]['_id'] },
+    //     {
+    //       "$set": {
+    //         "creatorName": name, // the data you want to update
+    //       }
+    //     });
+    // }
+
     res.status(200).json({ "status": 'successfully created user', 'updated_user': updated_user });
 
   } catch (error) {
