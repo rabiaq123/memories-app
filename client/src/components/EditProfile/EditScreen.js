@@ -37,20 +37,26 @@ const EditScreen = () => {
   }
 
   const handleChange = (e) => {
-    if (name != e.target.name || email != e.target.email) { // enable update button if user changes name or email
-      setDisableUpdate(false);
+    setDisableUpdate(false); // default
+
+    // disable update button if the name and email are the same as the current saved name and email
+    if (e.target.name == 'name' && e.target.value == user?.name) { // if name field is in focus and the input value is the same as the current saved name
+      if (email == user?.email) { // and the email is the same as the current saved email
+        setDisableUpdate(true);
+      }
+    } else if (e.target.name == 'email' && e.target.value == user?.email) { // if email field is in focus and the input value is the same as the current saved email
+      if (name == user?.name) { // and the name is the same as the current saved name
+        setDisableUpdate(true);
+      }
     }
-    switch (e.target.name) {
-      case 'name':
-        setName(e.target.value);
-        break;
-      case 'email':
-        setEmail(e.target.value);
-        break;
-      default:
-        break;
+
+    // if the name or email is changed, update the state
+    if (e.target.name == 'name') {
+      setName(e.target.value);
+    } else if (e.target.name == 'email') {
+      setEmail(e.target.value);
     }
-  };
+  }
 
   const handleDelete = () => {
     console.log('delete user');
