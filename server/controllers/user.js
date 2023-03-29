@@ -385,13 +385,12 @@ export const deleteUser = async (req, res) => {
     return
   }
 
-  // iterating through all of the user to be deleted followers and removing this user from thier following list
+  // iterating through all of the followers of the user to be deleted and removing the user from their following list
   for (var j = 0; j < user_to_delete['followers'].length; j++) {
     // console.log (`User: ${user_to_delete['followers'][j]} is following this user`);
     const current_user_follower = await UserModel.findById(user_to_delete['followers'][j]);
 
-
-    // checking to see if the user to be deleted is in this current users following list and if so, removing them.
+    // checking to see if the user to be deleted is in this current user's following list and if so, removing them.
     let index = current_user_follower['following'].indexOf(user_id);
     if (index > -1) {
 
@@ -408,19 +407,18 @@ export const deleteUser = async (req, res) => {
   user_to_delete['followers'] = [];
   // user_to_delete.save();
 
-  // going through the user to be deleted following list and removing this user
-  // from each users follower list
+  // going through the following list of the user to be deleted and removing this user
+  // from each user's followers list
   for (var j = 0; j < user_to_delete['following'].length; j++) {
     // console.log (`User: ${user_to_delete['followers'][j]} is following this user`);
     const current_user_following = await UserModel.findById(user_to_delete['following'][j]);
-
 
     // checking to see if the user to be deleted is in this current users following list and if so, removing them.
     let index = current_user_following['followers'].indexOf(user_id);
     if (index > -1) {
 
       console.log(`Current user being looked at is: ${current_user_following['_id']}`);
-      console.log(`Found the requested user (${user_id}) in thier followers list. Removing this user from their following list`);
+      console.log(`Found the requested user (${user_id}) in their followers list. Removing this user from their following list`);
 
       // found the user to be deleted in the followers of the current_user_following and removing
       // the id of the user to be deleted.
@@ -433,15 +431,14 @@ export const deleteUser = async (req, res) => {
   user_to_delete['following'] = [];
   user_to_delete.save();
 
-  // going through each of the posts created by this user and deteing them
-
+  // going through each of the posts created by the user to be deleted and deleting them
   const users_posts = await PostMessage.find({ creator: user_id });
   for (var i = 0; i < users_posts.length; i++) {
     await PostMessage.findByIdAndRemove(users_posts[i]['_id']);
     console.log(`Removed a post with the title ${users_posts[i]['title']}`);
   }
 
-  // finding all the posts that have likes from the user that will be deleted and deleting them
+  // finding all the posts that have likes from the user to be deleted and deleting them
   const all_posts = await PostMessage.find();
 
   for (var i = 0; i < all_posts.length; i++) {
