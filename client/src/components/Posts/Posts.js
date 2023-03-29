@@ -54,11 +54,10 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
           </div>
         )}
         {(posts?.length === 0 && !isUserFeed) && <Typography variant="h3">No posts found.</Typography>}
-        {(followingPosts?.length === 0 && isUserFeed) && <Typography variant="h5">Follow some users fill up your feed.</Typography>}
+        {(followingPosts?.length === 0 && isUserFeed && searchQuery == null) && <Typography variant="h5">Follow some users to fill up your feed.</Typography>}
 
         {isUserFeed ? (
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {((typeof user.following === "undefined" || typeof user.following[0] === "undefined") && (searchQuery == null)) && <Typography variant="h3">Following no users.</Typography>}
             {followingPosts.map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
