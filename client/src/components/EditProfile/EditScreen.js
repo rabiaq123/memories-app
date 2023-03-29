@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import useStyles from './styles';
-import { getUser, updateUserProfile } from '../../actions/user';
+import { deleteUserAction, getUser, updateUserProfile } from '../../actions/user';
 import Input from '../Auth/Input';
 import * as actionType from '../../constants/actionTypes';
 
@@ -65,7 +65,6 @@ const EditScreen = () => {
   const delay = ms => new Promise(res => setTimeout(res, ms)); // helper function to delay for a certain amount of time
 
   const logout = () => {
-    setDeleteClicked(true);
     delay(3000).then(() => { // delay for 3 seconds
       setOpen(false);
       dispatch({ type: actionType.LOGOUT });
@@ -75,7 +74,9 @@ const EditScreen = () => {
 
   const handleDelete = () => {
     console.log('delete user');
+    setDeleteClicked(true);
     logout();
+    dispatch(deleteUserAction(id));
   }
 
   const DeleteAccountModal = () => {
@@ -95,7 +96,7 @@ const EditScreen = () => {
               {deleteClicked ? 'Deleting...' : 'Are you sure you want to delete your account? You will be logged out upon confirmation.'}
             </p>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-              <Button variant='outlined' onClick={() => setOpen(false)}>Cancel</Button>
+              <Button variant='outlined' onClick={() => setOpen(false)} disabled={deleteClicked}>Cancel</Button>
               <Button variant='contained' color='secondary' onClick={handleDelete} disabled={deleteClicked}>Delete</Button>
             </div>
           </Typography>
