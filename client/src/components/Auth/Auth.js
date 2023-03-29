@@ -9,7 +9,7 @@ import { AUTH } from '../../constants/actionTypes';
 import useStyles from './styles';
 import Input from './Input';
 
-const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
+const initialState = { userName: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const SignUp = () => {
   const [form, setForm] = useState(initialState);
@@ -33,6 +33,7 @@ const SignUp = () => {
     e.preventDefault();
 
     if (isSignup) {
+      console.log("FORM INFO:", form)
       dispatch(signup(form, history));
     } else {
       dispatch(signin(form, history));
@@ -64,12 +65,15 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            {isSignup && (
+            { isSignup && (
               <>
+                {/* Add username input field */}
+                <Input name="userName" label="Username" handleChange={handleChange} />
                 <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
                 <Input name="lastName" label="Last Name" handleChange={handleChange} half />
               </>
             )}
+          
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
