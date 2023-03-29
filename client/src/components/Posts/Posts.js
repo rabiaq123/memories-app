@@ -53,7 +53,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
             <u>Posts</u>
           </div>
         )}
-        {(posts?.length === 0 && !isUserFeed) && <Typography variant="h3">No posts found.</Typography>}
+        {(posts?.length === 0 && !isUserFeed) && <Typography variant="h5">No posts found.</Typography>}
         {(followingPosts?.length === 0 && isUserFeed && searchQuery == null) && <Typography variant="h5">Follow some users to fill up your feed.</Typography>}
 
         {isUserFeed ? (
