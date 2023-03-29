@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Typography, Paper, Container, Grid, Modal, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser, updateUserProfile } from '../../actions/user';
 import { useHistory } from 'react-router-dom';
+
 import useStyles from './styles';
+import { getUser, updateUserProfile } from '../../actions/user';
 import Input from '../Auth/Input';
+import * as actionType from '../../constants/actionTypes';
 
 const EditScreen = () => {
   const classes = useStyles();
@@ -17,6 +19,7 @@ const EditScreen = () => {
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
   const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
+  const [deleteClicked, setDeleteClicked] = useState(false);
   const [open, setOpen] = useState(false); // for delete confirmation modal
 
   if (!initialState) { // if user is not logged in, redirect to login page
@@ -58,8 +61,21 @@ const EditScreen = () => {
     }
   }
 
+  // https://stackoverflow.com/questions/14226803/wait-5-seconds-before-executing-next-line
+  const delay = ms => new Promise(res => setTimeout(res, ms)); // helper function to delay for a certain amount of time
+
+  const logout = () => {
+    setDeleteClicked(true);
+    delay(3000).then(() => { // delay for 3 seconds
+      setOpen(false);
+      dispatch({ type: actionType.LOGOUT });
+      history.push('/auth');
+    });
+  };
+
   const handleDelete = () => {
     console.log('delete user');
+    logout();
   }
 
   const DeleteAccountModal = () => {
@@ -75,10 +91,12 @@ const EditScreen = () => {
             Delete Account
           </Typography>
           <Typography id="modal-modal-description">
-            <p style={{color: 'GrayText', fontSize: '15px'}}>Are you sure you want to delete your account? You will be logged out upon confirmation.</p>
+            <p style={{color: 'GrayText', fontSize: '15px'}}>
+              {deleteClicked ? 'Deleting...' : 'Are you sure you want to delete your account? You will be logged out upon confirmation.'}
+            </p>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
               <Button variant='outlined' onClick={() => setOpen(false)}>Cancel</Button>
-              <Button variant='contained' color='secondary' onClick={handleDelete}>Delete</Button>
+              <Button variant='contained' color='secondary' onClick={handleDelete} disabled={deleteClicked}>Delete</Button>
             </div>
           </Typography>
         </Box>
