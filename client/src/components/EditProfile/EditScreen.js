@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Typography, Paper, Container, Grid, Modal, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import {DeleteOutline, Edit} from '@material-ui/icons';
 
 import useStyles from './styles';
 import { deleteUserAction, getUser, updateUserProfile } from '../../actions/user';
@@ -97,7 +98,10 @@ const EditScreen = () => {
             </p>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
               <Button variant='outlined' onClick={() => setOpen(false)} disabled={deleteClicked}>Cancel</Button>
-              <Button variant='contained' color='secondary' onClick={handleDelete} disabled={deleteClicked}>Delete</Button>
+              <Button variant='contained' color='secondary' onClick={handleDelete} disabled={deleteClicked}>
+                <DeleteOutline style={{marginRight: 5}} />  
+                Delete
+              </Button>
             </div>
           </Typography>
         </Box>
@@ -115,12 +119,12 @@ const EditScreen = () => {
             <form className={classes.form} onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <>
-                  {/* TODO: split name into first and last name (by space) */}
                   <Input name="name" label="Name" handleChange={handleChange} autoFocus value={name}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
               </Grid>
               <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || disableUpdate}>
+                <Edit style={{marginRight: 5}} />
                 Update
               </Button>
               <Button fullWidth variant="contained" color="secondary" onClick={() => history.goBack()}> Back to Profile </Button>
@@ -132,7 +136,10 @@ const EditScreen = () => {
               </Typography>
               <br />
               <p style={{color: 'GrayText', fontSize: '15px'}}> Deleting your account will also remove all likes, posts, and comments. </p>
-              <Button fullWidth variant="contained" color="secondary" onClick={() => setOpen(true)}> Delete </Button>
+              <Button fullWidth variant="contained" color="secondary" onClick={() => setOpen(true)}> 
+                <DeleteOutline style={{marginRight: 5}} />  
+                Delete
+              </Button>
               <DeleteAccountModal />
 
             </form>
