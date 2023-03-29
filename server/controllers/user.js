@@ -53,7 +53,7 @@ export const getUser = async (req, res) => {
 
   try {
     const user = await UserModel.findById(id);
-    
+
     // creating a new user object with all the required fields
     // and the additional follower information
     let appended_user = {};
@@ -64,21 +64,21 @@ export const getUser = async (req, res) => {
     appended_user['password'] = user['password'];
     appended_user['__v'] = user['__v'];
     appended_user['_id'] = user['_id'];
-    
+
     // iterating through the followers info to get all info for that follower
 
     let followers_info = [];
     let following_info = [];
 
     const users = await UserModel.find();
-    for (var j = 0; j<users.length; j++){
-      if (appended_user['followers'].includes(users[j]['_id'])){
+    for (var j = 0; j < users.length; j++) {
+      if (appended_user['followers'].includes(users[j]['_id'])) {
         followers_info.push(users[j]);
       }
     }
 
-    for (var j = 0; j<users.length; j++){
-      if (appended_user['following'].includes(users[j]['_id'])){
+    for (var j = 0; j < users.length; j++) {
+      if (appended_user['following'].includes(users[j]['_id'])) {
         following_info.push(users[j]);
       }
     }
@@ -94,7 +94,7 @@ export const getUser = async (req, res) => {
     // console.log(followers_info);
     appended_user['following'] = following_info;
 
-    
+
 
     // console.log(typeof(user));
     res.status(200).json(appended_user);
@@ -120,29 +120,29 @@ export const getUsers = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const {id, name, email} = req.body;
-    
+    const { id, name, email } = req.body;
+
     // getting the user that matches the ID that is sent
 
     const user = await UserModel.findById(id);
 
     // const updateUser = { email, name, _id : id};
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
-    
+
     console.log("The email is: " + email);
     console.log("The name is: " + name);
     // updating the user profile
     await UserModel.findOneAndUpdate(
-      { "_id": id},
-      { 
-          "$set": {
-              "email": email, // the data you want to update
-              "name" : name
-          }
+      { "_id": id },
+      {
+        "$set": {
+          "email": email, // the data you want to update
+          "name": name
+        }
       });
 
     const updated_user = await UserModel.findById(id);
-    res.status(200).json({"status": 'successfully created user', 'updated_user' : updated_user});
+    res.status(200).json({ "status": 'successfully created user', 'updated_user': updated_user });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -154,8 +154,8 @@ export const updateUserProfile = async (req, res) => {
 export const getUserByID = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const {id} = req.params;
-    
+    const { id } = req.params;
+
     // getting the user that matches the ID that is sent
 
     const user = await UserModel.findById(id);
@@ -163,7 +163,7 @@ export const getUserByID = async (req, res) => {
     // const updateUser = { email, name, _id : id};
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
 
-    res.status(200).json({"message": "this endpoint is still under development", "found_user" : user});
+    res.status(200).json({ "message": "this endpoint is still under development", "found_user": user });
   } catch (error) {
     res.status(500).json({ message: error.message });
 
@@ -175,25 +175,25 @@ export const getUserByID = async (req, res) => {
 // adds that user to their following list if they do not already exist
 export const addFollower = async (req, res) => {
 
-  const {id, new_follower} = req.body;
+  const { id, new_follower } = req.body;
   // console.log("The user id sent is: " + id);
   // console.log("The new_follower id sent is: " + new_follower);
-  
+
   try {
     const followedUser = await UserModel.findById(id); // followed user
 
-    if (followedUser == null){
+    if (followedUser == null) {
       console.log("User with id: " + id + " was not found");
-      res.status(400).json({ 'message': "User with id: " + id + " was not found"});
+      res.status(400).json({ 'message': "User with id: " + id + " was not found" });
       return
     }
     // console.log("The id of the new follower is: " + new_follower);
-    
+
     const activeUser = await UserModel.findById(new_follower);
 
-    if (activeUser == null){
+    if (activeUser == null) {
       console.log("The new follower with id: " + new_follower + " was not found");
-      res.status(400).json({ 'message': "The new follower with id: " + new_follower + " was not found"});
+      res.status(400).json({ 'message': "The new follower with id: " + new_follower + " was not found" });
       return
     }
 
@@ -207,11 +207,11 @@ export const addFollower = async (req, res) => {
     }
 
     if (followedUser.followers.includes(new_follower) == false) {
-      console.log ("Adding the follower: " + new_follower + " to the followers array");
+      console.log("Adding the follower: " + new_follower + " to the followers array");
 
       followedUser.followers.push(new_follower);
       followedUser.save();
-      
+
 
       // let appended_user = {};
       // appended_user['email'] = followedUser['email'];
@@ -221,7 +221,7 @@ export const addFollower = async (req, res) => {
       // appended_user['password'] = followedUser['password'];
       // appended_user['__v'] = followedUser['__v'];
       // appended_user['_id'] = followedUser['_id'];
-      
+
       // // iterating through the followers info to get all info for that follower
 
       // let followers_info = [];
@@ -252,14 +252,14 @@ export const addFollower = async (req, res) => {
       return
     }
     else {
-      console.log("The active user " + new_follower +  " is already on their following list");
+      console.log("The active user " + new_follower + " is already on their following list");
 
       let appended_user = await create_followers_appended_user(followedUser);
 
       res.status(200).json(appended_user);
       return
     }
-  }catch (error) {
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 
@@ -267,23 +267,23 @@ export const addFollower = async (req, res) => {
 
 export const removeFollower = async (req, res) => {
 
-  const {id, follower_to_remove} = req.body;
+  const { id, follower_to_remove } = req.body;
   try {
 
     // checking to see if the user exists
     const unfollowedUser = await UserModel.findById(id);
 
-    if (unfollowedUser == null){
+    if (unfollowedUser == null) {
       console.log("The user with id: " + id + " was not found");
-      res.status(400).json({ 'message': "The user id: " + id + " was not found"});
+      res.status(400).json({ 'message': "The user id: " + id + " was not found" });
       return
     }
 
     // checking to see if the removed user exists
     const activeUser = await UserModel.findById(follower_to_remove);
-    if (activeUser == null){
+    if (activeUser == null) {
       console.log("The user with id: " + activeUser + " was not found, this was the requesting unfollower");
-      res.status(400).json({ 'message': "The new follower with id: " + activeUser + " was not found"});
+      res.status(400).json({ 'message': "The new follower with id: " + activeUser + " was not found" });
       return
     }
 
@@ -300,7 +300,7 @@ export const removeFollower = async (req, res) => {
       if (index_of_unfollowed > -1) {
         activeUser.following.splice(index_of_unfollowed, 1);
         activeUser.save()
-        console.log ("Removed the user's id from the requester's following list");
+        console.log("Removed the user's id from the requester's following list");
       }
       else {
         console.log("The user's id was not found in the requester's following list.")
@@ -309,7 +309,7 @@ export const removeFollower = async (req, res) => {
     else {
       console.log("The requester's id was not found in the user's followers list.");
     }
-  
+
     res.status(200).json(unfollowedUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -320,17 +320,17 @@ export const removeFollower = async (req, res) => {
 
 
 export const getUserByName = async (req, res) => {
-   
-    const {name} = req.params;
-    
-    // getting the user that matches the ID that is sent
 
-    const user = await UserModel.findOne({ name });
+  const { name } = req.params;
 
-    // const updateUser = { email, name, _id : id};
-    // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
+  // getting the user that matches the ID that is sent
 
-    res.status(200).json(user);
+  const user = await UserModel.findOne({ name });
+
+  // const updateUser = { email, name, _id : id};
+  // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
+
+  res.status(200).json(user);
 }
 
 
@@ -344,21 +344,21 @@ const create_followers_appended_user = async (user) => {
   appended_user['password'] = user['password'];
   appended_user['__v'] = user['__v'];
   appended_user['_id'] = user['_id'];
-  
+
   // iterating through the followers info to get all info for that follower
 
   let followers_info = [];
   let following_info = [];
 
   const users = await UserModel.find();
-  for (var j = 0; j<users.length; j++){
-    if (appended_user['followers'].includes(users[j]['_id'])){
+  for (var j = 0; j < users.length; j++) {
+    if (appended_user['followers'].includes(users[j]['_id'])) {
       followers_info.push(users[j]);
     }
   }
 
-  for (var j = 0; j<users.length; j++){
-    if (appended_user['following'].includes(users[j]['_id'])){
+  for (var j = 0; j < users.length; j++) {
+    if (appended_user['following'].includes(users[j]['_id'])) {
       following_info.push(users[j]);
     }
   }
@@ -373,7 +373,7 @@ const create_followers_appended_user = async (user) => {
 export const deleteUser = async (req, res) => {
   const { user_id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(user_id)) return res.status(404).json({ 'message': "The user_id: " + user_id + " is not a valid object id"});
+  if (!mongoose.Types.ObjectId.isValid(user_id)) return res.status(404).json({ 'message': "The user_id: " + user_id + " is not a valid object id" });
 
   // await PostMessage.findByIdAndRemove(id);
 
@@ -381,26 +381,26 @@ export const deleteUser = async (req, res) => {
   const user_to_delete = await UserModel.findById(user_id);
 
   if (user_to_delete === null) {
-    res.status(400).json({ 'message': "The user with id: " + user_id + " could not be found"});
+    res.status(400).json({ 'message': "The user with id: " + user_id + " could not be found" });
     return
   }
 
-  // iterating through all of the users followers and removing this user from thier following list
-  for (var j = 0; j<user_to_delete['followers'].length; j++){
+  // iterating through all of the user to be deleted followers and removing this user from thier following list
+  for (var j = 0; j < user_to_delete['followers'].length; j++) {
     // console.log (`User: ${user_to_delete['followers'][j]} is following this user`);
-    const current_user_following = await UserModel.findById(user_to_delete['followers'][j]);
+    const current_user_follower = await UserModel.findById(user_to_delete['followers'][j]);
 
 
-    // checking to see if the user is in this current users following list and if so, removing them.
-    let index = current_user_following['following'].indexOf(user_id);
+    // checking to see if the user to be deleted is in this current users following list and if so, removing them.
+    let index = current_user_follower['following'].indexOf(user_id);
     if (index > -1) {
-      
-      console.log(`Current user being looked at is: ${current_user_following['_id']}`);
+
+      console.log(`Current user being looked at is: ${current_user_follower['_id']}`);
       console.log(`Found the requested user (${user_id}) in thier following list. Removing this user from their following list`);
-      
+
       // found the user to remove from the followers list
-      current_user_following['following'].splice(index, 1);
-      current_user_following.save();
+      current_user_follower['following'].splice(index, 1);
+      current_user_follower.save();
 
     }
   }
@@ -408,21 +408,22 @@ export const deleteUser = async (req, res) => {
   user_to_delete['followers'] = [];
   // user_to_delete.save();
 
-  // going through the users following list and removing this user
+  // going through the user to be deleted following list and removing this user
   // from each users follower list
-  for (var j = 0; j<user_to_delete['following'].length; j++){
+  for (var j = 0; j < user_to_delete['following'].length; j++) {
     // console.log (`User: ${user_to_delete['followers'][j]} is following this user`);
     const current_user_following = await UserModel.findById(user_to_delete['following'][j]);
 
 
-    // checking to see if the user is in this current users following list and if so, removing them.
+    // checking to see if the user to be deleted is in this current users following list and if so, removing them.
     let index = current_user_following['followers'].indexOf(user_id);
     if (index > -1) {
-      
+
       console.log(`Current user being looked at is: ${current_user_following['_id']}`);
       console.log(`Found the requested user (${user_id}) in thier followers list. Removing this user from their following list`);
-      
-      // found the user to remove from the followers list
+
+      // found the user to be deleted in the followers of the current_user_following and removing
+      // the id of the user to be deleted.
       current_user_following['followers'].splice(index, 1);
       current_user_following.save();
 
@@ -433,51 +434,51 @@ export const deleteUser = async (req, res) => {
   user_to_delete.save();
 
   // going through each of the posts created by this user and deteing them
- 
-  const users_posts = await PostMessage.find({creator : user_id});
-  for (var i = 0; i<users_posts.length; i++){
+
+  const users_posts = await PostMessage.find({ creator: user_id });
+  for (var i = 0; i < users_posts.length; i++) {
     await PostMessage.findByIdAndRemove(users_posts[i]['_id']);
-    console.log (`Removed a post with the title ${users_posts[i]['title']}`);
+    console.log(`Removed a post with the title ${users_posts[i]['title']}`);
   }
 
-  // finding all the posts that have likes from the user that will be deleted 
+  // finding all the posts that have likes from the user that will be deleted and deleting them
   const all_posts = await PostMessage.find();
 
-  for (var i = 0; i< all_posts.length; i++){
+  for (var i = 0; i < all_posts.length; i++) {
 
     if (all_posts[i]['likes'].includes(user_id)) {
-      console.log (`***\nFound a post that the user: ${user_id} (the user to be deleted) liked\nThat post has the title: ${all_posts[i]['title']}`)
+      console.log(`***\nFound a post that the user: ${user_id} (the user to be deleted) liked\nThat post has the title: ${all_posts[i]['title']}`)
       let index = all_posts[i]['likes'].indexOf(user_id);
       if (index > -1) {
-        console.log (`removing ${user_id} from the likes list`);
+        console.log(`removing ${user_id} from the likes list`);
         all_posts[i]['likes'].splice(index, 1);
         all_posts[i].save();
       }
     }
   }
 
-  // finding any comments that the user left on posts and removing them
-  console.log ("*****\n");
-  for (var i = 0; i< all_posts.length; i++){
+  // finding any comments that the user to be deleted left on posts and removing them
+  console.log("*****\n");
+  for (var i = 0; i < all_posts.length; i++) {
     let current_comments = all_posts[i]['comments'];
 
     // iterating through each of the comments and splicing the name
     // to check if the name is the same as the user that is being
     // deleted
-    for (var j = 0; j<current_comments.length; j++){
+    for (var j = 0; j < current_comments.length; j++) {
       let split_comment = current_comments[j].split(':');
 
-      if (split_comment[0] === user_to_delete['name']){
-        console.log (`Found a comment authored by the user to delete (${user_to_delete['name']})\nThe comment is: ${split_comment[1]}`);
+      if (split_comment[0] === user_to_delete['name']) {
+        console.log(`Found a comment authored by the user to delete (${user_to_delete['name']})\nThe comment is: ${split_comment[1]}`);
         all_posts[i]['comments'].splice(j, 1);
         all_posts[i].save();
       }
     }
   }
 
-  //deleting the user profile
+  //deleting the user profile of the user that was requested to be deleted.
   await UserModel.findByIdAndRemove(user_id);
-  
-  
-  res.status(200).json({ "message" : `The user with id ${user_id} was successfully deleted`, 'user_deleted' : user_to_delete});
+
+
+  res.status(200).json({ "message": `The user with id ${user_id} was successfully deleted`, 'user_deleted': user_to_delete });
 }
