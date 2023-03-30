@@ -24,14 +24,6 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
 
-  // useEffect(() => {
-  //   if (auth.errors != null) {
-  //     setShowError(true);
-  //   } else {
-  //     setShowError(false);
-  //   }
-  // }, [auth.errors]);
-
   const switchMode = () => {
     setForm(initialState);
     setIsSignup((prevIsSignup) => !prevIsSignup);
@@ -43,9 +35,9 @@ const SignUp = () => {
     e.preventDefault();
 
     if (isSignup) {
-      dispatch(signup(form, history))
+      dispatch(signup(form, history));
     } else {
-      dispatch(signin(form, history))
+      dispatch(signin(form, history));
     }
   };
 
