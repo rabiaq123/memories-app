@@ -30,20 +30,24 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
   },[])
 
   const followingPosts = posts?.filter(post => {
-              if(searchQuery !== null) {
-                return post
-              }
-              if (typeof user.following !== "undefined") {
-                for (let i = 0 ; i < user?.following.length ; i++) {
-                  // console.log(user.following[i])
-                  if (post.creator === user.following[i]._id) {
-                    return post
-                  }
-                }
-              }
-            })
+    if(searchQuery !== null) {
+      return post
+    }
+    if (typeof user.following !== "undefined") {
+      for (let i = 0 ; i < user?.following.length ; i++) {
+        // console.log(user.following[i])
+        if (post.creator === user.following[i]._id) {
+          return post
+        }
+      }
+    }})
 
-  return (
+  const discoverPosts = posts?.filter(post => {
+    if (post.name !== user.name) { // if current user is not the creator of the post
+      return post
+    }})
+
+              return (
     isLoading ? <CircularProgress /> : (
       <>
         {(searchQuery !== null) && (
@@ -65,9 +69,9 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
             ))}
           </Grid>
         ) : (
-          // returns posts by all users if not on user feed / homepage
+          // returns posts by all users except for current user if not on user feed / homepage
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {posts?.map((post) => (
+            {discoverPosts.map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
               </Grid>

@@ -72,9 +72,6 @@ export default makeStyles((theme) => ({
     display: 'flex',
     padding: '16px',
   },
-  searchButton: {
-    marginTop: '10px',
-  },
   gridContainer: {
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column-reverse',
