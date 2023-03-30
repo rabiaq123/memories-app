@@ -19,6 +19,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
+  const auth = useSelector((state) => state.auth);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
@@ -33,20 +34,9 @@ const SignUp = () => {
     e.preventDefault();
 
     if (isSignup) {
-      // dispatch(signup(form, history)).then((result) => {
-      //   console.log('result is ' + result);
-      // }).catch((err) => {
-      //   console.log('err is ' + err);
-      // });
       dispatch(signup(form, history))
     } else {
-      // dispatch(signin(form, history)).then((result) => {
-      //   console.log('result is ' + result);
-      // }).catch((err) => {
-      //   console.log('err is ' + err);
-      // });
       dispatch(signin(form, history))
-      // fetch("http://localhost:5500/user/signin", { method: "POST", body: JSON.stringify(form, history) }).then(response => {  console.log(response.status, response.ok); });
     }
   };
 
@@ -85,8 +75,7 @@ const SignUp = () => {
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
             
-            {/* <span style={{paddingLeft: '8px'}}>{JSON.stringify(authData)}</span> */}
-            {/* <span style={{paddingLeft: '8px'}}>{errors}</span> */}
+            <span style={{fontSize:'15px', paddingLeft: '8px'}}>{auth.errors != null && 'Invalid username or password.'}</span>
           
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
