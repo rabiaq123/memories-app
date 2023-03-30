@@ -47,7 +47,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
       return post
     }})
 
-              return (
+  return (
     isLoading ? <CircularProgress /> : (
       <>
         {(searchQuery !== null) && (
