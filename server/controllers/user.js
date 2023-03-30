@@ -38,9 +38,9 @@ export const signup = async (req, res) => {
 
     // check if user name already exists:
 
-    // const oldUserName = await UserModel.findOne({ userName });
+    const oldUserName = await UserModel.findOne({ name: `${userName}` });
 
-    // if (oldUserName) return res.status(400).json({ message: "User with that name already exists"})
+    if (oldUserName) return res.status(400).json({ message: "User with that name already exists"})
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -130,7 +130,7 @@ export const getUsers = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const { id, name, email } = req.body;
+    const { id, name, email, displayname } = req.body;
 
     // getting the user that matches the ID that is sent
 
@@ -141,13 +141,15 @@ export const updateUserProfile = async (req, res) => {
 
     console.log("The email is: " + email);
     console.log("The name is: " + name);
+    console.log("The display name is: " + displayname);
     // updating the user profile
     await UserModel.findOneAndUpdate(
       { "_id": id },
       {
         "$set": {
           "email": email, // the data you want to update
-          "name": name
+          "name": name,
+          "displayname": displayname,
         }
       });
 

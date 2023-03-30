@@ -14,6 +14,7 @@ const initialState = { userName: '', firstName: '', lastName: '', email: '', pas
 const SignUp = () => {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
+  const [isSpace, setSpace] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
@@ -31,8 +32,10 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (isSignup) {
+    setSpace(false);
+    if ((form.userName).indexOf(' ') >= 0) {
+      setSpace(true);
+    } else if (isSignup) {
       console.log("FORM INFO:", form)
       dispatch(signup(form, history));
     } else {
@@ -66,12 +69,13 @@ const SignUp = () => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             { isSignup && (
-              <>
-                {/* Add username input field */}
-                <Input name="userName" label="Username" handleChange={handleChange} />
-                <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
-                <Input name="lastName" label="Last Name" handleChange={handleChange} half />
-              </>
+            <>
+            {/* Add username input field */}
+              <Input name="userName" label="Username" handleChange={handleChange} />
+              {isSpace && <div className={classes.error}>*Usernames cannot contain spaces within it.</div>}
+              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
+              <Input name="lastName" label="Last Name" handleChange={handleChange} half />
+            </>
             )}
           
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />

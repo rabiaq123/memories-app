@@ -19,6 +19,7 @@ const EditScreen = () => {
   const { user } = useSelector((state) => state.user);
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
+  const [displayname, setDisplayName] = useState(user?.displayname);
   const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [open, setOpen] = useState(false); // for delete confirmation modal
@@ -28,15 +29,15 @@ const EditScreen = () => {
   }
 
   // helper function that can be used for updating a users profile
-  const update_user = (id, email, name) => {
-    dispatch(updateUserProfile (id, email, name));
+  const update_user = (id, email, name, displayname) => {
+    dispatch(updateUserProfile (id, email, name, displayname));
     // console.log ('updated_user', user);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getUser(id));
-    update_user(id, email, name)
+    update_user(id, email, name, displayname)
     setDisableUpdate(true);
   }
 
@@ -45,11 +46,15 @@ const EditScreen = () => {
 
     // disable update button if the name and email are the same as the current saved name and email
     if (e.target.name == 'name' && e.target.value == user?.name) { // if name field is in focus and the input value is the same as the current saved name
-      if (email == user?.email) { // and the email is the same as the current saved email
+      if (email == user?.email && displayname == user?.displayname) { 
         setDisableUpdate(true);
       }
     } else if (e.target.name == 'email' && e.target.value == user?.email) { // if email field is in focus and the input value is the same as the current saved email
-      if (name == user?.name) { // and the name is the same as the current saved name
+      if (name == user?.name && displayname == user?.displayname) { 
+        setDisableUpdate(true);
+      }
+    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { // if email field is in focus and the input value is the same as the current saved email
+      if (name == user?.name && email == user?.email) { 
         setDisableUpdate(true);
       }
     }
@@ -59,6 +64,8 @@ const EditScreen = () => {
       setName(e.target.value);
     } else if (e.target.name == 'email') {
       setEmail(e.target.value);
+    } else if (e.target.name == 'displayName') {
+      setDisplayName(e.target.value);
     }
   }
 
@@ -120,6 +127,7 @@ const EditScreen = () => {
               <Grid container spacing={2}>
                 <>
                   <Input name="name" label="Name" handleChange={handleChange} autoFocus value={name}/>
+                  <Input name="displayName" label="Full Name" handleChange={handleChange} autoFocus value={displayname}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
               </Grid>
