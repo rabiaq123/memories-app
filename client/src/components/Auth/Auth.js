@@ -75,7 +75,7 @@ const SignUp = () => {
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
             
-            <span style={{fontSize:'15px', paddingLeft: '8px'}}>{auth.errors != null && 'Invalid username or password.'}</span>
+            <span style={{fontSize:'15px', paddingLeft: '8px', color: 'red'}}>{auth.errors != null && 'Invalid username or password.'}</span>
           
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
