@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
@@ -20,14 +20,23 @@ const SignUp = () => {
   const history = useHistory();
   const classes = useStyles();
   const auth = useSelector((state) => state.auth);
-
+  const [showError, setShowError] = useState(auth.errors == null ? false : true);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
+
+  // useEffect(() => {
+  //   if (auth.errors != null) {
+  //     setShowError(true);
+  //   } else {
+  //     setShowError(false);
+  //   }
+  // }, [auth.errors]);
 
   const switchMode = () => {
     setForm(initialState);
     setIsSignup((prevIsSignup) => !prevIsSignup);
     setShowPassword(false);
+    setShowError(false);
   };
 
   const handleSubmit = (e) => {
@@ -74,8 +83,7 @@ const SignUp = () => {
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
-            
-            <span style={{fontSize:'15px', paddingLeft: '8px', color: 'red'}}>{auth.errors != null && 'Invalid username or password.'}</span>
+            {showError && <span style={{fontSize:'15px', paddingLeft: '8px', color: 'red'}}>Invalid username or password.</span>}
           
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
