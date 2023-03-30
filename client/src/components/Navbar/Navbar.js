@@ -37,7 +37,7 @@ const Navbar = () => {
     setIsDiscoverClicked(location.pathname.includes('/posts/discover'));
   }, [location]);
 
-
+  console.log("The user in navbar is:", typeof (user?.result.name));
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
       <Link to="/" className={classes.brandContainer}>
@@ -49,7 +49,7 @@ const Navbar = () => {
         {user?.result ? (
           <div className={classes.profile}>
             <Link to={`/user/${user.result._id}`} style={{ textDecoration: 'none', color: '#3f51b5' }}>
-              <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
+              <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.displayname.charAt(0)}</Avatar>
             </Link>
             <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
           </div>

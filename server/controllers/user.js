@@ -8,7 +8,7 @@ const secret = 'test';
 
 export const signin = async (req, res) => {
   const { email, password } = req.body;
- 
+
   try {
     const oldUser = await UserModel.findOne({ email });
 
@@ -27,7 +27,8 @@ export const signin = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-  console.log("REQ BODY: ", req.b)
+  console.log("Started Sign up");
+  console.log("REQ BODY: ", req.body)
   const { userName, email, password, firstName, lastName } = req.body;
 
   try {
@@ -43,10 +44,10 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const result = UserModel.create({ name: `${userName}`, email, password: hashedPassword, displayname: `${firstName} ${lastName}` });
+    const result = await UserModel.create({ name: `${userName}`, email, password: hashedPassword, displayname: `${firstName} ${lastName}` });
 
     const token = jwt.sign({ email: result.email, id: result._id }, secret, { expiresIn: "1h" });
-    
+
     console.log(result)
     res.status(201).json({ result, token });
   } catch (error) {
