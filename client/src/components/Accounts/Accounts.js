@@ -162,7 +162,7 @@ const Accounts = () => {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={searchAccount} className={classes.searchButton} variant="contained" color="primary">Search</Button>
+                  <Button onClick={searchAccount} variant="contained" color="primary">Search</Button>
                 </AppBar>
                 <Form currentId={currentId} setCurrentId={setCurrentId} />
               </Grid>

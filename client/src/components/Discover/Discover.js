@@ -90,7 +90,6 @@ const Discover = () => {
                   onChange={handleChange} />} label="Search by User" />
               </FormGroup>
             </AppBar>
-            <Form currentId={currentId} setCurrentId={setCurrentId} />
             {(!searchQuery) && (
               <Paper className={classes.pagination} elevation={6}>
                 <Pagination page={page} isUserFeed={false} />

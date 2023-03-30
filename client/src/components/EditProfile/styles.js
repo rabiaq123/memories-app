@@ -19,4 +19,18 @@ export default makeStyles((theme) => ({
     marginBottom: 10,
     marginTop: 16
   },
+  modal: {
+    position: 'absolute', // should this be fixed?
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    backgroundColor: 'white',
+    border: '1px solid lightgray',
+    boxShadow: 24,
+    padding: 20,
+    overflow: 'auto',
+    // zIndex: 1000, // is this necessary?
+  },
+
 }));

@@ -23,10 +23,10 @@ export default makeStyles({
     transform: 'translate(-50%, -50%)',
     width: 400,
     backgroundColor: 'white',
-    border: '2px solid #000',
+    border: '1px solid lightgray',
     boxShadow: 24,
     padding: 20,
-    maxHeight: '25vh',
+    maxHeight: '30vh',
     overflow: 'auto',
     // zIndex: 1000, // is this necessary?
   },

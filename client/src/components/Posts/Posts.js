@@ -29,6 +29,24 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
     if (typeof id !== "undefined") dispatch(getUser(id))
   },[])
 
+  const followingPosts = posts?.filter(post => {
+    if(searchQuery !== null) {
+      return post
+    }
+    if (typeof user.following !== "undefined") {
+      for (let i = 0 ; i < user?.following.length ; i++) {
+        // console.log(user.following[i])
+        if (post.creator === user.following[i]._id) {
+          return post
+        }
+      }
+    }})
+
+  const discoverPosts = posts?.filter(post => {
+    if (post.name !== user.name) { // if current user is not the creator of the post
+      return post
+    }})
+
   return (
     isLoading ? <CircularProgress /> : (
       <>
@@ -39,33 +57,21 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
             <u>Posts</u>
           </div>
         )}
-        {(posts?.length === 0) && <Typography variant="h3">No posts found.</Typography>}
+        {(discoverPosts?.length === 0 && !isUserFeed) && <Typography variant="h5">No posts found.</Typography>}
+        {(followingPosts?.length === 0 && isUserFeed && searchQuery == null) && <Typography variant="h5">Follow some users to fill up your feed.</Typography>}
 
         {isUserFeed ? (
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {((typeof user.following === "undefined" || typeof user.following[0] === "undefined") && (searchQuery == null)) && <Typography variant="h3">Following no users.</Typography>}
-            {posts?.filter(post => {
-              if(searchQuery !== null) {
-                return post
-              }
-              if (typeof user.following !== "undefined") {
-                for (let i = 0 ; i < user?.following.length ; i++) {
-                  // console.log(user.following[i])
-                  if (post.creator === user.following[i]._id) {
-                    return post
-                  }
-                }
-              }
-            }).map((post) => (
+            {followingPosts.map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
               </Grid>
             ))}
           </Grid>
         ) : (
-          // returns posts by all users if not on user feed / homepage
+          // returns posts by all users except for current user if not on user feed / homepage
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {posts?.map((post) => (
+            {discoverPosts.map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
               </Grid>
