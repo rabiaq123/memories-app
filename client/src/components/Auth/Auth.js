@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
@@ -33,9 +33,20 @@ const SignUp = () => {
     e.preventDefault();
 
     if (isSignup) {
-      dispatch(signup(form, history));
+      // dispatch(signup(form, history)).then((result) => {
+      //   console.log('result is ' + result);
+      // }).catch((err) => {
+      //   console.log('err is ' + err);
+      // });
+      dispatch(signup(form, history))
     } else {
-      dispatch(signin(form, history));
+      // dispatch(signin(form, history)).then((result) => {
+      //   console.log('result is ' + result);
+      // }).catch((err) => {
+      //   console.log('err is ' + err);
+      // });
+      dispatch(signin(form, history))
+      // fetch("http://localhost:5500/user/signin", { method: "POST", body: JSON.stringify(form, history) }).then(response => {  console.log(response.status, response.ok); });
     }
   };
 
@@ -45,7 +56,6 @@ const SignUp = () => {
 
     try {
       dispatch({ type: AUTH, data: { result, token } });
-
       history.push('/');
     } catch (error) {
       console.log(error);
@@ -65,18 +75,22 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            { isSignup && (
-            <>
-              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
-              <Input name="lastName" label="Last Name" handleChange={handleChange} half />
-            </>
+            {isSignup && (
+              <>
+                <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
+                <Input name="lastName" label="Last Name" handleChange={handleChange} half />
+              </>
             )}
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
-            { isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
+            {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
+            
+            {/* <span style={{paddingLeft: '8px'}}>{JSON.stringify(authData)}</span> */}
+            {/* <span style={{paddingLeft: '8px'}}>{errors}</span> */}
+          
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-            { isSignup ? 'Sign Up' : 'Sign In' }
+            {isSignup ? 'Sign Up' : 'Sign In' }
           </Button>
           <GoogleLogin
             clientId="564033717568-bu2nr1l9h31bhk9bff4pqbenvvoju3oq.apps.googleusercontent.com"
