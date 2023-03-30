@@ -20,6 +20,7 @@ const EditScreen = () => {
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
   const [displayname, setDisplayName] = useState(user?.displayname);
+  const [isSpace, setSpace] = useState(false);
   const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [open, setOpen] = useState(false); // for delete confirmation modal
@@ -58,10 +59,16 @@ const EditScreen = () => {
         setDisableUpdate(true);
       }
     }
-
-    // if the name or email is changed, update the state
+    
+    // if the name, email or displayname is changed, update the state
     if (e.target.name == 'name') {
       setName(e.target.value);
+      if ((e.target.value).indexOf(' ') >= 0) {
+        setSpace(true);
+        setDisableUpdate(true);
+      } else {
+        setSpace(false);
+      }
     } else if (e.target.name == 'email') {
       setEmail(e.target.value);
     } else if (e.target.name == 'displayName') {
@@ -126,12 +133,14 @@ const EditScreen = () => {
             <form className={classes.form} onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <>
-                  <Input name="name" label="Name" handleChange={handleChange} autoFocus value={name}/>
+                  {/* TODO: split name into first and last name (by space) */}
+                  <Input name="name" label="Username" handleChange={handleChange} autoFocus value={name}/>
+                  {isSpace && <div className={classes.error}>*Usernames cannot contain spaces within it.</div>}
                   <Input name="displayName" label="Full Name" handleChange={handleChange} autoFocus value={displayname}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
               </Grid>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || disableUpdate}>
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || !displayname || disableUpdate}>
                 <Edit style={{marginRight: 5}} />
                 Update
               </Button>

@@ -32,5 +32,7 @@ export default makeStyles((theme) => ({
     overflow: 'auto',
     // zIndex: 1000, // is this necessary?
   },
-
+  error: {
+    color: theme.palette.secondary.main,
+  },
 }));
