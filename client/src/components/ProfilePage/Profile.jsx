@@ -116,20 +116,20 @@ const Profile = () => {
     )
   }
 
-
   return (
     <div>
       <div className={classes.profileInfo}> 
-        <Typography variant="h2" className={classes.userName}>{user?.name}</Typography>
+        <Avatar className={classes.pfp} alt={initialState?.result.name} src={initialState?.result.imageUrl}>{initialState?.result.name.charAt(0)}</Avatar>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <p className={classes.userName} style={{fontSize:'30px'}}>{user?.name}</p>
+          <p className={classes.userName}>{user?.displayname}</p>
+        </div>
         <div className={classes.socialInfo}>
           {(loggedID === id) && <Button component={Link} to='/edit' variant="contained" color="primary">Edit Profile</Button>}
           <FollowButton />
           <p className={classes.userCount} onClick={handleFollowersClick}>{user?.followers?.length} Followers</p>
           <p className={classes.userCount} onClick={handleFollowingClick}>{user?.following?.length} Following</p>
         </div>
-      </div>
-      <div className={classes.profileInfo}> 
-        <Typography variant="h5" className={classes.userName}>{user?.displayname}</Typography>
       </div>
       
       <Divider style={{ margin: '20px 0 50px 0' }} />
