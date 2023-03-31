@@ -14,13 +14,13 @@ const initialState = { userName: '', firstName: '', lastName: '', email: '', pas
 const SignUp = () => {
 
   const [form, setForm] = useState(initialState);
-  const [isSignup, setIsSignup] = useState(false);
   const [isSpace, setSpace] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
   const auth = useSelector((state) => state.auth);
-  const [showError, setShowError] = useState(auth.errors == null ? false : true);
+  const [isSignup, setIsSignup] = useState(auth.signupErrors == null ? false : true);
+  const [showError, setShowError] = useState(auth.signinErrors == null ? false : true);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -31,6 +31,8 @@ const SignUp = () => {
     setForm(initialState);
     setIsSignup((prevIsSignup) => !prevIsSignup);
     setShowPassword(false);
+    setUsernameError(false);
+    setEmailError(false);
     setShowError(false);
   };
 
@@ -47,21 +49,10 @@ const SignUp = () => {
     }
   };
 
-  const googleSuccess = async (res) => {
-    const result = res?.profileObj;
-    const token = res?.tokenId;
-
-    try {
-      dispatch({ type: AUTH, data: { result, token } });
-      history.push('/');
-    } catch (error) {
-      console.log(error);
-    }
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
-
-  const googleError = () => console.log('Google Sign In was unsuccessful. Try again later');
-
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -78,7 +69,7 @@ const SignUp = () => {
               <Input name="userName" label="Username" handleChange={handleChange} />
               {isSpace && <div className={classes.error}>Usernames cannot contain spaces within it.</div>}
               {usernameError && <div className={classes.error}>This usernames is already taken. Please select another username.</div>}
-              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
+              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half/>
               <Input name="lastName" label="Last Name" handleChange={handleChange} half />
             </>
             )}
