@@ -29,5 +29,6 @@ export default makeStyles((theme) => ({
   },
   error: {
     color: theme.palette.secondary.main,
+    paddingLeft: '8px',
   },
 }));

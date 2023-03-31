@@ -12,6 +12,7 @@ import Input from './Input';
 const initialState = { userName: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const SignUp = () => {
+
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
   const [isSpace, setSpace] = useState(false);
@@ -22,6 +23,9 @@ const SignUp = () => {
   const [showError, setShowError] = useState(auth.errors == null ? false : true);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
+
+  const [usernameError, setUsernameError] = useState(auth.signupErrors == null ? false : auth.signupErrors.includes("name"));
+  const [emailError, setEmailError] = useState(auth.signupErrors == null ? false : !auth.signupErrors.includes("name"));
 
   const switchMode = () => {
     setForm(initialState);
@@ -72,13 +76,15 @@ const SignUp = () => {
             <>
             {/* Add username input field */}
               <Input name="userName" label="Username" handleChange={handleChange} />
-              {isSpace && <div className={classes.error}>*Usernames cannot contain spaces within it.</div>}
+              {isSpace && <div className={classes.error}>Usernames cannot contain spaces within it.</div>}
+              {usernameError && <div className={classes.error}>This usernames is already taken. Please select another username.</div>}
               <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
               <Input name="lastName" label="Last Name" handleChange={handleChange} half />
             </>
             )}
           
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
+            {(emailError && isSignup) && <div className={classes.error}>This email is already taken. Please enter another email.</div>}
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
             {showError && <span style={{fontSize:'15px', paddingLeft: '8px', color: 'red'}}>Invalid username or password.</span>}
