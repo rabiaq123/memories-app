@@ -66,10 +66,10 @@ const SignUp = () => {
             { isSignup && (
             <>
             {/* Add username input field */}
-              <Input name="userName" label="Username" handleChange={handleChange} />
+              <Input name="userName" label="Username" handleChange={handleChange} autoFocus/>
               {isSpace && <div className={classes.error}>Usernames cannot contain spaces within it.</div>}
               {usernameError && <div className={classes.error}>This usernames is already taken. Please select another username.</div>}
-              <Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half/>
+              <Input name="firstName" label="First Name" handleChange={handleChange} half/>
               <Input name="lastName" label="Last Name" handleChange={handleChange} half />
             </>
             )}
