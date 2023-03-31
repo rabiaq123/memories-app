@@ -128,6 +128,10 @@ const Profile = () => {
           <p className={classes.userCount} onClick={handleFollowingClick}>{user?.following?.length} Following</p>
         </div>
       </div>
+      <div className={classes.profileInfo}> 
+        <Typography variant="h5" className={classes.userName}>{user?.displayname}</Typography>
+      </div>
+      
       <Divider style={{ margin: '20px 0 50px 0' }} />
 
       <Modal
