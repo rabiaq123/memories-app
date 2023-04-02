@@ -130,7 +130,13 @@ export const getUsers = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const { id, name, email, displayname } = req.body;
+    const { id, name, email, displayname, same } = req.body;
+    
+    if (!same) {
+      const oldUserName = await UserModel.findOne({ name: `${name}` });
+
+      if (oldUserName) return res.status(400).json({ message: "User with that name already exists"});
+    }
 
     // getting the user that matches the ID that is sent
 

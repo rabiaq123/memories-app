@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER, END_LOADING, DELETE_USER } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER, END_LOADING, DELETE_USER, UPDATE_ERROR } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const getUser = (id) => async (dispatch) => {
@@ -35,7 +35,7 @@ export const getUsers = () => async (dispatch) => {
 //   }
 // };
 
-export const updateUserProfile = (id, email, name, displayname) => async (dispatch) => {
+export const updateUserProfile = (id, email, name, displayname, same) => async (dispatch) => {
   try {
 
     let user_data = {
@@ -45,9 +45,25 @@ export const updateUserProfile = (id, email, name, displayname) => async (dispat
       "displayname" : displayname,
     }
 
-    const { data } = await api.updateUser(user_data);
+    let info = {
+      "id" : id,
+      "name" : name,
+      "email" : email,
+      "displayname" : displayname,
+      "same": same,
+    }
 
-    dispatch({ type: UPDATE, payload: data });
+    await api.updateUser(info)
+      .then((res) => {
+        dispatch({ type: UPDATE, payload: {user: res.data }});
+      })
+      .catch((err) => {
+        dispatch({ type: UPDATE_ERROR, payload: { user: user_data, error: err.response.data.message} });
+      });
+
+    // const { data } = await api.updateUser(user_data);
+
+    // dispatch({ type: UPDATE, payload: data });
   } catch (error) {
     console.log(error);
   }

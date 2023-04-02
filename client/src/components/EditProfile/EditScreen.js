@@ -16,8 +16,15 @@ const EditScreen = () => {
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const id = initialState?.result?._id;
   const history = useHistory();
-  const { user } = useSelector((state) => state.user);
+  const { user, error } = useSelector((state) => state.user);
+  const [isError, setError] = useState(error == null ? false : true);
+
+  //REMOVE CONSOLE LOG ONCE ISSUE IS FIXED
+  console.log("error", error);
+  console.log("isError", isError);
+
   const [name, setName] = useState(user?.name);
+  const [oldUsername, setOldUsername] = useState(name);
   const [email, setEmail] = useState(user?.email);
   const [displayname, setDisplayName] = useState(user?.displayname);
   const [isSpace, setSpace] = useState(false);
@@ -30,15 +37,21 @@ const EditScreen = () => {
   }
 
   // helper function that can be used for updating a users profile
-  const update_user = (id, email, name, displayname) => {
-    dispatch(updateUserProfile (id, email, name, displayname));
+  const update_user = (id, email, name, displayname, same) => {
+    dispatch(updateUserProfile (id, email, name, displayname, same));
     // console.log ('updated_user', user);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getUser(id));
-    update_user(id, email, name, displayname)
+
+    if(name == oldUsername) {
+      update_user(id, email, name, displayname, true);
+    } else {
+      update_user(id, email, name, displayname, false);
+    }
+
     setDisableUpdate(true);
   }
 
@@ -136,7 +149,8 @@ const EditScreen = () => {
                   {/* TODO: split name into first and last name (by space) */}
                   <Input name="name" label="Username" handleChange={handleChange} autoFocus value={name}/>
                   {isSpace && <div className={classes.error}>Username cannot contain spaces within it.</div>}
-                  <Input name="displayName" label="Full Name" handleChange={handleChange} value={displayname}/>
+                  {isError && <div className={classes.error}>Username is already taken. Please enter a different username.</div>}
+                  <Input name="displayName" label="Full Name" handleChange={handleChange} autoFocus value={displayname}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
               </Grid>
