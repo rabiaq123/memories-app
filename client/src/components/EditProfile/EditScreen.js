@@ -135,7 +135,7 @@ const EditScreen = () => {
                 <>
                   {/* TODO: split name into first and last name (by space) */}
                   <Input name="name" label="Username" handleChange={handleChange} autoFocus value={name}/>
-                  {isSpace && <div className={classes.error}>*Usernames cannot contain spaces within it.</div>}
+                  {isSpace && <div className={classes.error}>Username cannot contain spaces within it.</div>}
                   <Input name="displayName" label="Full Name" handleChange={handleChange} autoFocus value={displayname}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
