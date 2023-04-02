@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import { signin, signup } from '../../actions/auth';
-import { AUTH } from '../../constants/actionTypes';
 import useStyles from './styles';
 import Input from './Input';
 
@@ -19,11 +18,11 @@ const SignUp = () => {
   const history = useHistory();
   const classes = useStyles();
   const auth = useSelector((state) => state.auth);
-  const [isSignup, setIsSignup] = useState(auth.signupErrors == null ? false : true);
-  const [showError, setShowError] = useState(auth.signinErrors == null ? false : true);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
-
+  
+  const [isSignup, setIsSignup] = useState(auth.signupErrors == null ? false : true);
+  const [loginError, setLoginError] = useState(auth.signinErrors == null ? false : true);
   const [usernameError, setUsernameError] = useState(auth.signupErrors == null ? false : auth.signupErrors.includes("name"));
   const [emailError, setEmailError] = useState(auth.signupErrors == null ? false : !auth.signupErrors.includes("name"));
 
@@ -33,7 +32,7 @@ const SignUp = () => {
     setShowPassword(false);
     setUsernameError(false);
     setEmailError(false);
-    setShowError(false);
+    setLoginError(false);
   };
 
   const handleSubmit = (e) => {
@@ -64,21 +63,20 @@ const SignUp = () => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             { isSignup && (
-            <>
-            {/* Add username input field */}
-              <Input name="userName" label="Username" handleChange={handleChange} autoFocus/>
-              {isSpace && <div className={classes.error}>Usernames cannot contain spaces within it.</div>}
-              {usernameError && <div className={classes.error}>This usernames is already taken. Please select another username.</div>}
-              <Input name="firstName" label="First Name" handleChange={handleChange} half/>
-              <Input name="lastName" label="Last Name" handleChange={handleChange} half />
-            </>
+              <>
+                <Input name="userName" label="Username" handleChange={handleChange} autoFocus/>
+                {isSpace && <div className={classes.error}>Username cannot contain spaces within it.</div>}
+                {usernameError && <div className={classes.error}>This username is already taken. Please select another username.</div>}
+                <Input name="firstName" label="First Name" handleChange={handleChange} half/>
+                <Input name="lastName" label="Last Name" handleChange={handleChange} half />
+              </>
             )}
-          
+            {/* email and password fields show on both Sign in and Sign up pages */}
             <Input name="email" label="Email Address" handleChange={handleChange} type="email" />
             {(emailError && isSignup) && <div className={classes.error}>This email is already taken. Please enter another email.</div>}
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
-            {showError && <span style={{fontSize:'15px', paddingLeft: '8px', color: 'red'}}>Invalid username or password.</span>}
+            {!isSignup && loginError && <span className={classes.error}>Invalid username or password.</span>}
           
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
