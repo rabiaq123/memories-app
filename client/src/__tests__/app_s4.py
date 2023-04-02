@@ -12,20 +12,20 @@ import time
 class PythonOrgSearch(unittest.TestCase):
     # IDs were retrieved from inspect tool on site
 
-    invalid_email = "teehee@teehee1.com"
-    invalid_password = "TEEHEE"
-    valid_email = "teehee@teehee.com"
-    valid_password = "teehee"
+    invalid_email = "rabiatest2@test.com"
+    invalid_password = "rabiatest2"
+    valid_email = "rabiatest@test.com"
+    valid_password = "rabiatest"
 
+    ### US9 (account deletion) test cases:
+    # select delete account but cancel upon confirmation
+    # delete account
     ### US10 (sign in errors) test cases:
     # incorrect email and password
     # incorrect email and correct password
     # correct email and incorrect password
     # correct email and correct password before invalid attempts
     # correct email and correct password after invalid attempts
-    ### US9 (account deletion) test cases:
-    # select delete account but cancel upon confirmation
-    # delete account
 
     def setUp(self):
         self.driver = webdriver.Chrome()
@@ -34,6 +34,7 @@ class PythonOrgSearch(unittest.TestCase):
     def test_cancel_deletion_upon_confirmation(self):
         driver = self.driver
         driver.maximize_window()
+        
         # sign in
         driver.get("http://localhost:3000/auth")
         try:
@@ -53,8 +54,9 @@ class PythonOrgSearch(unittest.TestCase):
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+        
         # navigate to Edit Profile page
-        time.sleep(2) # wait for posts/state to load
+        time.sleep(1) # wait for posts/state to load
         driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/div/a').click() # user avatar
         try:
             edit_button_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/div/div[1]/div/a/span[1]'), "Edit Profile") # Edit Profile button
@@ -62,11 +64,12 @@ class PythonOrgSearch(unittest.TestCase):
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+        
         # select delete account but cancel upon confirmation
         driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div[1]/div/a/span[1]').click() # Edit Profile button
         try:
             # click on Delete Account button before confirmation modal appears
-            delete_button_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/main/div/form/button[3]/span[1]'), "Delete Account") # Delete Account button
+            delete_button_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/main/div/form/button[3]/span[1]'), "Delete") # Delete Account button
             WebDriverWait(driver, 5).until(delete_button_present)
             driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[3]/span[1]').click() 
             # click on Cancel button in confirmation modal
@@ -83,6 +86,7 @@ class PythonOrgSearch(unittest.TestCase):
     def test_delete_account(self):
         driver = self.driver
         driver.maximize_window()
+
         # sign in
         driver.get("http://localhost:3000/auth")
         try:
@@ -102,8 +106,9 @@ class PythonOrgSearch(unittest.TestCase):
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+        
         # navigate to Edit Profile page
-        time.sleep(2) # wait for posts/state to load
+        time.sleep(1) # wait for posts/state to load
         driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/div/a').click() # user avatar
         try:
             edit_button_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/div/div[1]/div/a/span[1]'), "Edit Profile") # Edit Profile button
@@ -111,11 +116,12 @@ class PythonOrgSearch(unittest.TestCase):
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+        
         # select delete account but cancel upon confirmation
         driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div[1]/div/a/span[1]').click() # Edit Profile button
         try:
             # click on Delete Account button before confirmation modal appears
-            delete_button_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/main/div/form/button[3]/span[1]'), "Delete Account") # Delete Account button
+            delete_button_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/main/div/form/button[3]/span[1]'), "Delete") # Delete Account button
             WebDriverWait(driver, 5).until(delete_button_present)
             driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[3]/span[1]').click() 
             # click on Delete button in confirmation modal
@@ -123,10 +129,13 @@ class PythonOrgSearch(unittest.TestCase):
             WebDriverWait(driver, 5).until(modal_delete_button_present)
             driver.find_element(By.XPATH, '//*[@id="modal-modal-description"]/div/button[2]/span[1]').click()
             # wait for delete confirmation message to appear
-            self.assertIn("Deleting...", driver.page_source)
+            confirmation_msg_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/div/div[1]/div/a/span[1]'), "Deleting...")
+            WebDriverWait(driver, 5).until(confirmation_msg_present)
+            signin_title_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/h1')) # Sign in form title
+            WebDriverWait(driver, 5).until(signin_title_present)
         except TimeoutException:
             print 
-            "Timed out waiting for page to load"        
+            "Timed out waiting for page to load"
 
     # US10: correct email and correct password
     def test_signin_valid_credentials(self):
@@ -237,6 +246,7 @@ class PythonOrgSearch(unittest.TestCase):
             "Timed out waiting for page to load"
         email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
         password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        
         # attempt to sign in with invalid credentials
         email.send_keys(self.invalid_email)
         password.send_keys(self.valid_password)
@@ -247,6 +257,7 @@ class PythonOrgSearch(unittest.TestCase):
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+        
         # attempt to sign in with valid credentials
         email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
         password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
