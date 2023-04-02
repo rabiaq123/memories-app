@@ -35,13 +35,14 @@ export const getUsers = () => async (dispatch) => {
 //   }
 // };
 
-export const updateUserProfile = (id, email, name) => async (dispatch) => {
+export const updateUserProfile = (id, email, name, displayname) => async (dispatch) => {
   try {
 
     let user_data = {
       "id" : id,
       "name" : name,
       "email" : email,
+      "displayname" : displayname,
     }
 
     const { data } = await api.updateUser(user_data);

@@ -27,19 +27,28 @@ export const signin = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
+  console.log("Started Sign up");
+  console.log("REQ BODY: ", req.body)
+  const { userName, email, password, firstName, lastName } = req.body;
 
   try {
     const oldUser = await UserModel.findOne({ email });
 
     if (oldUser) return res.status(400).json({ message: "User already exists" });
 
+    // check if user name already exists:
+
+    const oldUserName = await UserModel.findOne({ name: `${userName}` });
+
+    if (oldUserName) return res.status(400).json({ message: "User with that name already exists"})
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const result = await UserModel.create({ email, password: hashedPassword, name: `${firstName} ${lastName}` });
+    const result = await UserModel.create({ name: `${userName}`, email, password: hashedPassword, displayname: `${firstName} ${lastName}` });
 
     const token = jwt.sign({ email: result.email, id: result._id }, secret, { expiresIn: "1h" });
 
+    console.log(result)
     res.status(201).json({ result, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
@@ -57,6 +66,7 @@ export const getUser = async (req, res) => {
     // creating a new user object with all the required fields
     // and the additional follower information
     let appended_user = {};
+    appended_user['displayname'] = user['displayname'];
     appended_user['email'] = user['email'];
     appended_user['followers'] = user['followers'];
     appended_user['following'] = user['following'];
@@ -120,7 +130,7 @@ export const getUsers = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const { id, name, email } = req.body;
+    const { id, name, email, displayname } = req.body;
 
     // getting the user that matches the ID that is sent
 
@@ -131,13 +141,15 @@ export const updateUserProfile = async (req, res) => {
 
     console.log("The email is: " + email);
     console.log("The name is: " + name);
+    console.log("The display name is: " + displayname);
     // updating the user profile
     await UserModel.findOneAndUpdate(
       { "_id": id },
       {
         "$set": {
           "email": email, // the data you want to update
-          "name": name
+          "name": name,
+          "displayname": displayname,
         }
       });
 
@@ -349,6 +361,7 @@ export const getUserByName = async (req, res) => {
 const create_followers_appended_user = async (user) => {
 
   let appended_user = {};
+  appended_user['displayname'] = user['displayname'];
   appended_user['email'] = user['email'];
   appended_user['followers'] = user['followers'];
   appended_user['following'] = user['following'];

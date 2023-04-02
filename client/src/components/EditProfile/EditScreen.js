@@ -19,6 +19,8 @@ const EditScreen = () => {
   const { user } = useSelector((state) => state.user);
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
+  const [displayname, setDisplayName] = useState(user?.displayname);
+  const [isSpace, setSpace] = useState(false);
   const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
   const [deleteClicked, setDeleteClicked] = useState(false);
   const [open, setOpen] = useState(false); // for delete confirmation modal
@@ -28,15 +30,15 @@ const EditScreen = () => {
   }
 
   // helper function that can be used for updating a users profile
-  const update_user = (id, email, name) => {
-    dispatch(updateUserProfile (id, email, name));
+  const update_user = (id, email, name, displayname) => {
+    dispatch(updateUserProfile (id, email, name, displayname));
     // console.log ('updated_user', user);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getUser(id));
-    update_user(id, email, name)
+    update_user(id, email, name, displayname)
     setDisableUpdate(true);
   }
 
@@ -45,20 +47,32 @@ const EditScreen = () => {
 
     // disable update button if the name and email are the same as the current saved name and email
     if (e.target.name == 'name' && e.target.value == user?.name) { // if name field is in focus and the input value is the same as the current saved name
-      if (email == user?.email) { // and the email is the same as the current saved email
+      if (email == user?.email && displayname == user?.displayname) { 
         setDisableUpdate(true);
       }
     } else if (e.target.name == 'email' && e.target.value == user?.email) { // if email field is in focus and the input value is the same as the current saved email
-      if (name == user?.name) { // and the name is the same as the current saved name
+      if (name == user?.name && displayname == user?.displayname) { 
+        setDisableUpdate(true);
+      }
+    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { // if email field is in focus and the input value is the same as the current saved email
+      if (name == user?.name && email == user?.email) { 
         setDisableUpdate(true);
       }
     }
-
-    // if the name or email is changed, update the state
+    
+    // if the name, email or displayname is changed, update the state
     if (e.target.name == 'name') {
       setName(e.target.value);
+      if ((e.target.value).indexOf(' ') >= 0) {
+        setSpace(true);
+        setDisableUpdate(true);
+      } else {
+        setSpace(false);
+      }
     } else if (e.target.name == 'email') {
       setEmail(e.target.value);
+    } else if (e.target.name == 'displayName') {
+      setDisplayName(e.target.value);
     }
   }
 
@@ -119,11 +133,14 @@ const EditScreen = () => {
             <form className={classes.form} onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <>
-                  <Input name="name" label="Name" handleChange={handleChange} autoFocus value={name}/>
+                  {/* TODO: split name into first and last name (by space) */}
+                  <Input name="name" label="Username" handleChange={handleChange} autoFocus value={name}/>
+                  {isSpace && <div className={classes.error}>Username cannot contain spaces within it.</div>}
+                  <Input name="displayName" label="Full Name" handleChange={handleChange} autoFocus value={displayname}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
                 </>
               </Grid>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || disableUpdate}>
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || !displayname || disableUpdate}>
                 <Edit style={{marginRight: 5}} />
                 Update
               </Button>

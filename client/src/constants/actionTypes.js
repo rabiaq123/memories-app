@@ -13,6 +13,7 @@ export const FETCH_BY_CREATOR = 'FETCH_BY_CREATOR';
 export const AUTH = 'AUTH';
 export const LOGOUT = 'LOGOUT';
 export const AUTH_ERROR = 'AUTH_ERROR';
+export const SIGNUP_ERROR = 'SIGNUP_ERROR';
 
 export const FETCH_USER = 'FETCH_USER';
 export const DELETE_USER = 'DELETE_USER';

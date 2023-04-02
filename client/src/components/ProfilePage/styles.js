@@ -1,12 +1,20 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
+  pfp: {
+    height: '100px',
+    width: '100px',
+    marginRight: '20px',
+  },
   profileInfo: {
     padding: '0 16px 8px 16px',
     display: 'flex',
+    alignItems: 'center',
   },
   userName: {
-    marginRight: '30px',
+    marginRight: '20px',
+    marginBlockStart: '0em',
+    marginBlockEnd: '0em',
   },
   socialInfo: {
     display: 'flex',

@@ -37,7 +37,7 @@ const Navbar = () => {
     setIsDiscoverClicked(location.pathname.includes('/posts/discover'));
   }, [location]);
 
-
+  console.log("The user in navbar is:", typeof (user?.result.name));
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
       <Link to="/" className={classes.brandContainer}>
