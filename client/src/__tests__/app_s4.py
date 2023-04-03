@@ -280,145 +280,145 @@ class PythonOrgSearch(unittest.TestCase):
 
         
     # US11 Test Case 1: Locate username input
-    # def test_username_display(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://rad-naiad-d04419.netlify.app/posts")
-    #     # locate Sign Up button
-    #     signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[2]/div/button/span[1]')
-    #     signin_button.click()
+    def test_username_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("https://rad-naiad-d04419.netlify.app/posts")
+        # locate Sign Up button
+        signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[2]/div/button/span[1]')
+        signin_button.click()
 
-    #     # Find username element
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')) # username input
-    #         WebDriverWait(driver, 5).until(element_present)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
+        # Find username element
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')) # username input
+            WebDriverWait(driver, 5).until(element_present)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
 
-    # # US11 Test Case 2: signup with a non-existent username
-    # def test_username_signup(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://rad-naiad-d04419.netlify.app/posts")
-    #     # locate Sign Up button
-    #     signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[2]/div/button/span[1]')
-    #     signin_button.click()
+    # US11 Test Case 2: signup with a non-existent username
+    def test_username_signup(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("https://rad-naiad-d04419.netlify.app/posts")
+        # locate Sign Up button
+        signin_button = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[2]/div/button/span[1]')
+        signin_button.click()
 
-    #     # Find username element
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')) # username input
-    #         WebDriverWait(driver, 5).until(element_present)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
+        # Find username element
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')) # username input
+            WebDriverWait(driver, 5).until(element_present)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
-    #     # Enter credentials
-    #     username = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
-    #     firstname = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
-    #     lastname = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[3]/div/div/input')
-    #     email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[4]/div/div/input')
-    #     password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[5]/div/div/input')
-    #     # repeatPassword = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[6]/div/div/input')
+        # Enter credentials
+        username = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
+        firstname = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        lastname = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[3]/div/div/input')
+        email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[4]/div/div/input')
+        password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[5]/div/div/input')
+        # repeatPassword = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[6]/div/div/input')
 
-    #     username.send_keys("userstory11test")
-    #     firstname.send_keys("user11")
-    #     lastname.send_keys("story11")
-    #     email.send_keys("us11@test")
-    #     password.send_keys("us")
-    #     # repeatPassword.send_keys("us")
+        username.send_keys("userstory11test")
+        firstname.send_keys("user11")
+        lastname.send_keys("story11")
+        email.send_keys("us11@test")
+        password.send_keys("us")
+        # repeatPassword.send_keys("us")
 
-    #     # Attempt to signup
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button').click()
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/h5')) # New landing page
-    #         WebDriverWait(driver, 5).until(element_present)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
+        # Attempt to signup
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button').click()
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/h5')) # New landing page
+            WebDriverWait(driver, 5).until(element_present)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
-    # # US11 Test Case 3: Display username on profile
-    # def test_username_profile(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://rad-naiad-d04419.netlify.app/auth")
-    #     # locate and enter email and password and submit
-    #     email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
-    #     password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
-    #     email.send_keys("triple@h")
-    #     password.send_keys("tt")
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
+    # US11 Test Case 3: Display username on profile
+    def test_username_profile(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("https://rad-naiad-d04419.netlify.app/auth")
+        # locate and enter email and password and submit
+        email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
+        password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        email.send_keys("triple@h")
+        password.send_keys("tt")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
 
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/header/div/div/a')) # post title
-    #         WebDriverWait(driver, 5).until(element_present)
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/header/div/div/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
 
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
-    #     # Navigate to profile page
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/div/a').click()
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+        # Navigate to profile page
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/div/a').click()
         
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[2]/p[1]')) # New landing page
-    #         WebDriverWait(driver, 5).until(element_present)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[2]/p[1]')) # New landing page
+            WebDriverWait(driver, 5).until(element_present)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
-    # # US11 Test Case 4: Edit username
-    # def test_username_edit(self):
-    #     driver = self.driver
-    #     driver.maximize_window()
-    #     driver.get("https://rad-naiad-d04419.netlify.app/auth")
-    #     # locate and enter email and password and submit
-    #     email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
-    #     password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
-    #     email.send_keys("triple@h")
-    #     password.send_keys("tt")
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
+    # US11 Test Case 4: Edit username
+    def test_username_edit(self):
+        driver = self.driver
+        driver.maximize_window()
+        driver.get("https://rad-naiad-d04419.netlify.app/auth")
+        # locate and enter email and password and submit
+        email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
+        password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        email.send_keys("triple@h")
+        password.send_keys("tt")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
 
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/header/div/div/a')) # profile navigation
-    #         WebDriverWait(driver, 5).until(element_present)
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/header/div/div/a')) # profile navigation
+            WebDriverWait(driver, 5).until(element_present)
 
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
-    #     # Navigate to profile page
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/div/a').click()
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+        # Navigate to profile page
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/header/div/div/a').click()
         
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/a')) # username input
-    #         WebDriverWait(driver, 5).until(element_present)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/a')) # username input
+            WebDriverWait(driver, 5).until(element_present)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
-    #     # Edit username
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/a').click()
+        # Edit username
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div[1]/div[3]/a').click()
 
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div/div[1]/div/div/input')) # username input
-    #         WebDriverWait(driver, 5).until(element_present)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div/div[1]/div/div/input')) # username input
+            WebDriverWait(driver, 5).until(element_present)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
-    #     username = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div/div[1]/div/div/input')
-    #     username.send_keys("doubleh")
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
-    #     driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[2]').click()
+        username = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div/div[1]/div/div/input')
+        username.send_keys("doubleh")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[2]').click()
 
-    #     # Check if updated
-    #     try:
-    #         element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[2]/p[1]')) # username 
-    #         WebDriverWait(driver, 5).until(element_present)
-    #         self.assertIn("doubleh", driver.page_source)
-    #     except TimeoutException:
-    #         print 
-    #         "Timed out waiting for page to load"
+        # Check if updated
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div[1]/div[2]/p[1]')) # username 
+            WebDriverWait(driver, 5).until(element_present)
+            self.assertIn("doubleh", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
 
 
 
