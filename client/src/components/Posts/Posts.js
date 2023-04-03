@@ -62,7 +62,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
 
         {isUserFeed ? (
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {followingPosts.map((post) => (
+            {followingPosts?.map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
               </Grid>
@@ -71,7 +71,7 @@ const Posts = ({ setCurrentId, isUserFeed = true }) => {
         ) : (
           // returns posts by all users except for current user if not on user feed / homepage
           <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-            {discoverPosts.map((post) => (
+            {discoverPosts?.map((post) => (
               <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
                 <Post post={post} setCurrentId={setCurrentId} />
               </Grid>

@@ -159,15 +159,6 @@ class PythonOrgSearch(unittest.TestCase):
             print 
             "Timed out waiting for page to load"
         self.assertIn("1 Following", driver.page_source) # assert current user is now following 1 user (previously 0, but followed 'test test' in previous test)
-        # # view the list of followers
-        # driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div[1]/div/p[1]').click() # click on the number of followers
-        # try:
-        #     follower_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="modal-modal-description"]/li/a'), "tee hee")
-        #     WebDriverWait(driver, 5).until(follower_present)
-        # except TimeoutException:
-        #     print 
-        #     "Timed out waiting for page to load"
-        # self.assertIn("tee hee", driver.page_source) # assert presence of follower's name in the list
 
     # search for and view specific user - DONE
     def test_user_specific_display(self):
@@ -180,7 +171,6 @@ class PythonOrgSearch(unittest.TestCase):
         driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button/span[1]').click()
         
         # Switch to accounts view
-
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
             WebDriverWait(driver, 5).until(element_present)
@@ -294,8 +284,8 @@ class PythonOrgSearch(unittest.TestCase):
         email.send_keys("py@py.com")
         password.send_keys("py")
         driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]/span[1]').click()
+        
         # wait for home page to load
-
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div/div/div/span/div[1]')) 
             WebDriverWait(driver, 5).until(element_present)
@@ -303,6 +293,155 @@ class PythonOrgSearch(unittest.TestCase):
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+
+    def test_user_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        # driver.get("https://rad-naiad-d04419.netlify.app/auth")
+        driver.get("http://localhost:3000/posts")
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a').click()
+
+        # Check if each user is displayed
+        userNames = ["Wes2 Test", "Demo demo", "test test"]
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[2]/div[1]/div/center/div')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+            for i in range(3):
+                self.assertIn(userNames[i], driver.page_source)
+
+            # self.assertIn("Selenium Test Title", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    def test_user_specific_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        # driver.get("https://rad-naiad-d04419.netlify.app/auth")
+        driver.get("http://localhost:3000/posts")
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a').click()
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+        searchBar = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')
+        searchBar.send_keys("test test")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button/span[1]').click()
+        
+        # Check if user is displayed
+        
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[2]/div/div/center/div')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+            
+            self.assertIn("test test", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    def test_no_user_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        # driver.get("https://rad-naiad-d04419.netlify.app/auth")
+        driver.get("http://localhost:3000/posts")
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a').click()
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+        searchBar = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')
+        searchBar.send_keys("x")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button/span[1]').click()
+        
+        # Check if user is displayed
+        
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[2]/h3')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+            
+            self.assertIn("No User Found", driver.page_source)
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+    def test_user_similar_display(self):
+        driver = self.driver
+        driver.maximize_window()
+        # driver.get("https://rad-naiad-d04419.netlify.app/auth")
+        driver.get("http://localhost:3000/posts")
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+            
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[1]/a').click()
+
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
+        searchBar = driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/div[1]/div/input')
+        searchBar.send_keys("test")
+        driver.find_element(By.XPATH, '//*[@id="root"]/div/div/div/div[2]/header/button/span[1]').click()
+        
+        # Check if user is displayed
+        userNames = ["test test", "Test example", "Wes2 Test", "test_Zayn test", "testing testing"]
+        try:
+            element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div/div/div[1]/div[2]/div[1]/div/center/div')) # post title
+            WebDriverWait(driver, 5).until(element_present)
+
+            for i in range(5):
+                self.assertIn(userNames[i], driver.page_source)
+
+        except TimeoutException:
+            print 
+            "Timed out waiting for page to load"
+
 
     def tearDown(self):
         self.driver.close()
