@@ -7,16 +7,20 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import *
+import time
 
 class PythonOrgSearch(unittest.TestCase):
     # IDs were retrieved from inspect tool on site
 
-    invalid_email = "teehee@teehee1.com"
-    invalid_password = "TEEHEE"
-    valid_email = "teehee@teehee.com"
-    valid_password = "teehee"
+    invalid_email = "rabiatest2@test.com"
+    invalid_password = "rabiatest2"
+    valid_email = "rabiatest@test.com"
+    valid_password = "rabiatest"
 
+    ### US9 (account deletion) test cases:
+    # select delete account but cancel upon confirmation
+    # delete account
+    ### US10 (sign in errors) test cases:
     # incorrect email and password
     # incorrect email and correct password
     # correct email and incorrect password
@@ -242,6 +246,7 @@ class PythonOrgSearch(unittest.TestCase):
             "Timed out waiting for page to load"
         email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
         password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
+        
         # attempt to sign in with invalid credentials
         email.send_keys(self.invalid_email)
         password.send_keys(self.valid_password)
@@ -252,6 +257,7 @@ class PythonOrgSearch(unittest.TestCase):
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
+        
         # attempt to sign in with valid credentials
         email = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[1]/div/div/input')
         password = driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/div[2]/div/div/input')
