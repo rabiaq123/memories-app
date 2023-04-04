@@ -14,7 +14,7 @@ import Form from '../Form/Form';
 import useStyles from './styles';
 
 function getDisplayUsers (searchUser, users, secondaryuser) {
-  console.log(searchUser, secondaryuser)
+  // console.log(searchUser, secondaryuser)
   if (!searchUser) {
     // console.log("LOCAL STORAGE SEARCH", localStorage.getItem("search"))
     return orderedSearch(localStorage.getItem("search"), users);
