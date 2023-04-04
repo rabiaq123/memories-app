@@ -186,7 +186,7 @@ class PythonOrgSearch(unittest.TestCase):
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/span')) # error message
             WebDriverWait(driver, 5).until(element_present)
-            self.assertIn("Invalid username or password.", driver.page_source)
+            self.assertIn("Invalid email or password.", driver.page_source)
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
@@ -210,7 +210,7 @@ class PythonOrgSearch(unittest.TestCase):
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/span')) # error message
             WebDriverWait(driver, 5).until(element_present)
-            self.assertIn("Invalid username or password.", driver.page_source)
+            self.assertIn("Invalid email or password.", driver.page_source)
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
@@ -234,7 +234,7 @@ class PythonOrgSearch(unittest.TestCase):
         try:
             element_present = EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/span')) # error message
             WebDriverWait(driver, 5).until(element_present)
-            self.assertIn("Invalid username or password.", driver.page_source)
+            self.assertIn("Invalid email or password.", driver.page_source)
         except TimeoutException:
             print 
             "Timed out waiting for page to load"
@@ -258,7 +258,7 @@ class PythonOrgSearch(unittest.TestCase):
         password.send_keys(self.valid_password)
         driver.find_element(By.XPATH, '//*[@id="root"]/div/main/div/form/button[1]').click()
         try:
-            error_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/span'), "Invalid username or password.") # error message
+            error_present = EC.text_to_be_present_in_element((By.XPATH, '//*[@id="root"]/div/main/div/form/div[1]/span'), "Invalid email or password.") # error message
             WebDriverWait(driver, 5).until(error_present)
         except TimeoutException:
             print 

@@ -76,7 +76,7 @@ const SignUp = () => {
             {(emailError && isSignup) && <div className={classes.error}>This email is already taken. Please enter another email.</div>}
             <Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text' : 'password'} handleShowPassword={handleShowPassword} />
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" /> }
-            {!isSignup && loginError && <span className={classes.error}>Invalid username or password.</span>}
+            {!isSignup && loginError && <span className={classes.error}>Invalid email or password.</span>}
           
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
