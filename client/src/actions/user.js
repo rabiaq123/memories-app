@@ -35,7 +35,7 @@ export const getUsers = () => async (dispatch) => {
 //   }
 // };
 
-export const updateUserProfile = (id, email, name, displayname, same) => async (dispatch) => {
+export const updateUserProfile = (id, email, name, displayname, sameUsername, sameEmail) => async (dispatch) => {
   try {
 
     let user_data = {
@@ -50,7 +50,8 @@ export const updateUserProfile = (id, email, name, displayname, same) => async (
       "name" : name,
       "email" : email,
       "displayname" : displayname,
-      "same": same,
+      "sameUsername": sameUsername,
+      "sameEmail": sameEmail,
     }
 
     await api.updateUser(info)

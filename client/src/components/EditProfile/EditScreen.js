@@ -17,15 +17,17 @@ const EditScreen = () => {
   const id = initialState?.result?._id;
   const history = useHistory();
   const { user, error } = useSelector((state) => state.user);
-  const [isError, setError] = useState(error == null ? false : true);
-
+  const [usernameError, setUsernameError] = useState(error == null ? false : error.includes("name"));
+  const [emailError, setEmailError] = useState(error == null ? false : !error.includes("name"));
   //REMOVE CONSOLE LOG ONCE ISSUE IS FIXED
   console.log("error", error);
-  console.log("isError", isError);
+  console.log("username error", usernameError);
+  console.log("username error", emailError);
 
   const [name, setName] = useState(user?.name);
   const [oldUsername, setOldUsername] = useState(name);
   const [email, setEmail] = useState(user?.email);
+  const [oldEmail, setOldEmail] = useState(email);
   const [displayname, setDisplayName] = useState(user?.displayname);
   const [isSpace, setSpace] = useState(false);
   const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
@@ -37,8 +39,10 @@ const EditScreen = () => {
   }
 
   // helper function that can be used for updating a users profile
-  const update_user = (id, email, name, displayname, same) => {
-    dispatch(updateUserProfile (id, email, name, displayname, same));
+  const update_user = (id, email, name, displayname, sameUsername, sameEmail) => {
+    setUsernameError(false);
+    setEmailError(false);
+    dispatch(updateUserProfile (id, email, name, displayname, sameUsername, sameEmail));
     // console.log ('updated_user', user);
   }
 
@@ -47,9 +51,17 @@ const EditScreen = () => {
     dispatch(getUser(id));
 
     if(name == oldUsername) {
-      update_user(id, email, name, displayname, true);
+      if (email == oldEmail) {
+        update_user(id, email, name, displayname, true, true);
+      } else {
+        update_user(id, email, name, displayname, true, false);
+      }
     } else {
-      update_user(id, email, name, displayname, false);
+      if (email == oldEmail) {
+        update_user(id, email, name, displayname, false, true);
+      } else {
+        update_user(id, email, name, displayname, false, false);
+      }
     }
 
     setDisableUpdate(true);
@@ -149,9 +161,10 @@ const EditScreen = () => {
                   {/* TODO: split name into first and last name (by space) */}
                   <Input name="name" label="Username" handleChange={handleChange} autoFocus value={name}/>
                   {isSpace && <div className={classes.error}>Username cannot contain spaces within it.</div>}
-                  {isError && <div className={classes.error}>Username is already taken. Please enter a different username.</div>}
+                  {usernameError && <div className={classes.error}>This username is already taken. Please select another username.</div>}
                   <Input name="displayName" label="Full Name" handleChange={handleChange} autoFocus value={displayname}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
+                  {(emailError) && <div className={classes.error}>This email is already taken. Please enter another email.</div>}
                 </>
               </Grid>
               <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || !displayname || disableUpdate}>

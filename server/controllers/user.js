@@ -130,9 +130,16 @@ export const getUsers = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const { id, name, email, displayname, same } = req.body;
+    const { id, name, email, displayname, sameUsername, sameEmail } = req.body;
+
+    if (!sameEmail) {
+      console.log("here");
+      const oldUser = await UserModel.findOne({ email });
+
+      if (oldUser) return res.status(400).json({ message: "User already exists" });
+    }
     
-    if (!same) {
+    if (!sameUsername) {
       const oldUserName = await UserModel.findOne({ name: `${name}` });
 
       if (oldUserName) return res.status(400).json({ message: "User with that name already exists"});
