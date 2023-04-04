@@ -1,28 +1,18 @@
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import { useParams } from 'react-router-dom';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Typography, Container, Grow, Grid, AppBar, TextField, Button, Paper, CircularProgress} from '@material-ui/core';
+import { Typography, Container, Grow, Grid, AppBar, TextField, Button, CircularProgress} from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
 
 import { getUsers } from '../../actions/user';
-import { getUserByName } from '../../actions/secondaryuser';
 import Account from './Account/Account';
 import Form from '../Form/Form';
 import useStyles from './styles';
 
-function getDisplayUsers (searchUser, users, secondaryuser) {
-  console.log(searchUser, secondaryuser)
-  if (!searchUser) {
-    console.log("LOCAL STORAGE SEARCH", localStorage.getItem("search"))
-    return orderedSearch(localStorage.getItem("search"), users);
-  } else {
-    
-    console.log("ORDERED SEARCH", orderedSearch(searchUser, users))
-    return orderedSearch(searchUser, users)
-  }
+function getDisplayUsers (users) {
+  return orderedSearch(localStorage.getItem("search"), users);
 }
 
 function orderedSearch (search, users) {
@@ -78,9 +68,7 @@ function orderedSearch (search, users) {
 
 
 const Accounts = () => {
-  const { searchUser } = useParams();
   const { users, isLoading } = useSelector((state) => state.user); // state.user because user is the name of the reducer
-  const { secondaryuser } = useSelector((state) => state.secondaryuser);
   const classes = useStyles();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
@@ -88,15 +76,14 @@ const Accounts = () => {
   const history = useHistory();
   const location = useLocation();
   const sendSearch = localStorage.getItem("search") + " ";
-  var displayUsers = getDisplayUsers (searchUser, users, secondaryuser);
+  var displayUsers = getDisplayUsers(users);
 
-  console.log("DISPLAY USERS: ", displayUsers)
-  console.log("SEARCH ITEM: ", localStorage.getItem("search"))
+  // console.log("DISPLAY USERS: ", displayUsers)
+  // console.log("SEARCH ITEM: ", localStorage.getItem("search"))
 
   useEffect(() => {
     dispatch(getUsers());
-    dispatch(getUserByName(searchUser));
-  }, [searchUser]);
+  }, [sendSearch]);
 
   // console.log("users", users);
   // console.log("displayUser: " + displayUsers);
@@ -138,7 +125,7 @@ const Accounts = () => {
                 </div>
                 <br/>
                 <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-                  {(displayUsers?.length === 0) && <Typography variant="h3">No User Found</Typography>}
+                  {(displayUsers?.length === 0) && <Typography variant="h5">No user found.</Typography>}
                   {displayUsers?.map((user) => (
                     <Grid key={user._id} item xs={12} sm={12} md={6} lg={3}>
                       <Account user={user}/>
