@@ -10,8 +10,8 @@ Required pip libraries to install:
 - pyjwt
 """
 
-# BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
-BASE_URL = 'http://localhost:5500/'
+BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
+# BASE_URL = 'http://localhost:5500/'
 
 class bcolors:
     HEADER = '\033[95m'
@@ -476,6 +476,33 @@ def create_post_test(title, message, creator_id, creator_email, creator_name, pr
     #     print (f'Testing the endpoint that returns all the posts of a users following list; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
     #     print (f"Posts from the user {following_id} were not found")
 
+def test_incorrect_login_unittest(email, password):
+    """
+    This test creates a post
+    """
+
+    url = BASE_URL + f'user/signin'
+
+    post_data = {
+        
+    }
+
+    submit_post_data = {
+        'email' : email,
+        'password' : password,
+    }
+
+    # encoded_jwt = jwt.encode({"email": creator_email, "id": creator_id}, "test", algorithm="HS256")
+    # print (f"The JWT token created is: {encoded_jwt}")
+    request = requests.post(url, json=submit_post_data, headers={},)    
+    
+    recieved_results = request.json()
+    # print (recieved_results)
+    if request.status_code == 401:
+        print (f'Testing the login endpoint with incorrect credentials; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
+    else:
+        print (f'Testing the login endpoint with incorrect credentials; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
+        # print (f"Posts from the user {following_id} were not found")    
 
 
 
@@ -502,7 +529,8 @@ def main():
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
     # add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
     # post_of_following__unit_test("6400c5e8dcc14a33a65f7876", "63ebe2df07578e0014da8d55")
-    delete_user_unit_test ('642349701e04884890270d2e', 'test46@test.com', 'Wes 3 Test')
+    delete_user_unit_test ('642c373dc0ba7b00145a56d4', 'test46@test.com', 'Wes 3 Test')
+    # test_incorrect_login_unittest('test66@gmail.com', '1234')
     
 
 
