@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Typography, Paper, Container, Grid, Modal, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -20,9 +20,10 @@ const EditScreen = () => {
   const [usernameError, setUsernameError] = useState(error == null ? false : error.includes("name"));
   const [emailError, setEmailError] = useState(error == null ? false : !error.includes("name"));
   // TODO: REMOVE CONSOLE LOG ONCE ISSUE IS FIXED
+  console.log(JSON.stringify(user));
   console.log("error", error);
   console.log("username error", usernameError);
-  console.log("username error", emailError);
+  console.log("email error", emailError);
 
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
@@ -38,36 +39,20 @@ const EditScreen = () => {
     history.push('/auth');
   }
 
-  // helper function that can be used for updating a users profile
-  const update_user = (id, email, name, displayname, username) => {
-    setUsernameError(false);
-    setEmailError(false);
-    dispatch(updateUserProfile(id, email, name, displayname, username));
-    // console.log ('updated_user', user);
-  }
-
-  // useEffect(() => {
-  //   dispatch(updateUserProfile (id, email, name, displayname, username));
-  // }, [usernameError, emailError]);
+  useEffect(() => {
+    setUsernameError(error == null ? false : error.includes("name"));
+    setEmailError(error == null ? false : !error.includes("name"));
+    if (error != null && error != "") {
+      setDisableUpdate(false);
+    } else if (name == user?.name && email == user?.email && displayname == user?.displayname) {
+      setDisableUpdate(true);
+    }
+  }, [error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getUser(id)); // user info from database, accessible through redux store (user object)
-    dispatch(updateUserProfile(id, email, name, displayname, username));
-    // if(name == user?.name) {
-    //   if (email == oldEmail) {
-    //     update_user(id, email, name, displayname, true, true);
-    //   } else {
-    //     update_user(id, email, name, displayname, true, false);
-    //   }
-    // } else {
-    //   if (email == oldEmail) {
-    //     update_user(id, email, name, displayname, false, true);
-    //   } else {
-    //     update_user(id, email, name, displayname, false, false);
-    //   }
-    // }
-
+    dispatch(updateUserProfile(id, email, name, displayname));
     setDisableUpdate(true);
   }
 
@@ -76,7 +61,7 @@ const EditScreen = () => {
 
     // disable update button if the name and email are the same as the current saved name and email
     if (e.target.name == 'name' && e.target.value == user?.name) { 
-      if (email == user?.email && displayname == user?.displayname && username == user?.displayname) { 
+      if (email == user?.email && displayname == user?.displayname) { 
         setDisableUpdate(true);
       }
     } else if (e.target.name == 'email' && e.target.value == user?.email) {
@@ -93,7 +78,7 @@ const EditScreen = () => {
       }
     }
     
-    // if the name, email or displayname is changed, update the state
+    // if the username, email or displayname is changed, update the state
     if (e.target.name == 'name') {
       setName(e.target.value);
       if ((e.target.value).indexOf(' ') >= 0) {
