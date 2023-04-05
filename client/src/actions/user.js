@@ -35,7 +35,7 @@ export const getUsers = () => async (dispatch) => {
 //   }
 // };
 
-export const updateUserProfile = (id, email, name, displayname, sameUsername, sameEmail) => async (dispatch) => {
+export const updateUserProfile = (id, email, name, displayname, username) => async (dispatch) => {
   try {
 
     let user_data = {
@@ -43,18 +43,10 @@ export const updateUserProfile = (id, email, name, displayname, sameUsername, sa
       "name" : name,
       "email" : email,
       "displayname" : displayname,
+      "username" : username,
     }
 
-    let info = {
-      "id" : id,
-      "name" : name,
-      "email" : email,
-      "displayname" : displayname,
-      "sameUsername": sameUsername,
-      "sameEmail": sameEmail,
-    }
-
-    await api.updateUser(info)
+    await api.updateUser(user_data)
       .then((res) => {
         dispatch({ type: UPDATE, payload: {user: res.data }});
       })

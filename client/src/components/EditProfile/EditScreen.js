@@ -19,16 +19,16 @@ const EditScreen = () => {
   const { user, error } = useSelector((state) => state.user);
   const [usernameError, setUsernameError] = useState(error == null ? false : error.includes("name"));
   const [emailError, setEmailError] = useState(error == null ? false : !error.includes("name"));
-  //REMOVE CONSOLE LOG ONCE ISSUE IS FIXED
+  // TODO: REMOVE CONSOLE LOG ONCE ISSUE IS FIXED
   console.log("error", error);
   console.log("username error", usernameError);
   console.log("username error", emailError);
 
   const [name, setName] = useState(user?.name);
-  const [oldUsername, setOldUsername] = useState(name);
   const [email, setEmail] = useState(user?.email);
-  const [oldEmail, setOldEmail] = useState(email);
   const [displayname, setDisplayName] = useState(user?.displayname);
+  const [username, setUsername] = useState(user?.username);
+
   const [isSpace, setSpace] = useState(false);
   const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
   const [deleteClicked, setDeleteClicked] = useState(false);
@@ -39,30 +39,34 @@ const EditScreen = () => {
   }
 
   // helper function that can be used for updating a users profile
-  const update_user = (id, email, name, displayname, sameUsername, sameEmail) => {
+  const update_user = (id, email, name, displayname, username) => {
     setUsernameError(false);
     setEmailError(false);
-    dispatch(updateUserProfile (id, email, name, displayname, sameUsername, sameEmail));
+    dispatch(updateUserProfile(id, email, name, displayname, username));
     // console.log ('updated_user', user);
   }
 
+  // useEffect(() => {
+  //   dispatch(updateUserProfile (id, email, name, displayname, username));
+  // }, [usernameError, emailError]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(getUser(id));
+    dispatch(getUser(id)); // user info from database, accessible through redux store (user object)
 
-    if(name == oldUsername) {
-      if (email == oldEmail) {
-        update_user(id, email, name, displayname, true, true);
-      } else {
-        update_user(id, email, name, displayname, true, false);
-      }
-    } else {
-      if (email == oldEmail) {
-        update_user(id, email, name, displayname, false, true);
-      } else {
-        update_user(id, email, name, displayname, false, false);
-      }
-    }
+    // if(name == user?.name) {
+    //   if (email == oldEmail) {
+    //     update_user(id, email, name, displayname, true, true);
+    //   } else {
+    //     update_user(id, email, name, displayname, true, false);
+    //   }
+    // } else {
+    //   if (email == oldEmail) {
+    //     update_user(id, email, name, displayname, false, true);
+    //   } else {
+    //     update_user(id, email, name, displayname, false, false);
+    //   }
+    // }
 
     setDisableUpdate(true);
   }
@@ -71,15 +75,19 @@ const EditScreen = () => {
     setDisableUpdate(false); // default
 
     // disable update button if the name and email are the same as the current saved name and email
-    if (e.target.name == 'name' && e.target.value == user?.name) { // if name field is in focus and the input value is the same as the current saved name
-      if (email == user?.email && displayname == user?.displayname) { 
+    if (e.target.name == 'name' && e.target.value == user?.name) { 
+      if (email == user?.email && displayname == user?.displayname && username == user?.displayname) { 
         setDisableUpdate(true);
       }
-    } else if (e.target.name == 'email' && e.target.value == user?.email) { // if email field is in focus and the input value is the same as the current saved email
+    } else if (e.target.name == 'email' && e.target.value == user?.email) {
       if (name == user?.name && displayname == user?.displayname) { 
         setDisableUpdate(true);
       }
-    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { // if email field is in focus and the input value is the same as the current saved email
+    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { 
+      if (name == user?.name && email == user?.email) { 
+        setDisableUpdate(true);
+      }
+    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { 
       if (name == user?.name && email == user?.email) { 
         setDisableUpdate(true);
       }

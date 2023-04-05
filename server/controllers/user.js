@@ -130,7 +130,20 @@ export const getUsers = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
-    const { id, name, email, displayname, sameUsername, sameEmail } = req.body;
+    const { id, name, email, displayname, username } = req.body;
+    var sameEmail = false;
+    var sameUsername = false;
+
+    // check if the email or username is the same as the one in the database
+    if (await UserModel.findOne({ email }) != null) {
+      sameEmail = true;
+    }
+    if (await UserModel.findOne({ name: username }) != null) {
+      sameUsername = true;
+    }
+      
+    // more logic required here
+    
 
     if (!sameEmail) {
       console.log("here");
