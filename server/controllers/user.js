@@ -334,7 +334,9 @@ export const removeFollower = async (req, res) => {
       console.log("The requester's id was not found in the user's followers list.");
     }
 
-    res.status(200).json(unfollowedUser);
+    let appended_user = await create_followers_appended_user(unfollowedUser);
+
+    res.status(200).json(appended_user);
   } catch (error) {
     res.status(500).json({ message: error.message });
     return
