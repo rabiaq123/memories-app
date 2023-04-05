@@ -10,8 +10,8 @@ Required pip libraries to install:
 - pyjwt
 """
 
-# BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
-BASE_URL = 'http://localhost:5500/'
+BASE_URL = 'https://memories-server-cis4250.herokuapp.com/'
+# BASE_URL = 'http://localhost:5500/'
 
 class bcolors:
     HEADER = '\033[95m'
@@ -520,7 +520,7 @@ def test_username_signup_unittest(email, password, username):
     request = requests.post(url, json=submit_post_data, headers={},)    
     
     recieved_results = request.json()
-    print (recieved_results)
+    # print (recieved_results)
 
     if recieved_results["result"]["name"] == username and recieved_results["result"]["email"] == email:
         print (f'Testing the signup endpoint with correct credentials; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
@@ -552,7 +552,7 @@ def main():
     # post_of_following__unit_test("6400c5e8dcc14a33a65f7876", "63ebe2df07578e0014da8d55")
     # delete_user_unit_test ('642c373dc0ba7b00145a56d4', 'test46@test.com', 'Wes 3 Test')
     # test_incorrect_login_unittest('test66@gmail.com', '1234')
-    test_username_signup_unittest('server26@com', 'test', 'servertest120')
+    test_username_signup_unittest('server26123@com', 'test', 'servertest120123')
     
 
 
