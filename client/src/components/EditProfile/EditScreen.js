@@ -17,13 +17,8 @@ const EditScreen = () => {
   const id = initialState?.result?._id;
   const history = useHistory();
   const { user, error } = useSelector((state) => state.user);
-  const [usernameError, setUsernameError] = useState(error == null ? false : error.includes("name"));
+  const [usernameError, setUsernameError] = useState(error == null ? false : (error.includes("name") || error.includes("both")));
   const [emailError, setEmailError] = useState(error == null ? false : !error.includes("name"));
-  // TODO: REMOVE CONSOLE LOG ONCE ISSUE IS FIXED
-  console.log(JSON.stringify(user));
-  console.log("error", error);
-  console.log("username error", usernameError);
-  console.log("email error", emailError);
 
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
@@ -40,7 +35,7 @@ const EditScreen = () => {
   }
 
   useEffect(() => {
-    setUsernameError(error == null ? false : error.includes("name"));
+    setUsernameError(error == null ? false : (error.includes("name") || error.includes("both")));
     setEmailError(error == null ? false : !error.includes("name"));
     if (error != null && error != "") {
       setDisableUpdate(false);

@@ -33,13 +33,13 @@ export const signup = async (req, res) => {
 
   try {
     const oldUser = await UserModel.findOne({ email });
+    const oldUserName = await UserModel.findOne({ name: `${userName}` });
+
+    if (oldUser && oldUserName) return res.status(400).json({ message: "both" });
 
     if (oldUser) return res.status(400).json({ message: "User already exists" });
 
     // check if user name already exists:
-
-    const oldUserName = await UserModel.findOne({ name: `${userName}` });
-
     if (oldUserName) return res.status(400).json({ message: "User with that name already exists"})
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -150,15 +150,22 @@ export const updateUserProfile = async (req, res) => {
       console.log("same username: ", sameUsername)
     }
 
-    if (!sameEmail) {
+    const oldUserName = await UserModel.findOne({ name: `${name}` });
+    const oldUser = await UserModel.findOne({ email });
+    console.log(oldUser);
+    console.log(oldUserName);
+
+    if(!sameEmail && !sameUsername) {
       console.log("here");
-      const oldUser = await UserModel.findOne({ email });
+      if (oldUser != null && oldUserName != null) return res.status(400).json({ message: "both" });
+    }
+
+    if (!sameEmail) {
 
       if (oldUser) return res.status(400).json({ message: "User already exists" });
     }
     
     if (!sameUsername) {
-      const oldUserName = await UserModel.findOne({ name: `${name}` });
 
       if (oldUserName) return res.status(400).json({ message: "User with that name already exists"});
     }
