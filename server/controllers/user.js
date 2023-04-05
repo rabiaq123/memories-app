@@ -150,6 +150,7 @@ export const updateUserProfile = async (req, res) => {
       console.log("same username: ", sameUsername)
     }
 
+    // if email and username exist in db but don't belong to requesting user, return error
     const oldUserName = await UserModel.findOne({ name: `${name}` });
     const oldUser = await UserModel.findOne({ email });
     console.log(oldUser);
