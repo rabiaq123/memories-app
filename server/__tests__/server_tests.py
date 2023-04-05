@@ -504,7 +504,28 @@ def test_incorrect_login_unittest(email, password):
         print (f'Testing the login endpoint with incorrect credentials; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
         # print (f"Posts from the user {following_id} were not found")    
 
+# Story 11 test signup with user name
+def test_username_signup_unittest(email, password, username):
+    
+    url = BASE_URL + f'user/signup'
 
+    submit_post_data = {
+        'userName': username,
+        'lastname': "Server",
+        'email' : email,
+        'password' : password,
+        'firstname' : "test",
+    }
+
+    request = requests.post(url, json=submit_post_data, headers={},)    
+    
+    recieved_results = request.json()
+    # print (recieved_results)
+
+    if recieved_results["result"]["name"] == username and recieved_results["result"]["email"] == email:
+        print (f'Testing the signup endpoint with correct credentials; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
+    else:
+        print (f'Testing the signup endpoint with correct credentials; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
 
 def main():
 
@@ -529,8 +550,9 @@ def main():
     # get_user_by_id_test("6400c5e8dcc14a33a65f7876")
     # add_users_follower_unit_test ("6400c5e8dcc14a33a65f7876", "63ff9f7c9f5ee10014557abe")
     # post_of_following__unit_test("6400c5e8dcc14a33a65f7876", "63ebe2df07578e0014da8d55")
-    delete_user_unit_test ('642c373dc0ba7b00145a56d4', 'test46@test.com', 'Wes 3 Test')
+    # delete_user_unit_test ('642c373dc0ba7b00145a56d4', 'test46@test.com', 'Wes 3 Test')
     # test_incorrect_login_unittest('test66@gmail.com', '1234')
+    test_username_signup_unittest('server26123@com', 'test', 'servertest120123')
     
 
 
