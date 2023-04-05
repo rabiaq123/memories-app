@@ -510,10 +510,11 @@ def test_username_signup_unittest(email, password, username):
     url = BASE_URL + f'user/signup'
 
     submit_post_data = {
-        'name': username,
-        'displayname': "TestingServer",
+        'userName': username,
+        'lastname': "Server",
         'email' : email,
         'password' : password,
+        'firstname' : "test",
     }
 
     request = requests.post(url, json=submit_post_data, headers={},)    
@@ -521,7 +522,7 @@ def test_username_signup_unittest(email, password, username):
     recieved_results = request.json()
     print (recieved_results)
 
-    if request.status_code == 401:
+    if recieved_results["result"]["name"] == username and recieved_results["result"]["email"] == email:
         print (f'Testing the signup endpoint with correct credentials; result is '+bcolors.OKGREEN + "TEST PASSED" + bcolors.ENDC)
     else:
         print (f'Testing the signup endpoint with correct credentials; result is '+bcolors.FAIL + "TEST FAILED" + bcolors.ENDC)
@@ -551,7 +552,7 @@ def main():
     # post_of_following__unit_test("6400c5e8dcc14a33a65f7876", "63ebe2df07578e0014da8d55")
     # delete_user_unit_test ('642c373dc0ba7b00145a56d4', 'test46@test.com', 'Wes 3 Test')
     # test_incorrect_login_unittest('test66@gmail.com', '1234')
-    test_username_signup_unittest('server23@com', 'test', 'zaynserver')
+    test_username_signup_unittest('server26@com', 'test', 'servertest120')
     
 
 
