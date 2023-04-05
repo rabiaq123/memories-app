@@ -1,4 +1,4 @@
-import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER, END_LOADING, DELETE_USER } from '../constants/actionTypes';
+import { FETCH_USER, FETCH_ALL, START_LOADING, UPDATE, UPDATE_NEW_FOLLOWER, REMOVE_FOLLOWER, END_LOADING, DELETE_USER, UPDATE_ERROR } from '../constants/actionTypes';
 import * as api from '../api/index.js';
 
 export const getUser = (id) => async (dispatch) => {
@@ -45,9 +45,19 @@ export const updateUserProfile = (id, email, name, displayname) => async (dispat
       "displayname" : displayname,
     }
 
-    const { data } = await api.updateUser(user_data);
+    await api.updateUser(user_data)
+      .then((res) => {
+        console.log("in then of updateUserProfile");
+        dispatch({ type: UPDATE, payload: {user: res.data }});
+      })
+      .catch((err) => {
+        console.log("in catch of updateUserProfile");
+        dispatch({ type: UPDATE_ERROR, payload: { user: user_data, error: err.response.data.message} });
+      });
 
-    dispatch({ type: UPDATE, payload: data });
+    // const { data } = await api.updateUser(user_data);
+
+    // dispatch({ type: UPDATE, payload: data });
   } catch (error) {
     console.log(error);
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Typography, Paper, Container, Grid, Modal, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -16,10 +16,15 @@ const EditScreen = () => {
   const initialState = JSON.parse(localStorage.getItem('profile'));
   const id = initialState?.result?._id;
   const history = useHistory();
-  const { user } = useSelector((state) => state.user);
+  const { user, error } = useSelector((state) => state.user);
+  const [usernameError, setUsernameError] = useState(error == null ? false : (error.includes("name") || error.includes("both")));
+  const [emailError, setEmailError] = useState(error == null ? false : !error.includes("name"));
+
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
   const [displayname, setDisplayName] = useState(user?.displayname);
+  const [username, setUsername] = useState(user?.username);
+
   const [isSpace, setSpace] = useState(false);
   const [disableUpdate, setDisableUpdate] = useState(true); // disable update button by default
   const [deleteClicked, setDeleteClicked] = useState(false);
@@ -29,16 +34,20 @@ const EditScreen = () => {
     history.push('/auth');
   }
 
-  // helper function that can be used for updating a users profile
-  const update_user = (id, email, name, displayname) => {
-    dispatch(updateUserProfile (id, email, name, displayname));
-    // console.log ('updated_user', user);
-  }
+  useEffect(() => {
+    setUsernameError(error == null ? false : (error.includes("name") || error.includes("both")));
+    setEmailError(error == null ? false : !error.includes("name"));
+    if (error != null && error != "") {
+      setDisableUpdate(false);
+    } else if (name == user?.name && email == user?.email && displayname == user?.displayname) {
+      setDisableUpdate(true);
+    }
+  }, [error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(getUser(id));
-    update_user(id, email, name, displayname)
+    dispatch(getUser(id)); // user info from database, accessible through redux store (user object)
+    dispatch(updateUserProfile(id, email, name, displayname));
     setDisableUpdate(true);
   }
 
@@ -46,21 +55,25 @@ const EditScreen = () => {
     setDisableUpdate(false); // default
 
     // disable update button if the name and email are the same as the current saved name and email
-    if (e.target.name == 'name' && e.target.value == user?.name) { // if name field is in focus and the input value is the same as the current saved name
+    if (e.target.name == 'name' && e.target.value == user?.name) { 
       if (email == user?.email && displayname == user?.displayname) { 
         setDisableUpdate(true);
       }
-    } else if (e.target.name == 'email' && e.target.value == user?.email) { // if email field is in focus and the input value is the same as the current saved email
+    } else if (e.target.name == 'email' && e.target.value == user?.email) {
       if (name == user?.name && displayname == user?.displayname) { 
         setDisableUpdate(true);
       }
-    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { // if email field is in focus and the input value is the same as the current saved email
+    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { 
+      if (name == user?.name && email == user?.email) { 
+        setDisableUpdate(true);
+      }
+    } else if (e.target.name == 'displayName' && e.target.value == user?.displayname) { 
       if (name == user?.name && email == user?.email) { 
         setDisableUpdate(true);
       }
     }
     
-    // if the name, email or displayname is changed, update the state
+    // if the username, email or displayname is changed, update the state
     if (e.target.name == 'name') {
       setName(e.target.value);
       if ((e.target.value).indexOf(' ') >= 0) {
@@ -136,8 +149,10 @@ const EditScreen = () => {
                   {/* TODO: split name into first and last name (by space) */}
                   <Input name="name" label="Username" handleChange={handleChange} autoFocus value={name}/>
                   {isSpace && <div className={classes.error}>Username cannot contain spaces within it.</div>}
-                  <Input name="displayName" label="Full Name" handleChange={handleChange} value={displayname}/>
+                  {usernameError && <div className={classes.error}>This username is already taken. Please select another username.</div>}
+                  <Input name="displayName" label="Full Name" handleChange={handleChange} autoFocus value={displayname}/>
                   <Input name="email" label="Email" handleChange={handleChange} value={email} />
+                  {(emailError) && <div className={classes.error}>This email is already taken. Please enter another email.</div>}
                 </>
               </Grid>
               <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} disabled={!name || !email || !displayname || disableUpdate}>

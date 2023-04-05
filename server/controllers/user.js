@@ -33,13 +33,13 @@ export const signup = async (req, res) => {
 
   try {
     const oldUser = await UserModel.findOne({ email });
+    const oldUserName = await UserModel.findOne({ name: `${userName}` });
+
+    if (oldUser && oldUserName) return res.status(400).json({ message: "both" });
 
     if (oldUser) return res.status(400).json({ message: "User already exists" });
 
     // check if user name already exists:
-
-    const oldUserName = await UserModel.findOne({ name: `${userName}` });
-
     if (oldUserName) return res.status(400).json({ message: "User with that name already exists"})
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -132,16 +132,45 @@ export const updateUserProfile = async (req, res) => {
     // const users = await UserModel.find();
     const { id, name, email, displayname } = req.body;
 
-    // getting the user that matches the ID that is sent
-
-    const user = await UserModel.findById(id);
-
-    // const updateUser = { email, name, _id : id};
-    // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
-
     console.log("The email is: " + email);
     console.log("The name is: " + name);
     console.log("The display name is: " + displayname);
+    var sameEmail = false;
+    var sameUsername = false;
+
+    // check if the email or username is the same as the one in the database
+    let user = await UserModel.findOne({ email })
+    if (user != null) {
+      if (user._id == id) sameEmail = true;
+      console.log("same email: ", sameEmail)
+    }
+    user = await UserModel.findOne({ name })
+    if (user != null) {
+      if (user._id == id) sameUsername = true;
+      console.log("same username: ", sameUsername)
+    }
+
+    // if email and username exist in db but don't belong to requesting user, return error
+    const oldUserName = await UserModel.findOne({ name: `${name}` });
+    const oldUser = await UserModel.findOne({ email });
+    console.log(oldUser);
+    console.log(oldUserName);
+
+    if(!sameEmail && !sameUsername) {
+      console.log("here");
+      if (oldUser != null && oldUserName != null) return res.status(400).json({ message: "both" });
+    }
+
+    if (!sameEmail) {
+
+      if (oldUser) return res.status(400).json({ message: "User already exists" });
+    }
+    
+    if (!sameUsername) {
+
+      if (oldUserName) return res.status(400).json({ message: "User with that name already exists"});
+    }
+
     // updating the user profile
     await UserModel.findOneAndUpdate(
       { "_id": id },

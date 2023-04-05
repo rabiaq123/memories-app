@@ -23,8 +23,8 @@ const SignUp = () => {
   
   const [isSignup, setIsSignup] = useState(auth.signupErrors == null ? false : true);
   const [loginError, setLoginError] = useState(auth.signinErrors == null ? false : true);
-  const [usernameError, setUsernameError] = useState(auth.signupErrors == null ? false : auth.signupErrors.includes("name"));
-  const [emailError, setEmailError] = useState(auth.signupErrors == null ? false : !auth.signupErrors.includes("name"));
+  const [usernameError, setUsernameError] = useState(auth.signupErrors == null ? false : (auth.signupErrors.includes("name") || auth.signupErrors.includes("both")));
+  const [emailError, setEmailError] = useState(auth.signupErrors == null ? false : (!auth.signupErrors.includes("name") || auth.signupErrors.includes("both")));
 
   const switchMode = () => {
     setForm(initialState);
