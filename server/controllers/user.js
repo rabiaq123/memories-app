@@ -131,31 +131,42 @@ export const updateUserProfile = async (req, res) => {
   try {
     // const users = await UserModel.find();
     const { id, name, email, displayname, username } = req.body;
+
+    console.log("The email is: " + email);
+    console.log("The name is: " + name);
+    console.log("The display name is: " + displayname);
+
     var sameEmail = false;
     var sameUsername = false;
 
-    // check if the email or username is the same as the one in the database
-    if (await UserModel.findOne({ email }) != null) {
-      sameEmail = true;
-    }
-    if (await UserModel.findOne({ name: username }) != null) {
-      sameUsername = true;
-    }
-      
-    // more logic required here
+    // find user with given email and username, if it exists and does not belong to the user (check by id) then return error
     
+
+    // check if the email or username is the same as the one in the database
+    user = await UserModel.findOne({ email })
+    if (user != null) {
+      if (user._id == id) sameEmail = true;
+    }
+    user = await UserModel.findOne({ name: username })
+    if (user != null) {
+      if (user._id == id) sameUsername = true;
+    }
+
+    console.log("sameEmail: " + sameEmail)
+    console.log("sameUsername: " + sameUsername)
+    // more logic required here
 
     if (!sameEmail) {
       console.log("here");
       const oldUser = await UserModel.findOne({ email });
 
-      if (oldUser) return res.status(400).json({ message: "User already exists" });
+      if (oldUser) return res.status(401).json({ message: "User already exists" });
     }
     
     if (!sameUsername) {
       const oldUserName = await UserModel.findOne({ name: `${name}` });
 
-      if (oldUserName) return res.status(400).json({ message: "User with that name already exists"});
+      if (oldUserName) return res.status(401).json({ message: "User with that name already exists"});
     }
 
     // getting the user that matches the ID that is sent
@@ -165,9 +176,6 @@ export const updateUserProfile = async (req, res) => {
     // const updateUser = { email, name, _id : id};
     // await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
 
-    console.log("The email is: " + email);
-    console.log("The name is: " + name);
-    console.log("The display name is: " + displayname);
     // updating the user profile
     await UserModel.findOneAndUpdate(
       { "_id": id },

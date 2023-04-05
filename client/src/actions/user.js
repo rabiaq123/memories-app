@@ -48,9 +48,11 @@ export const updateUserProfile = (id, email, name, displayname, username) => asy
 
     await api.updateUser(user_data)
       .then((res) => {
+        console.log("in then of updateUserProfile");
         dispatch({ type: UPDATE, payload: {user: res.data }});
       })
       .catch((err) => {
+        console.log("in catch of updateUserProfile");
         dispatch({ type: UPDATE_ERROR, payload: { user: user_data, error: err.response.data.message} });
       });
 

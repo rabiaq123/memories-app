@@ -53,7 +53,7 @@ const EditScreen = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(getUser(id)); // user info from database, accessible through redux store (user object)
-
+    dispatch(updateUserProfile(id, email, name, displayname, username));
     // if(name == user?.name) {
     //   if (email == oldEmail) {
     //     update_user(id, email, name, displayname, true, true);
